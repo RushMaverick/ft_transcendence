@@ -1,0 +1,44 @@
+services:
+  rev-proxy:
+    build:
+      context: ./backend/nginx
+    image: nginx:transcendence
+    container_name: nginx
+    networks:
+        - inception-net
+    ports:
+      - "443:443"
+    depends_on:
+      - django
+    restart: always
+
+  django:
+    build:
+      context: ./backend/django_backend/
+    image: django_backend:transcendence
+    container_name: django_backend
+    volumes:
+      - ./backend/django_backend:/app
+    working_dir: /app
+    networks:
+        - inception-net
+
+networks:
+    inception-net:
+
+# volumes:
+#   wordpress:
+#     name: wordpress
+#     driver: local
+#     driver_opts:
+#       type: none
+#       device: /home/tspoof/data/wordpress
+#       o: bind
+
+#   mariadb:
+#     name: mariadb
+#     driver: local
+#     driver_opts:
+#       type: none
+#       device: /home/tspoof/data/mariadb
+#       o: bind

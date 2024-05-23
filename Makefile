@@ -1,9 +1,4 @@
-.PHONY: start stop
-
-dev:
-	@echo "Starting the dev containers"
-	docker compose -f docker-compose.dev.yml up -d
-	# docker compose -f docker-compose.dev.yml logs -f
+.PHONY: up down dev dev-down fclean
 
 up:
 	@echo "Starting the containers"
@@ -11,7 +6,14 @@ up:
 
 down:
 	@echo "Stopping the containers"
-	# docker compose down
+	docker compose down
+
+dev:
+	@echo "Starting the dev containers"
+	docker compose -f docker-compose.dev.yml logs -f
+
+dev-down:
+	@echo "Stopping the dev containers"
 	docker compose -f docker-compose.dev.yml down
 
 fclean: stop
