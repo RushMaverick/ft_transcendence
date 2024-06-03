@@ -28,7 +28,7 @@ class CreateGameThread:
 
 			# Create a new thread that runs the event loop
 			thread = threading.Thread(target=run_event_loop, args=(new_loop,))
-			thread.start()
+			# thread.start()
 
 			# Store the thread and its state
 			cls.threads[game_name] = {
@@ -37,3 +37,26 @@ class CreateGameThread:
 				"player2": False,
 				"active": False,
 			}
+
+	@classmethod
+	def start_game(cls, game_name):
+		if game_name in cls.threads:
+			if (cls.threads[game_name]["player1"] and cls.threads[game_name]["player2"]) and not cls.threads[game_name]["active"]:
+				cls.threads[game_name]["active"] = True
+				cls.threads[game_name]["thread"].start()
+
+	@classmethod
+	def stop_game(cls, game_name):
+		if game_name in cls.threads:
+			cls.threads[game_name]["active"] = False
+			# pong_instance = cls.games[game_name]
+			# pong_instance.stop_game()
+			print("#1", flush=True)
+			print("is alive: ", cls.threads[game_name]["thread"].is_alive(), flush=True)
+			# while (cls.threads[game_name]["thread"]["active"]):
+			# 	pass
+			cls.threads[game_name]["thread"].join()
+			print("#2", flush=True)
+			del cls.threads[game_name]  # Remove the thread entry
+			del cls.games[game_name]  # Optionally remove the game instance as well
+			print("Game stopped successfully", flush=True)

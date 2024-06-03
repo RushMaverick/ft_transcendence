@@ -3,11 +3,11 @@ from .player import Player
 from .ball import Ball
 from . import consts
 
-
 class Pong:
 	def __init__(self):
 		self.channel_layer = None
 		self.room_group_name = None
+		self.thread = None
 		self.tick: int = 1
 		self.game_running: bool = False
 		self.ball: Ball = Ball()
@@ -20,6 +20,9 @@ class Pong:
 
 	def add_channel_layer(self, channel_layer) -> None:
 		self.channel_layer = channel_layer
+
+	def add_thread(self, thread) -> None:
+		self.thread = thread
 
 	def add_player(self, player: Player) -> None:
 		if player.id == 1:
@@ -75,8 +78,9 @@ class Pong:
 
 	async def game_loop(self) -> None:
 		print("Game loop")
-		self.game_running = True
-		while self.game_running:
+		# self.game_running = True
+		print("thread active: ", self.thread["active"], flush=True)
+		while self.thread["active"]:
 			if not self.player1 or not self.player2:
 				print("Players not connected")
 				await asyncio.sleep(1)
@@ -91,4 +95,5 @@ class Pong:
 			sleep_time = 1./self.tick - delta_time
 			if (sleep_time > 0):
 				await asyncio.sleep(sleep_time)
+		print("Game loop ended", flush=True)
 

@@ -10,13 +10,12 @@ class GameConsumer(AsyncWebsocketConsumer):
         super().__init__(*args, **kwargs)
 
     async def connect(self):
-        user = self.scope['user']
-        print(f"User: {user}")
-        if not user.is_authenticated:
-            print("User not authenticated")
-            await self.close()
+        # user = self.scope['user']
+        # print(f"User: {user}")
+        # if not user.is_authenticated:
+        #     print("User not authenticated")
+        #     await self.close()
 
-        #Todo: make a new thread for each game
         self.game_room = self.scope["url_route"]["kwargs"]["room_name"]
         self.room_group_name = f"game_{self.game_room}"
 
@@ -27,13 +26,15 @@ class GameConsumer(AsyncWebsocketConsumer):
         self.thread = CreateGameThread.threads[self.game_room]
         self.pong_game: Pong = CreateGameThread.games[self.game_room]
 
+        # Socket stuff
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
         if not self.pong_game.channel_layer:
             self.pong_game.add_channel_layer(self.channel_layer)
-
         if not self.pong_game.room_group_name:
             self.pong_game.add_room_group_name(self.room_group_name)
-
+        if not self.pong_game.thread:
+            self.pong_game.add_thread(self.thread)
+        # Add player to game
         if not self.pong_game.player1:
             self.player = Player(1, "Player 1")
             self.pong_game.add_player(self.player)
@@ -43,20 +44,18 @@ class GameConsumer(AsyncWebsocketConsumer):
             self.pong_game.add_player(self.player)
             self.thread["player2"] = True
 
-        if self.thread["player1"] and self.thread["player2"] and not self.thread["active"]:
-                self.thread["active"] = True
+
+        if self.thread["player1"] and self.thread["player2"]:
+                CreateGameThread.start_game(self.game_room)
                 #self.pong_game.start_game()
 
-        print (f"Connected to {self.room_group_name}")
+        print (f"Connected to {self.room_group_name}", flush=True)
         await self.accept()
-        # if self.pong_game.player1 and self.pong_game.player2 and not self.pong_game.game_running:
-        #     print("Starting game")
-        #     await self.pong_game.start_game()
+
 
     async def disconnect(self, close_code):
-        print("Disconnected")
-        self.pong_game.stop_game()
-        self.thread["active"] = False
+        print("Disconnected", flush=True)
+        await CreateGameThread.stop_game(self.game_room)
         # Leave room group
         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
 
@@ -66,13 +65,16 @@ class GameConsumer(AsyncWebsocketConsumer):
         if (cmd == "move"):
             self.player.move(json_data.get("action"))
         elif (cmd == "stop"):
-            self.pong_game.stop_game()
+            CreateGameThread.stop_game(self.game_room)
+            # self.pong_game.stop_game()
         elif (cmd == "start"):
-            self.pong_game.start_game()
+            CreateGameThread.start_game(self.game_room)
+            # self.pong_game.start_game()
 
-        await self.channel_layer.group_send(
-			self.room_group_name, {"type": "send_test", "state": "self.state"}
-		)
+        # await self.channel_layer.group_send(
+		# 	self.room_group_name, {"type": "send_test", "state": "self.state"}
+		# )
+
 
     # Receive message from room group
     async def game_state(self, event):
@@ -80,5 +82,5 @@ class GameConsumer(AsyncWebsocketConsumer):
         # Send message to WebSocket
         await self.send(text_data=json.dumps(state))
 
-    async def send_test(self, event):
-        await self.send(text_data=json.dumps({"message": "Test"}))
+    # async def send_test(self, event):
+    #     await self.send(text_data=json.dumps({"message": "Test"}))
