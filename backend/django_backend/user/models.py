@@ -7,9 +7,9 @@ class Profile(models.Model):
         on_delete=models.CASCADE,
         primary_key=True,
     )
-    # avatar = models.ImageField(upload_to='profile_pics', default='default.jpg')
+    avatar = models.ImageField(upload_to='profile_pics', default='default.jpg')
     # avatar = models.URLField(default='https://www.gravatar.com/avatar/')
-    avatar = models.URLField(default='https://picsum.photos/200')
+    # avatar = models.URLField(default='https://picsum.photos/200')
 
     def __str__(self):
         return "%s's profile" % self.user.username
