@@ -1,7 +1,0 @@
-make --dry-run --always-make --keep-going --print-directory
-make: Entering directory `/Users/yoonseonlee/transcendence'
-echo "Starting the dev containers"
-docker compose -f docker-compose.dev.yml build
-docker compose -f docker-compose.dev.yml up -d
-make: Leaving directory `/Users/yoonseonlee/transcendence'
- 
