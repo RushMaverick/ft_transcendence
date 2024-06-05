@@ -5,17 +5,17 @@ const speed = 2.5
 const scene = new THREE.Scene()
 
 const geometry = new THREE.BoxGeometry(5, 15, 2)
-const material = new THREE.MeshLambertMaterial({color: 0x00FFFF})
+const material = new THREE.MeshLambertMaterial({color: 0xaeaa97})
 const cube = new THREE.Mesh(geometry, material)
 cube.position.x = -70
 cube.rotation.x = 300
 
 const geometry_sphere = new THREE.SphereGeometry(2, 32, 32)
-const material_sphere = new THREE.MeshLambertMaterial({color: 0xFF00FF})
+const material_sphere = new THREE.MeshLambertMaterial({color: 0xc6c1a8})
 const sphere = new THREE.Mesh(geometry_sphere, material_sphere)
 
 const geometry2 = new THREE.BoxGeometry(5, 15, 2)
-const material2 = new THREE.MeshLambertMaterial({color: 0x00FFFF})
+const material2 = new THREE.MeshLambertMaterial({color: 0xaeaa97})
 const cube2 = new THREE.Mesh(geometry2, material2)
 cube2.position.x = 70
 cube2.rotation.x = 300
@@ -45,6 +45,7 @@ scene.add(camera, sphere, cube, cube2, ambientLight, directionalLight)
 
 const renderer = new THREE.WebGLRenderer()
 renderer.setSize(window.innerWidth, window.innerHeight)
+renderer.setClearColor( 0xc7c2a9, 1 );
 document.body.appendChild(renderer.domElement)
 
 
