@@ -59,11 +59,11 @@ const handleKeyPress = (e) => {
 			break
 		//Player 2, up
 		case 'ArrowUp':
-			cube2.position.y += speed
+			cube2.position.z -= speed
 			break
 		//Player 2, down
 		case 'ArrowDown':
-			cube2.position.y -= speed
+			cube2.position.z += speed
 			break
 		}
 }
