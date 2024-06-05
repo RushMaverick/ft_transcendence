@@ -1,13 +1,14 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-class Profile(models.Model):
+class Avatar(models.Model):
     user = models.OneToOneField(
         User,
         on_delete=models.CASCADE,
         primary_key=True,
     )
-    avatar = models.ImageField(upload_to='profile_pics', default='default.jpg')
+    image = models.ImageField(upload_to='profile_pics', default='default.jpg')
+    uploaded_on = models.DateTimeField(auto_now_add=True)
     # avatar = models.URLField(default='https://www.gravatar.com/avatar/')
     # avatar = models.URLField(default='https://picsum.photos/200')
 

@@ -2,19 +2,19 @@ from django.contrib.auth.models import  User
 from rest_framework import serializers
 from django.contrib.auth.password_validation import validate_password
 from rest_framework.validators import UniqueValidator
-from .models import Profile
+from .models import Avatar
 
-class ProfileSerializer(serializers.ModelSerializer):
+class AvatarSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Profile
-        fields = ['avatar']
+        model = Avatar
+        fields = ['image', 'uploaded_on']
 
 class UserSerializer(serializers.ModelSerializer):
     username = serializers.CharField(required=True, validators=[UniqueValidator(queryset=User.objects.all())])
     password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
     password2 = serializers.CharField(write_only=True, required=True)
 
-    profile = ProfileSerializer(read_only=True)
+    avatar = AvatarSerializer(read_only=True)
 
     class Meta:
         model = User
@@ -31,7 +31,7 @@ class UserSerializer(serializers.ModelSerializer):
         )
         user.set_password(validated_data['password'])
         user.save()
-        Profile.objects.create(user=user)
+        Avatar.objects.create(user=user)
         return user
 
     def update(self, instance: User, validated_data):
