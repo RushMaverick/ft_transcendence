@@ -565,7 +565,7 @@
 		},
 		{
 			"key": "baseUrl",
-			"value": "https://localhost:443",
+			"value": "http://localhost:8000",
 			"type": "string"
 		},
 		{
