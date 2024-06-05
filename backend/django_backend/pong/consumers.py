@@ -1,13 +1,13 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
-from pong.pong_game import Pong, Player, CreateGameThread
+from pong.pong_game import Pong, Player, Games
 
 class GameConsumer(AsyncWebsocketConsumer):
     def __init__(self, *args, **kwargs):
         self.player = None
-        self.thread = None
         self.pong_game: Pong = None
         super().__init__(*args, **kwargs)
+
 
     async def connect(self):
         user = self.scope['user']
@@ -20,12 +20,11 @@ class GameConsumer(AsyncWebsocketConsumer):
         self.game_room = self.scope["url_route"]["kwargs"]["room_name"]
         self.room_group_name = f"game_{self.game_room}"
 
-        # Add game to thread pool
-        if self.game_room not in CreateGameThread.threads:
-            CreateGameThread.create_game(self.game_room)
+        # Add game to games
+        if self.game_room not in Games.games:
+            Games.create_game(self.game_room)
 
-        self.thread = CreateGameThread.threads[self.game_room]
-        self.pong_game: Pong = CreateGameThread.games[self.game_room]
+        self.pong_game = Games.games[self.game_room]
 
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
         if not self.pong_game.channel_layer:
@@ -34,51 +33,46 @@ class GameConsumer(AsyncWebsocketConsumer):
         if not self.pong_game.room_group_name:
             self.pong_game.add_room_group_name(self.room_group_name)
 
+        # Add player to game
         if not self.pong_game.player1:
             self.player = Player(1, "Player 1")
             self.pong_game.add_player(self.player)
-            self.thread["player1"] = True
         elif not self.pong_game.player2:
             self.player = Player(2, "Player 2")
             self.pong_game.add_player(self.player)
-            self.thread["player2"] = True
 
-        if self.thread["player1"] and self.thread["player2"] and not self.thread["active"]:
-                self.thread["active"] = True
-                #self.pong_game.start_game()
+        if self.pong_game.player1 and self.pong_game.player2:
+                Games.start_game(self.game_room)
 
         print (f"Connected to {self.room_group_name}")
         await self.accept()
-        # if self.pong_game.player1 and self.pong_game.player2 and not self.pong_game.game_running:
-        #     print("Starting game")
-        #     await self.pong_game.start_game()
+
 
     async def disconnect(self, close_code):
-        print("Disconnected")
-        self.pong_game.stop_game()
-        self.thread["active"] = False
+        print(f"{self.player.name} disconnected from room {self.game_room}", flush=True)
+        Games.stop_game(self.game_room)
         # Leave room group
         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
 
+
     async def receive(self, text_data):
-        json_data = json.loads(text_data)
-        cmd = json_data.get("cmd")
+        try:
+            json_data = json.loads(text_data)
+            cmd = json_data.get("cmd")
+            cmd_args = json_data.get("cmd_args")
+        except:
+            print("Invalid command", flush=True)
+            return
         if (cmd == "move"):
-            self.player.move(json_data.get("action"))
+            self.player.move(cmd_args)
         elif (cmd == "stop"):
-            self.pong_game.stop_game()
+            Games.stop_game(self.game_room)
         elif (cmd == "start"):
-            self.pong_game.start_game()
+            Games.start_game(self.game_room)
 
-        await self.channel_layer.group_send(
-			self.room_group_name, {"type": "send_test", "state": "self.state"}
-		)
 
-    # Receive message from room group
     async def game_state(self, event):
         state = event["state"]
         # Send message to WebSocket
         await self.send(text_data=json.dumps(state))
 
-    async def send_test(self, event):
-        await self.send(text_data=json.dumps({"message": "Test"}))
