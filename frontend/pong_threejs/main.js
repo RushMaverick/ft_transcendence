@@ -1,32 +1,47 @@
 import * as THREE from 'three';
-import { Loop } from './loop.js';
 
 const speed = 2.5
-let loop;
 
 const scene = new THREE.Scene()
 
-const geometry = new THREE.BoxGeometry(5, 15, 5)
-const material = new THREE.MeshStandardMaterial({color: 0xFF0000, roughness: 0.5, metalness: 0., emissive: 0x00})
+const geometry = new THREE.BoxGeometry(5, 15, 2)
+const material = new THREE.MeshLambertMaterial({color: 0x00FFFF})
 const cube = new THREE.Mesh(geometry, material)
 cube.position.x = -70
+cube.rotation.x = 300
 
 const geometry_sphere = new THREE.SphereGeometry(2, 32, 32)
-const material_sphere = new THREE.MeshStandardMaterial({color: 0x00FF00, roughness: 0.5, metalness: 0., emissive: 0x00})
+const material_sphere = new THREE.MeshLambertMaterial({color: 0xFF00FF})
 const sphere = new THREE.Mesh(geometry_sphere, material_sphere)
 
-const geometry2 = new THREE.BoxGeometry(5, 15, 5)
-const material2 = new THREE.MeshStandardMaterial({color: 0xFF0000, roughness: 0.5, metalness: 0., emissive: 0x00})
+const geometry2 = new THREE.BoxGeometry(5, 15, 2)
+const material2 = new THREE.MeshLambertMaterial({color: 0x00FFFF})
 const cube2 = new THREE.Mesh(geometry2, material2)
 cube2.position.x = 70
+cube2.rotation.x = 300
 
-const light = new THREE.PointLight(0xFFFFFF, 1, 500)
-light.position.set(0, 2, 200)
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
 
-const camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 0.1, 1000)
-camera.position.z = 50
+const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+directionalLight.position.set(200, 500, 300);
 
-scene.add(camera, sphere, cube, cube2, light)
+// Setting up camera
+const aspectRatio = window.innerWidth / window.innerHeight;
+const cameraWidth = 150;
+const cameraHeight = cameraWidth / aspectRatio;
+
+const camera = new THREE.OrthographicCamera(
+  cameraWidth / -2, // left
+  cameraWidth / 2, // right
+  cameraHeight / 2, // top
+  cameraHeight / -2, // bottom
+  0, // near plane
+  1000 // far plane
+);
+camera.position.set(100, 200, 200);
+camera.lookAt(0, 2, 0);
+
+scene.add(camera, sphere, cube, cube2, ambientLight, directionalLight)
 
 const renderer = new THREE.WebGLRenderer()
 renderer.setSize(window.innerWidth, window.innerHeight)
@@ -37,10 +52,10 @@ document.body.appendChild(renderer.domElement)
 const handleKeyPress = (e) => {
 	switch(e.key) {
 		case 'w':
-			cube.position.y += speed
+			cube.position.z -= speed
 			break
 		case 's':
-			cube.position.y -= speed
+			cube.position.z += speed
 			break
 		//Player 2, up
 		case 'ArrowUp':
@@ -57,10 +72,12 @@ const handleKeyPress = (e) => {
 document.addEventListener('keydown', handleKeyPress)
 
 function animate() {
-	loop = new Loop(camera, scene, renderer);
 	requestAnimationFrame(animate)
 	renderer.render(scene, camera)
 	sphere.position.x += 0.1
+	if (sphere.position.x > 70) {
+		sphere.position.x = 0
+	}
 }
 
 animate()
