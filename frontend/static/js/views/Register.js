@@ -15,10 +15,12 @@ export default class extends AView {
 				<div class="input-group">
 					<p>Please type your username and password</p>
 					<label for="username" class="label">Username</label>
-					<input type="text" id="username" class="input">
+					<input type="text" id="username" class="input"><br>
 					<label for="password" class="label">Password</label>
 					<input type="text" id="password" class="input">
 				</div>
+			<button class = "login button" data-action="registered">
+				Register</button>
 		`;
 	}
 }
