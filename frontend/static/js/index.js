@@ -2,6 +2,8 @@ import Dashboard from "./views/Dashboard.js";
 import OneVsOne from "./views/OneVsOne.js";
 import Tournaments from "./views/Tournaments.js";
 import Friends from "./views/Friends.js";
+import Login from "./views/Login.js";
+import Register from "./views/Register.js";
 
 //match the first character of the string or the start of the string -> "^"
 const pathToRegex = path => new RegExp("^" + path.replace(/\//g, "\\/").replace(/:\w+/g, "(.+)") + "$");
@@ -23,13 +25,15 @@ const navigateTo = url => {
 	router();
 };
 
+// const loggedIn = 
+
 //write client-side router
 const router = async () => {
 	//inside friends, it will be  /friends/:id
 	const routes = [
-		// { path: "/", view: Login},
-		// { path: "/Login", view: Login },
-		// { path: "/Login/:id", view: Register },
+		{ path: "/", view: Login},
+		{ path: "/login", view: Login },
+		{ path: "/register", view: Register },
 		{ path: "/dashboard", view: Dashboard },
 		{ path: "/one-vs-one", view: OneVsOne},
 		{ path: "/tournaments", view: Tournaments},
@@ -66,7 +70,11 @@ window.addEventListener("popstate", router);
 
 document.addEventListener("DOMContentLoaded", () => {
 	document.body.addEventListener("click", e => {
-		if (e.target.matches("[data-link]")) {
+		if (e.target.matches('[data-action="logged-in"]')) {
+			e.preventDefault();
+			navigateTo("/dashboard");
+		}
+		else if (e.target.matches("[data-link]")) {
 			e.preventDefault();
 			navigateTo(e.target.href);
 		}
