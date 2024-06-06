@@ -34,7 +34,7 @@ $ pip install -r requirements.txt
 
 Run the following command in the same directory where all the files are
 ```
-$ FLASK_APP=lib/app.py flask run
+$ python manage.py runserver
 ```
 
 **Remember to put semantic messages when you are pushing to master

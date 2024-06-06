@@ -10,6 +10,7 @@ daphne==4.1.2
 Django==5.0.4
 djangorestframework==3.15.1
 djangorestframework-simplejwt==5.3.1
+psycopg2-binary~=2.9.9
 hyperlink==21.0.0
 idna==3.7
 incremental==22.10.0
