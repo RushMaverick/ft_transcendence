@@ -1,13 +1,26 @@
 version: "3.5"
 
 services:
+  rev-proxy:
+    build:
+      context: ./backend/nginx
+    image: nginx:transcendence
+    container_name: nginx
+    networks:
+        - django_db_network
+    ports:
+      - "443:443"
+    depends_on:
+      - django
+    restart: always
+
   django:
     build:
       context: ./backend/django_backend/
       dockerfile: Dockerfile
     container_name: django_backend
-    ports:
-      - "8000:8000"
+    # ports:
+    #   - "8000:8000"
     volumes:
       - ./backend/django_backend:/app
     working_dir: /app
@@ -18,6 +31,7 @@ services:
     depends_on:
       db:
         condition: service_healthy
+
  #To persist the data beyond the life of the container we configured a volume.
  #This config will bind postgres_data to the "/var/lib/postgresql/data/" directory in the container.
   db:
@@ -25,8 +39,8 @@ services:
       context: ./backend/database/
       dockerfile: Dockerfile
     container_name: postgres_db
-    ports:
-      - "5432:5432"
+    # ports:
+    #   - "5432:5432"
     environment:
       - POSTGRES_DB=${DB_NAME}
       - POSTGRES_USER=${DB_USER}
