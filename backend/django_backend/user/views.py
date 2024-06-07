@@ -1,8 +1,16 @@
-from django.contrib.auth.models import  User
+from django.contrib.auth.models import  User 
 from rest_framework import status, viewsets, permissions
 from rest_framework.response import Response
-from .serializers import UserSerializer, PasswordUpdateSerializer
+from .serializers import UserSerializer, PasswordUpdateSerializer, AvatarSerializer
 from .permissions import IsAuthenticatedOrCreateOnly, IsUser
+from .models import Avatar
+from rest_framework.parsers import MultiPartParser
+
+
+class AvatarViewSet(viewsets.ModelViewSet):
+    queryset = Avatar.objects.all()
+    serializer_class = AvatarSerializer
+    parser_classes = [MultiPartParser]
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
