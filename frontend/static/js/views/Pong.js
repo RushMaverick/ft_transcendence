@@ -1,18 +1,14 @@
+import PongGame from "./pongThree.js";
 import AView from "./AView.js";
 
 export default class extends AView {
 	constructor(params){
 		super(params);//call the constructor of the parent class
-		this.setTitle("One-vs-one");
+		this.setTitle("Pong");
 	}
 
 	async getHtml(){
-		console.log("one-vs-one")
-		return `
-			<h1>Welcome to play ONE VS ONE</h1>
-			<p>
-				Wait for your opponent.	
-			</p>
-			`;
+		const pong = new PongGame();
+		pong.animate();
 	}
 }
