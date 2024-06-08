@@ -1,16 +1,46 @@
 from django.contrib.auth.models import  User 
 from rest_framework import status, viewsets, permissions
 from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework.parsers import MultiPartParser, FormParser
 from .serializers import UserSerializer, PasswordUpdateSerializer, AvatarSerializer
 from .permissions import IsAuthenticatedOrCreateOnly, IsUser
 from .models import Avatar
-from rest_framework.parsers import MultiPartParser
 
 
-class AvatarViewSet(viewsets.ModelViewSet):
-    queryset = Avatar.objects.all()
+class AvatarViewSet(APIView):
     serializer_class = AvatarSerializer
-    parser_classes = [MultiPartParser]
+    parser_classes = [MultiPartParser, FormParser]
+
+    def get(self, request, *args, **kwargs):
+        "Return the current avatar"
+        user = request.user
+        avatar = Avatar.objects.filter(user=user).first()
+        if(avatar):
+            serializer = self.serializer_class(instance=avatar)
+            return Response(serializer.data)
+        else:
+            return Response({"error": "No avatar found."}, status=status.HTTP_404_NOT_FOUND)
+    
+    def post(self, request, *args, **kwargs):
+        "Upload avatar"
+        serializer = self.serializer_class(data=request.data)
+        if(serializer.is_valid()):
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def delete(self, request, *args, **kwargs):
+        "Delete Avatar"
+        user = request.user
+        avatar = Avatar.objects.filter(user=user).first()
+        if(avatar):
+            avatar.image.delete()
+            avatar.delete()
+            return Response({"message": "Avatar deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
+        else:
+            return Response({"error": "No avatar found to delete."}, status=status.HTTP_404_NOT_FOUND)   
+
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
