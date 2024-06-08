@@ -7,7 +7,6 @@ export default class extends AView {
 	}
 
 	async getHtml(){
-		console.log("one-vs-one")
 		return `
 			<h1>Welcome to play ONE VS ONE</h1>
 			<p>
