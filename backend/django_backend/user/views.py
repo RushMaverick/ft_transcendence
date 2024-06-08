@@ -23,9 +23,14 @@ class AvatarViewSet(APIView):
             return Response({"error": "No avatar found."}, status=status.HTTP_404_NOT_FOUND)
     
     def post(self, request, *args, **kwargs):
-        "Upload avatar"
+        "Upload avatar, or update the avatar"
+        user = request.user
         serializer = self.serializer_class(data=request.data)
         if(serializer.is_valid()):
+            old_avatar = Avatar.objects.filter(user=user).first()
+            if(old_avatar):
+                old_avatar.image.delete()
+                old_avatar.delete()
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
