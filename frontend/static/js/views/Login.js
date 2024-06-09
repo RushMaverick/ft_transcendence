@@ -8,19 +8,54 @@ export default class extends AView {
 
 	async getHtml(){
 		return `
-			<h1>Welcome to Pong game</h1>
-			<p>
-				Please Login to access the game.
-			</p>
-			<p>
-				<a href="/one-vs-one" data-link>Start a one-vs-one game</a>.
-			</p>
-			<p>
-				<a href="/tournaments" data-link>Start your tournament</a>.
-			</p>
-			<p>
-				<a href="/friends" data-link>Checkout how your friends are doing</a>.
-			</p>
+			<div class="container">
+				<h2 class="text-center">Login</h2>
+				<br>
+				<form action="/login.php" class="loginForm">
+					<div class="input-group">
+						<label for="username" class="label">Username</label>
+						<input type="text" id="username" class="input">
+						<span class="error-message"></span>
+					</div>
+					<br>
+					<div class="input-group">
+						<label for="password" class="label">Password</label>
+						<input type="password" id="password" class="input">
+						<span class="error-message"></span>
+					</div>
+					<button class = "login button" data-action="logged-in">
+						Login</button>
+					<p>Not registered yet? <a href="/register" id ="registerLink" data-link>Register here</a></p>
+				</form>
+			</div>
 			`;
 	}
+
+	// var xmlString = "<div id='foo'><a href='#'>Link</a><span></span></div>";
+	// var wrapper = document.createElement('div');
+	// var doc = new DOMParser().parseFromString(xmlString, "text/xml");
+	// console.log(doc.firstChild.innerHTML); // => <a href="#">Link...
+	// console.log(doc.firstChild.firstChild.innerHTML); // => Link
 }
+
+
+
+{/* <div class="container">
+<h2 class="text-center">Login</h2>
+<br>
+<form action="/login.php" class="loginForm">
+	<div class="input-group">
+		<label for="username" class="label">Username</label>
+		<input type="text" id="username" class="input">
+		<span class="error-message"></span>
+	</div>
+	<br>
+	<div class="input-group">
+		<label for="password" class="label">Password</label>
+		<input type="password" id="password" class="input">
+		<span class="error-message"></span>
+	</div>
+	<button class="login-button">
+		Login</button>
+</form>
+</div> */}
