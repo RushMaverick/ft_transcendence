@@ -2,6 +2,7 @@ import Dashboard from "./views/Dashboard.js";
 import OneVsOne from "./views/OneVsOne.js";
 import Tournaments from "./views/Tournaments.js";
 import Friends from "./views/Friends.js";
+import Pong from "./views/Pong.js";
 import Login from "./views/Login.js";
 import Register from "./views/Register.js";
 
@@ -37,6 +38,7 @@ const router = async () => {
 		{ path: "/dashboard", view: Dashboard },
 		{ path: "/one-vs-one", view: OneVsOne},
 		{ path: "/tournaments", view: Tournaments},
+		{ path: "/pong", view: Pong},
 		{ path: "/friends", view: Friends },
 	];
 
