@@ -31,7 +31,8 @@ class AvatarViewSet(APIView):
             if(old_avatar):
                 old_avatar.image.delete()
                 old_avatar.delete()
-            serializer.save()
+            serializer.save(user=request.user)
+            print(serializer.errors)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     

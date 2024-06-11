@@ -5,9 +5,11 @@ from rest_framework.validators import UniqueValidator
 from .models import Avatar
 
 class AvatarSerializer(serializers.ModelSerializer):
+    
+    user_id = serializers.ReadOnlyField(source='user.id')
     class Meta:
         model = Avatar
-        fields = ['image', 'uploaded_on']
+        fields = ['user_id' ,'image', 'uploaded_on']
 
 class UserSerializer(serializers.ModelSerializer):
     username = serializers.CharField(required=True, validators=[UniqueValidator(queryset=User.objects.all())])
