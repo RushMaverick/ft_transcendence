@@ -1,3 +1,4 @@
+from django.shortcuts import render
 from django.contrib.auth.models import  User 
 from rest_framework import status, viewsets, permissions
 from rest_framework.response import Response
@@ -22,7 +23,7 @@ class AvatarViewSet(APIView):
         else:
             return Response({"error": "No avatar found."}, status=status.HTTP_404_NOT_FOUND)
     
-    def post(self, request, *args, **kwargs):
+    def post(self, request, format=None):
         "Upload avatar, or update the avatar"
         user = request.user
         serializer = self.serializer_class(data=request.data)
@@ -32,7 +33,6 @@ class AvatarViewSet(APIView):
                 old_avatar.image.delete()
                 old_avatar.delete()
             serializer.save(user=request.user)
-            print(serializer.errors)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
