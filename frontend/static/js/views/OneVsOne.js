@@ -7,11 +7,8 @@ export default class extends AView {
 	}
 
 	async getHtml(){
-		return `
-			<h1>Welcome to play ONE VS ONE</h1>
-			<p>
-				Wait for your opponent.	
-			</p>
-			`;
+		const test = document.createElement('h2');
+		test.textContent = "FIGHT ME ONE ON ONE!";
+		this.updateView(test);
 	}
 }

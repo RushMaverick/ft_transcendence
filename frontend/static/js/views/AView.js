@@ -12,4 +12,13 @@ export default class {
 	async getHtml(){
 		return "";
 	}
+
+	updateView(...elements){
+		const app = document.querySelector('main');
+		app.innerHTML = '';
+		elements.forEach((element) => {
+			if (element)
+				app.appendChild(element);
+		});
+	}
 }
