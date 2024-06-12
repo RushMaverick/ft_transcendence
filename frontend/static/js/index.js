@@ -61,8 +61,8 @@ const router = async () => {
 	//if we want, we can do 404 here when it is no match
 	
 	const view = new match.route.view(getParams(match));
-
-	document.querySelector("#app").innerHTML = await view.getHtml();
+	// document.querySelector("#app").innerHTML = await view.getHtml();
+	view.getHtml();
 	//select the app element and set the innerHTML to the view of the match route
 
 };
@@ -78,6 +78,9 @@ document.addEventListener("DOMContentLoaded", () => {
 		}
 		else if (e.target.matches("[data-link]")) {
 			e.preventDefault();
+			if (location.pathname === "/pong") {
+				// Add functionality for unloading the pong script.
+			}
 			navigateTo(e.target.href);
 		}
 		//if link element has data-link attribute, we want to prevent default behavior

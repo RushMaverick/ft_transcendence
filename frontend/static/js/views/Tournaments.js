@@ -6,12 +6,22 @@ export default class extends AView {
 		this.setTitle("Tournaments");
 	}
 
+	createHeader() {
+        const header = document.createElement('h1');
+        header.textContent = "Tournaments";
+        return header;
+    }
+
+    createParagraph(text) {
+        const p = document.createElement('p');
+        p.textContent = text;
+        return p;
+    }
+
 	async getHtml(){
-		return `
-			<h1>Welcome to play Tournaments</h1>
-			<p>
-				Wait for your Tournament to set.	
-			</p>
-			`;
+		const header = this.createHeader();
+		const p = this.createParagraph("You have no tournaments.");
+		this.updateView(header, p);
+		return ;
 	}
 }

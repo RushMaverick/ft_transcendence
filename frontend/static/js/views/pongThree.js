@@ -76,6 +76,7 @@ class PongGame {
         requestAnimationFrame(() => this.animate());
         this.renderer.render(this.scene, this.camera);
     }
+
 }
 
 export default PongGame;

@@ -10,5 +10,6 @@ export default class extends AView {
 		const test = document.createElement('h2');
 		test.textContent = "FIGHT ME ONE ON ONE!";
 		this.updateView(test);
+		return ;
 	}
 }

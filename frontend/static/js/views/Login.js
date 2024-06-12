@@ -7,6 +7,18 @@ export default class extends AView {
 		this.setTitle("Login");
 	}
 
+	createHeader() {
+        const header = document.createElement('h1');
+        header.textContent = "Welcome to Pong game";
+        return header;
+    }
+
+    createParagraph(text) {
+        const p = document.createElement('p');
+        p.textContent = text;
+        return p;
+    }
+
 	async getHtml(){
 		const container = document.querySelector('main');
 		container.innerHTML = '';
