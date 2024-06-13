@@ -8,10 +8,6 @@ export default class extends AView {
 	}
 
 	async getHtml(){
-
-	// const container = document.querySelector('main');
-	// container.innerHTML = '';
-
 	const title = this.createHeader2('Register')
 	title.classList.add('text-center');
 
