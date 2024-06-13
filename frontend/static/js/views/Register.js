@@ -7,56 +7,29 @@ export default class extends AView {
 		this.setTitle("Register");
 	}
 
-	createHeader() {
-        const header = document.createElement('h1');
-        header.textContent = "Welcome to Pong game";
-        return header;
-    }
-
-    createParagraph(text) {
-        const p = document.createElement('p');
-        p.textContent = text;
-        return p;
-    }
-
 	async getHtml(){
+		const title = this.createHeader('Register', 'h2');
+		title.classList.add('text-center');
 
-	const container = document.querySelector('main');
+		const form = this.createForm('registerform');
+		const usernameInput = textInputField('Username', 'username', 'text');
+		const passwordInput = textInputField('Password', 'password', 'password');
+		const confirmPasswordInput = textInputField('Confirm password', 'confirm-password', 'password');
+		const loginButton = this.createButton('register', 'Register');
+		form.appendChild(usernameInput);
+		form.appendChild(passwordInput);
+		form.appendChild(confirmPasswordInput);
+		form.appendChild(loginButton);
+		
+		const loginSuggestion = this.createParagraph('Already have an account?');
+		const loginLink = this.createAnchor('Log in here');
+		loginLink.href = '/login';
+		loginLink.setAttribute("data-link", "");
+		loginLink.setAttribute('id', "log-in-link");
+		loginSuggestion.appendChild(loginLink);
 
-	container.innerHTML = '';
-
-	const title = document.createElement('h2');
-	title.textContent = 'Login';
-	title.classList.add('text-center');
-
-	container.appendChild(title);
-
-	const form = document.createElement('form');
-	form.classList.add('registerform');
-
-	const usernameInput = textInputField('Username', 'username', 'text');
-	const passwordInput = textInputField('Password', 'password', 'password');
-
-	const loginButton = document.createElement('button');
-	loginButton.classList.add('register', 'button');
-	loginButton.textContent = 'Register';
-
-	form.appendChild(usernameInput);
-	form.appendChild(passwordInput);
-	form.appendChild(loginButton);
-	
-	
-	const loginSuggestion = document.createElement('p');
-	loginSuggestion.textContent = 'Already have an account?';
-	const loginLink = document.createElement('a');
-	loginLink.textContent = 'Log in here';
-	loginLink.href = '/login';
-	loginLink.setAttribute("data-link", "");
-	loginLink.setAttribute('id', "log-in-link");
-	loginSuggestion.appendChild(loginLink);
-
-
-	this.updateView(form, loginSuggestion);
+		this.updateView(title, form, loginSuggestion);
+		return;
 	}
 }
 	// return `

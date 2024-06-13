@@ -7,54 +7,28 @@ export default class extends AView {
 		this.setTitle("Login");
 	}
 
-	createHeader() {
-        const header = document.createElement('h1');
-        header.textContent = "Welcome to Pong game";
-        return header;
-    }
-
-    createParagraph(text) {
-        const p = document.createElement('p');
-        p.textContent = text;
-        return p;
-    }
-
 	async getHtml(){
-		const container = document.querySelector('main');
-		container.innerHTML = '';
-
-		const title = document.createElement('h2');
-		title.textContent = 'Login';
+		const title = this.createHeader('Log in', 'h2');
 		title.classList.add('text-center');
-
-		container.appendChild(title);
-
-		const form = document.createElement('form');
-		form.classList.add('loginform');
-
+	
+		const form = this.createForm('loginform');
 		const usernameInput = textInputField('Username', 'username', 'text');
 		const passwordInput = textInputField('Password', 'password', 'password');
-
-		const loginButton = document.createElement('button');
-		loginButton.classList.add('login', 'button');
-		loginButton.textContent = 'Login';
-
+		const loginButton = this.createButton('login', 'Login');
 		form.appendChild(usernameInput);
 		form.appendChild(passwordInput);
 		form.appendChild(loginButton);
 		
-		
-		const registerSuggestion = document.createElement('p');
-		registerSuggestion.textContent = 'Not registered yet?';
-		const registrationLink = document.createElement('a');
-		registrationLink.textContent = 'Register here';
-		registrationLink.href = '/register';
-		registrationLink.setAttribute("data-link", "");
-		registrationLink.setAttribute('id', "register-link");
-		registerSuggestion.appendChild(registrationLink);
-
-
-		this.updateView(form, registerSuggestion);
+		const registerSuggestion = this.createParagraph('Dont have an account?');
+		const registerLink = this.createAnchor('Register here');
+		registerLink.href = '/register';
+		registerLink.setAttribute("data-link", "");
+		registerLink.setAttribute('id', "register-link");
+		registerSuggestion.appendChild(registerLink);
+	
+	
+		this.updateView(title, form, registerSuggestion);
+		return;
 	}
 }
 		// return `
