@@ -7,7 +7,7 @@ export default class extends AView {
 	}
 
 	async getHtml(){
-		const header = this.createHeader1('Tournaments');
+		const header = this.createHeader('Tournaments', 'h1');
 		const p = this.createParagraph("You have no tournaments.");
 		
 		this.updateView(header, p);

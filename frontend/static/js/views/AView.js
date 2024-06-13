@@ -20,14 +20,8 @@ export default class {
 		});
 	}
 
-	createHeader1(text) {
-        const header = document.createElement('h1');
-        header.textContent = text;
-        return header;
-    }
-
-	createHeader2(text) {
-        const header = document.createElement('h2');
+	createHeader(text, headerSize) {
+		const header = document.createElement(headerSize);
         header.textContent = text;
         return header;
     }

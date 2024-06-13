@@ -8,7 +8,7 @@ export default class extends AView {
 	}
 
 	async getHtml(){
-		const title = this.createHeader2('Log in')
+		const title = this.createHeader('Log in', 'h2');
 		title.classList.add('text-center');
 	
 		const form = this.createForm('loginform');

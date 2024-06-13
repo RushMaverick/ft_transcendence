@@ -7,8 +7,8 @@ export default class extends AView {
 	}
 
 	async getHtml(){
-		const test = this.createHeader1('FIGHT ME ONE ON ONE!');
-		
+		const test = this.createHeader('FIGHT ME ONE ON ONE!', 'h1');
+
 		this.updateView(test);
 		return ;
 	}
