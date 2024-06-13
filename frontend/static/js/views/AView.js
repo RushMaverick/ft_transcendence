@@ -38,6 +38,22 @@ export default class {
         return p;
     }
 
+	createParagraphWithLink(text, href, additionalText) {
+        const p = document.createElement('p');
+		p.textContent = text;
+        const link = document.createElement('a');
+        link.href = href;
+        link.textContent = text;
+        link.dataset.link = true;
+        p.appendChild(link);
+        if (additionalText) {
+            const span = document.createElement('span');
+            span.textContent = additionalText;
+            p.appendChild(span);
+        }
+        return p;
+    }
+
 	createAnchor(text){
 		const a = document.createElement('a');
         a.textContent = text;
@@ -56,6 +72,5 @@ export default class {
 		button.textContent = text;
 		return button;
 	}
-
 
 }
