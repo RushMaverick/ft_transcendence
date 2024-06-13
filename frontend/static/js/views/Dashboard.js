@@ -14,7 +14,6 @@ export default class extends AView {
         const p4 = this.createParagraphWithLink("Checkout how your friends are doing", "/friends");
 		
 		this.updateView(header, p1, p2, p3, p4);
-
 		return ;
 	}
 }

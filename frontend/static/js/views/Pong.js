@@ -12,6 +12,7 @@ export default class extends AView {
 		const pong = new PongGame();
 		pong.animate();
 		const p = this.createParagraph("You are successfully running a Super Pongchamp game.");
+		
 		this.updateView(header, pong, p);
 		return ;
 	}

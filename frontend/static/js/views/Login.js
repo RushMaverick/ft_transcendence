@@ -28,6 +28,7 @@ export default class extends AView {
 	
 	
 		this.updateView(title, form, registerSuggestion);
+		return;
 	}
 }
 		// return `

@@ -8,27 +8,28 @@ export default class extends AView {
 	}
 
 	async getHtml(){
-	const title = this.createHeader2('Register')
-	title.classList.add('text-center');
+		const title = this.createHeader2('Register')
+		title.classList.add('text-center');
 
-	const form = this.createForm('registerform');
-	const usernameInput = textInputField('Username', 'username', 'text');
-	const passwordInput = textInputField('Password', 'password', 'password');
-	const confirmPasswordInput = textInputField('Confirm password', 'confirm-password', 'password');
-	const loginButton = this.createButton('register', 'Register');
-	form.appendChild(usernameInput);
-	form.appendChild(passwordInput);
-	form.appendChild(confirmPasswordInput);
-	form.appendChild(loginButton);
-	
-	const loginSuggestion = this.createParagraph('Already have an account?');
-	const loginLink = this.createAnchor('Log in here');
-	loginLink.href = '/login';
-	loginLink.setAttribute("data-link", "");
-	loginLink.setAttribute('id', "log-in-link");
-	loginSuggestion.appendChild(loginLink);
+		const form = this.createForm('registerform');
+		const usernameInput = textInputField('Username', 'username', 'text');
+		const passwordInput = textInputField('Password', 'password', 'password');
+		const confirmPasswordInput = textInputField('Confirm password', 'confirm-password', 'password');
+		const loginButton = this.createButton('register', 'Register');
+		form.appendChild(usernameInput);
+		form.appendChild(passwordInput);
+		form.appendChild(confirmPasswordInput);
+		form.appendChild(loginButton);
+		
+		const loginSuggestion = this.createParagraph('Already have an account?');
+		const loginLink = this.createAnchor('Log in here');
+		loginLink.href = '/login';
+		loginLink.setAttribute("data-link", "");
+		loginLink.setAttribute('id', "log-in-link");
+		loginSuggestion.appendChild(loginLink);
 
-	this.updateView(title, form, loginSuggestion);
+		this.updateView(title, form, loginSuggestion);
+		return;
 	}
 }
 	// return `
