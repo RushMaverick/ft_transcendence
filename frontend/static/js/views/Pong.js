@@ -7,24 +7,12 @@ export default class extends AView {
 		this.setTitle("Pong");
 	}
 
-	createHeader() {
-        const header = document.createElement('h1');
-        header.textContent = "S U P E R P O N G C H A M P";
-        return header;
-    }
-
-    createParagraph(text) {
-        const p = document.createElement('p');
-        p.textContent = text;
-        return p;
-    }
-
 	async getHtml(){
-		const header = this.createHeader();
+		const header = this.createHeader1('S U P E R P O N G C H A M P');
 		const pong = new PongGame();
 		pong.animate();
-		const p1 = this.createParagraph("You are successfully running a Super Pongchamp game.");
-		this.updateView(header, pong, p1);
+		const p = this.createParagraph("You are successfully running a Super Pongchamp game.");
+		this.updateView(header, pong, p);
 		return ;
 	}
 }
