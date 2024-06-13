@@ -2,23 +2,29 @@ from django.contrib.auth.models import  User
 from rest_framework import serializers
 from django.contrib.auth.password_validation import validate_password
 from rest_framework.validators import UniqueValidator
-from .models import Profile
+from .models import Avatar
 
-class ProfileSerializer(serializers.ModelSerializer):
+class AvatarSerializer(serializers.ModelSerializer):
+    
     class Meta:
-        model = Profile
-        fields = ['avatar']
+        model = Avatar
+        fields = ['image', 'uploaded_on']
+        
+        def update(self, instance: User, validated_data):
+            instance.image = validated_data.get('image', instance.image)
+            instance.save()
+            return instance
 
 class UserSerializer(serializers.ModelSerializer):
     username = serializers.CharField(required=True, validators=[UniqueValidator(queryset=User.objects.all())])
     password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
     password2 = serializers.CharField(write_only=True, required=True)
 
-    profile = ProfileSerializer(read_only=True)
+    avatar = AvatarSerializer(read_only=True)
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'profile', 'password', 'password2']
+        fields = ['id', 'username', 'avatar', 'password', 'password2']
 
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:
@@ -31,7 +37,7 @@ class UserSerializer(serializers.ModelSerializer):
         )
         user.set_password(validated_data['password'])
         user.save()
-        Profile.objects.create(user=user)
+        Avatar.objects.create(user=user)
         return user
 
     def update(self, instance: User, validated_data):
