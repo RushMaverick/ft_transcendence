@@ -26,10 +26,48 @@ export default class extends AView {
 		registerLink.setAttribute('id', "register-link");
 		registerSuggestion.appendChild(registerLink);
 	
-	
+		form.addEventListener('submit', this.handleFormSubmit.bind(this));
+
 		this.updateView(title, form, registerSuggestion);
 		return;
 	}
+
+	async handleFormSubmit(event) {
+        event.preventDefault();
+
+        const username = event.target.username.value;
+        const password = event.target.password.value;
+
+        const data = {
+            username: username,
+            password: password
+        };
+
+        try {
+            const response = await fetch(`${import.meta.env.VITE_API_ENDPOINT}/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const responseData = await response.json();
+			if (responseData.success) {
+                window.location.href = '/dashboard';
+            } else {
+				console.error('Login failed:', responseData.message);
+            }
+        } catch (error) {
+            console.error('There was a problem with the fetch operation:', error);
+        }
+		console.log(import.meta.env.VITE_API_ENDPOINT); // will be deleted later. now currently checkig if .env in frontend works
+
+    }
 }
 		// return `
 		// 	<div class="container">
