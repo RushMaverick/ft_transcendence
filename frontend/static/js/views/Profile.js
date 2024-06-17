@@ -12,8 +12,6 @@ export default class extends AView {
 		};
 	}
 
-	
-	
 	fetchName(userData){
 		const base = document.createElement('section');
 		const name = this.userData.name;
