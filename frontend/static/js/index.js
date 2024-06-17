@@ -5,6 +5,8 @@ import Friends from "./views/Friends.js";
 import Pong from "./views/Pong.js";
 import Login from "./views/Login.js";
 import Register from "./views/Register.js";
+import Profile from "./views/Profile.js";
+import Settings from "./views/Settings.js";
 
 //match the first character of the string or the start of the string -> "^"
 const pathToRegex = path => new RegExp("^" + path.replace(/\//g, "\\/").replace(/:\w+/g, "(.+)") + "$");
@@ -40,6 +42,8 @@ const router = async () => {
 		{ path: "/tournaments", view: Tournaments},
 		{ path: "/pong", view: Pong},
 		{ path: "/friends", view: Friends },
+		{ path: "/profile", view: Profile },
+		{ path: "/settings", view: Settings },
 	];
 
 	//Test each route for potential match. go through each route and find matches and return
