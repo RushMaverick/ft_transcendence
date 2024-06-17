@@ -37,6 +37,8 @@ export default class extends AView {
 	}
 
 	async getHtml(userData){
+		const container = document.createElement('div');
+
 		const header = this.createHeader('Welcome User!', 'h1');
 		const userName = this.fetchName(userData);
 		const userEmail = this.fetchEmail(userData);
@@ -46,7 +48,15 @@ export default class extends AView {
         const settings = this.createParagraphWithLink("Change settings from here", "/settings");
         const friends = this.createParagraphWithLink("Checkout who is online", "/friends");
 		
-		this.updateView(header, userName, userEmail, profilePicutre, message, stats, settings, friends);
-		return ;
+		container.appendChild(header);
+		container.appendChild(userName);
+		container.appendChild(userEmail);
+		container.appendChild(profilePicutre);
+		container.appendChild(message);
+		container.appendChild(stats);
+		container.appendChild(settings);
+		container.appendChild(friends);
+		// this.updateView(header, userName, userEmail, profilePicutre, message, stats, settings, friends);
+		return container;
 	}
 }

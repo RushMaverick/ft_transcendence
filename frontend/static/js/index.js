@@ -1,7 +1,9 @@
 //global variable to store the login status(currently without connecting to backend)
-window.isLoggedIn = false;
-window.isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-console.log(`Initial state: ${window.isLoggedIn}`);
+// This will let us the user to be logged in throughout the session
+// window.isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+// console.log(`Initial state: ${window.isLoggedIn}`);
+// but we will not use this for now, we will use temporary checks
+
 import Dashboard from "./views/Dashboard.js";
 import OneVsOne from "./views/OneVsOne.js";
 import Tournaments from "./views/Tournaments.js";
@@ -42,13 +44,13 @@ const router = async () => {
 		{ path: "/", view: Login},
 		{ path: "/login", view: Login },
 		{ path: "/register", view: Register },
-		{ path: "/dashboard", view: Dashboard },
-		{ path: "/one-vs-one", view: OneVsOne},
-		{ path: "/tournaments", view: Tournaments},
-		{ path: "/pong", view: Pong},
-		{ path: "/friends", view: Friends },
-		{ path: "/profile", view: Profile },
-		{ path: "/settings", view: Settings },
+		{ path: "/dashboard", view: Dashboard, authRequired: true },
+		{ path: "/one-vs-one", view: OneVsOne, authRequired: true},
+		{ path: "/tournaments", view: Tournaments, authRequired: true},
+		{ path: "/pong", view: Pong, authRequired: true},
+		{ path: "/friends", view: Friends, authRequired: true },
+		{ path: "/profile", view: Profile, authRequired: true },
+		{ path: "/settings", view: Settings, authRequired: true },
 	];
 
 	//Test each route for potential match. go through each route and find matches and return
@@ -75,8 +77,21 @@ const router = async () => {
 		return;
 	}
 	const view = new match.route.view(getParams(match));
+
+	const appElement = document.querySelector("#app");
+    if (appElement) {
+		const content = await view.getHtml();
+		appElement.innerHTML = '';
+        if (content instanceof HTMLElement) {
+            appElement.appendChild(content);
+        } else {
+            appElement.innerHTML = content;
+        }
+    } else {
+        console.error('Element with id "app" not found');
+    }
 	// document.querySelector("#app").innerHTML = await view.getHtml();
-	await view.getHtml();
+	// await view.getHtml();
 	//select the app element and set the innerHTML to the view of the match route
 
 };
@@ -86,11 +101,13 @@ window.addEventListener("popstate", router);
 
 document.addEventListener("DOMContentLoaded", () => {
 	document.body.addEventListener("click", e => {
-		if (e.target.matches('[data-action="logged-in"]')) {
-			e.preventDefault();
-			navigateTo("/dashboard");
-		}
-		else if (e.target.matches("[data-link]")) {
+		// if (e.target.matches('[data-action="logged-in"]')) {
+		// 	e.preventDefault();
+		// 	window.isLoggedIn = true;
+		// 	navigateTo("/dashboard");
+		// }
+		// else 
+		if (e.target.matches("[data-link]")) {
 			e.preventDefault();
 			// if (location.pathname === "/pong") {
 			// 	// Add functionality for unloading the pong script.
