@@ -53,10 +53,10 @@ export default class extends AView {
             id: newID,
             username: username,
             password: password,
-            profile: {
-                // avatar: ,
-                online: true
-            }
+            // profile: {
+            //     // avatar: ,
+            //     online: true
+            // }
         };
 
         try {
