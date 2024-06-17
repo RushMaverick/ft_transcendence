@@ -8,7 +8,7 @@ export default class extends AView {
 		this.userData = {
 			name: 'Test Name',
 			email: 'testmail@test.com',
-			pictureUrl: 'https://source.unsplash.com/200'
+			pictureUrl: 'https://snworksceo.imgix.net/drt/7a10426e-6523-4304-8532-2d230f9bab9b.sized-1000x1000.jpg?w=1000&dpr=2'
 		};
 	}
 
@@ -29,8 +29,10 @@ export default class extends AView {
 	}
 	
 	fetchPicture(userData){
-		const img = document.createElement('IMG');
+		const img = document.createElement('img');
 		img.src = this.userData.pictureUrl;
+		img.width = 300;
+		img.width = 200;
 		return img;
 	}
 
