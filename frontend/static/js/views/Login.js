@@ -36,7 +36,6 @@ export default class extends AView {
 		container.appendChild(title);
         container.appendChild(form);
         container.appendChild(registerSuggestion);
-		// this.updateView(title, form, registerSuggestion);
 		return container;
 	}
 	
@@ -63,7 +62,9 @@ export default class extends AView {
 				console.log('Login successful');
 				window.isLoggedIn = true;
 				console.log(`Updated from login.js: ${window.isLoggedIn}`);
-				// navigateTo('/dashboard')
+				//sending event for login success
+				const loginEvent = new CustomEvent('loginSuccess', { detail: { path: '/dashboard'} });
+				document.dispatchEvent(loginEvent);
 			} else {
 				console.error('Login failed:', mockResponse.message);
 				alert(mockResponse.message);

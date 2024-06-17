@@ -109,5 +109,11 @@ document.addEventListener("DOMContentLoaded", () => {
 		//if link element has data-link attribute, we want to prevent default behavior
 		//and sits on the element itself from index.html
 	});
+
+	document.addEventListener('loginSuccess', (event) => {
+        const { path } = event.detail;
+        navigateTo(path);
+    });
+	
 	router();
 });
