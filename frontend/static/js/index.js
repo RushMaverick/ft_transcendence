@@ -90,8 +90,6 @@ const router = async () => {
     } else {
         console.error('Element with id "app" not found');
     }
-	// document.querySelector("#app").innerHTML = await view.getHtml();
-	// await view.getHtml();
 	//select the app element and set the innerHTML to the view of the match route
 
 };
