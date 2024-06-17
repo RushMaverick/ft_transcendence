@@ -22,7 +22,7 @@ export default class extends AView {
 	
 	fetchEmail(userData){
 		const base = document.createElement('section');
-		const email = this.userData.name;
+		const email = this.userData.email;
 		base.textContent = 'email : ' + email;
 		
 		return base;
