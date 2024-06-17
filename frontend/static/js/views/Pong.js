@@ -9,11 +9,10 @@ export default class extends AView {
 
 	async getHtml(){
 		const header = this.createHeader('S U P E R P O N G C H A M P', 'h1');
-		const pong = new PongGame();
-		pong.animate();
+		const gameDiv = this.createGame('pong');
 		const p = this.createParagraph("You are successfully running a Super Pongchamp game.");
 		
-		this.updateView(header, pong, p);
+		this.updateView(header, gameDiv, p);
 		return ;
 	}
 }

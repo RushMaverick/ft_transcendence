@@ -1,8 +1,17 @@
 import * as THREE from 'three';
 
 class PongGame {
+	static instance;
     constructor() {
+		if (!PongGame.instance){
+			PongGame.instance = this;
+		}
+		else{
+			PongGame.instance.startAnimate();
+			return PongGame.instance;
+		}
         this.speed = 2.5;
+		this.isAnimating = true;
         this.scene = new THREE.Scene();
         this.createCubes();
         this.setupLighting();
@@ -73,9 +82,20 @@ class PongGame {
 
     animate() {
 		console.log("animate")
+		if (!this.isAnimating)
+			return ;
         requestAnimationFrame(() => this.animate());
         this.renderer.render(this.scene, this.camera);
     }
+
+	startAnimate(){
+		this.isAnimating = true;
+	}
+
+	stopAnimate(){
+		this.isAnimating = false;
+	}
+		
 
 }
 
