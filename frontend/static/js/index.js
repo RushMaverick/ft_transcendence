@@ -42,6 +42,7 @@ const router = async () => {
 		{ path: "/pong", view: Pong},
 		{ path: "/friends", view: Friends },
 		{ path: "/profile", view: Profile },
+		{ path: "/profile", view: Settings },
 	];
 
 	//Test each route for potential match. go through each route and find matches and return
