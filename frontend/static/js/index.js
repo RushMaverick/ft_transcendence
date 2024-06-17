@@ -9,6 +9,8 @@ import Friends from "./views/Friends.js";
 import Pong from "./views/Pong.js";
 import Login from "./views/Login.js";
 import Register from "./views/Register.js";
+import Profile from "./views/Profile.js";
+import Settings from "./views/Settings.js";
 
 
 //match the first character of the string or the start of the string -> "^"
@@ -40,11 +42,13 @@ const router = async () => {
 		{ path: "/", view: Login},
 		{ path: "/login", view: Login },
 		{ path: "/register", view: Register },
-		{ path: "/dashboard", view: Dashboard, authRequired: true },
-		{ path: "/one-vs-one", view: OneVsOne, authRequired: true },
-		{ path: "/tournaments", view: Tournaments, authRequired: true },
-		{ path: "/pong", view: Pong, authRequired: true},
-		{ path: "/friends", view: Friends, authRequired: true },
+		{ path: "/dashboard", view: Dashboard },
+		{ path: "/one-vs-one", view: OneVsOne},
+		{ path: "/tournaments", view: Tournaments},
+		{ path: "/pong", view: Pong},
+		{ path: "/friends", view: Friends },
+		{ path: "/profile", view: Profile },
+		{ path: "/settings", view: Settings },
 	];
 
 	//Test each route for potential match. go through each route and find matches and return
