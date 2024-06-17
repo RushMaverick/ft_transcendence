@@ -101,12 +101,6 @@ window.addEventListener("popstate", router);
 
 document.addEventListener("DOMContentLoaded", () => {
 	document.body.addEventListener("click", e => {
-		// if (e.target.matches('[data-action="logged-in"]')) {
-		// 	e.preventDefault();
-		// 	window.isLoggedIn = true;
-		// 	navigateTo("/dashboard");
-		// }
-		// else 
 		if (e.target.matches("[data-link]")) {
 			e.preventDefault();
 			// if (location.pathname === "/pong") {
