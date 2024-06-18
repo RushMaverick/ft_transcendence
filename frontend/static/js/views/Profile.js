@@ -45,8 +45,8 @@ export default class extends AView {
         const stats = this.createParagraphWithLink("Check out your game stats", "/statistics");
         const settings = this.createParagraphWithLink("Change settings from here", "/settings");
         const friends = this.createParagraphWithLink("Checkout who is online", "/friends");
-		
+
 		this.updateView(header, userName, userEmail, profilePicutre, message, stats, settings, friends);
-		return ;
+		return container;
 	}
 }
