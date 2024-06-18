@@ -78,20 +78,7 @@ const router = async () => {
 	}
 	const view = new match.route.view(getParams(match));
 
-	const appElement = document.querySelector("#app");
-    if (appElement) {
-		const content = await view.getHtml();
-		appElement.innerHTML = '';
-        if (content instanceof HTMLElement) {
-            appElement.appendChild(content);
-        } else {
-            appElement.innerHTML = content;
-        }
-    } else {
-        console.error('Element with id "app" not found');
-    }
-	//select the app element and set the innerHTML to the view of the match route
-
+	view.getHtml();
 };
 
 window.addEventListener("popstate", router);
@@ -114,6 +101,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const { path } = event.detail;
         navigateTo(path);
     });
-	
+
 	router();
 });

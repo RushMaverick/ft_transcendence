@@ -7,13 +7,11 @@ export default class extends AView {
 	}
 
 	async getHtml(){
-		const container = document.createElement('div');
 
 		const header = this.createHeader('Settings', 'h2');
 		const p = this.createParagraph('in theory here you could change the settings');
 
-		container.appendChild(header);
-		container.appendChild(p);
+		this.updateView(header, p);
 		return container;
 	}
 }

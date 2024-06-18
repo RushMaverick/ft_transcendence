@@ -7,11 +7,10 @@ export default class extends AView {
 	}
 
 	async getHtml(){
-		const container = document.createElement('div');
 
 		const test = this.createHeader('FIGHT ME ONE ON ONE!', 'h1');
 
-		container.appendChild(test);
-		return container;
+		this.updateView(test);
+		return ;
 	}
 }

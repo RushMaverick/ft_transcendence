@@ -11,8 +11,6 @@ export default class extends AView {
 	}
 
 	async getHtml(){
-		const container = document.createElement('div');
-
 		const title = this.createHeader('Log in', 'h2');
 		title.classList.add('text-center');
 	
@@ -33,10 +31,8 @@ export default class extends AView {
 	
 		form.addEventListener('submit', this.handleFormSubmit.bind(this));
 
-		container.appendChild(title);
-        container.appendChild(form);
-        container.appendChild(registerSuggestion);
-		return container;
+		this.updateView(title, form, registerSuggestion);
+		return ;
 	}
 	
 	async handleFormSubmit(event) {
