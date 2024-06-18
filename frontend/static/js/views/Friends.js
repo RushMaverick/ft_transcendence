@@ -11,6 +11,6 @@ export default class extends AView {
 		const p = this.createParagraph('You have no friends');
 
 		this.updateView(friends, p);
-		return;
+		return ;
 	}
 }

@@ -1,5 +1,6 @@
 import AView from "./AView.js";
 import textInputField from './TextInputView.js';
+import { v4 as uuidv4 } from 'uuid';
 
 export default class extends AView {
 	constructor(params){
@@ -8,6 +9,7 @@ export default class extends AView {
 	}
 
 	async getHtml(){
+
 		const title = this.createHeader('Register', 'h2');
 		title.classList.add('text-center');
 
@@ -15,11 +17,11 @@ export default class extends AView {
 		const usernameInput = textInputField('Username', 'username', 'text');
 		const passwordInput = textInputField('Password', 'password', 'password');
 		const confirmPasswordInput = textInputField('Confirm password', 'confirm-password', 'password');
-		const loginButton = this.createButton('register', 'Register');
+		const registerButton = this.createButton('register', 'Register');
 		form.appendChild(usernameInput);
 		form.appendChild(passwordInput);
 		form.appendChild(confirmPasswordInput);
-		form.appendChild(loginButton);
+		form.appendChild(registerButton);
 		
 		const loginSuggestion = this.createParagraph('Already have an account?');
 		const loginLink = this.createAnchor('Log in here');
@@ -28,9 +30,55 @@ export default class extends AView {
 		loginLink.setAttribute('id', "log-in-link");
 		loginSuggestion.appendChild(loginLink);
 
+		form.addEventListener('submit', this.handleFormSubmit.bind(this));
+
 		this.updateView(title, form, loginSuggestion);
-		return;
+		return ;
 	}
+
+	async handleFormSubmit(event) {
+        event.preventDefault(); // Prevent the default form submission behavior
+
+        const username = event.target.username.value;
+        const password = event.target.password.value;
+        const confirmPassword = event.target['confirm-password'].value;
+
+        if (password !== confirmPassword) {
+            alert("Passwords do not match!");
+            return;
+        }
+
+		const newID = uuidv4();
+        // Create the JSON object to be sent
+        const data = {
+            id: newID,
+            username: username,
+            password: password,
+            // profile: {
+            //     // avatar: ,
+            //     online: true
+            // }
+        };
+
+        try {
+            const response = await fetch(`${import.meta.env.VITE_API_ENDPOINT}/register`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const responseData = await response.json();
+            console.log(responseData);
+        } catch (error) {
+            console.error('There was a problem with the fetch operation:', error);
+        }
+    }
 }
 	// return `
 	// 	<h1>Register</h1>
