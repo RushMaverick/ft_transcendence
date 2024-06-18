@@ -39,6 +39,7 @@ INSTALLED_APPS = [
 	'daphne',
 	'pong',
 	'user',
+    'friends',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
