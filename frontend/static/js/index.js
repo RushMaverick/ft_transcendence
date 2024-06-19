@@ -88,7 +88,7 @@ document.addEventListener("viewUpdated", () => {
     console.log("well at least this works?");
     let translations;
 
-    fetch('./static/js/en.json')
+    fetch('./static/js/fi.json')
    .then(response => response.json())
    .then(data => {
         translations = data; // Store the imported translations

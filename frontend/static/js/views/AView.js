@@ -43,7 +43,7 @@ export default class {
 
     createTestParagraph(langkey) {
         const p = document.createElement('p');
-		// p.textContent = 'ei vieläkään';
+		p.textContent = 'ei vieläkään';
 		p.setAttribute('lang-key', langkey);
         return p;
     }
