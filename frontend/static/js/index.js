@@ -14,7 +14,6 @@ import Register from "./views/Register.js";
 import Profile from "./views/Profile.js";
 import Settings from "./views/Settings.js";
 
-
 //match the first character of the string or the start of the string -> "^"
 const pathToRegex = path => new RegExp("^" + path.replace(/\//g, "\\/").replace(/:\w+/g, "(.+)") + "$");
 
@@ -84,6 +83,27 @@ const router = async () => {
 window.addEventListener("popstate", router);
 //this will listen for back and forward buttons in the browser
 
+// Dynamically import the translation file
+document.addEventListener("viewUpdated", () => {
+    console.log("well at least this works?");
+    let translations;
+
+    fetch('./static/js/en.json')
+   .then(response => response.json())
+   .then(data => {
+        translations = data; // Store the imported translations
+        const elementsToTranslate = document.querySelectorAll('[lang-key]');
+        elementsToTranslate.forEach(element => {
+            const key = element.getAttribute('lang-key');
+            if (translations[key]) {
+                element.textContent = translations[key];
+                console.log(element.textContent);
+            }
+        });
+    })
+   .catch(error => console.error('Error loading translation file:', error));
+});
+
 document.addEventListener("DOMContentLoaded", () => {
 	document.body.addEventListener("click", e => {
 		if (e.target.matches("[data-link]")) {
@@ -92,12 +112,14 @@ document.addEventListener("DOMContentLoaded", () => {
 		}
 		//if link element has data-link attribute, we want to prevent default behavior
 		//and sits on the element itself from index.html
+	
 	});
 
-	document.addEventListener('loginSuccess', (event) => {
-        const { path } = event.detail;
-        navigateTo(path);
-    });
+document.addEventListener('loginSuccess', (event) => {
+	const { path } = event.detail;
+	navigateTo(path);
+});
+
 
 	router();
 });

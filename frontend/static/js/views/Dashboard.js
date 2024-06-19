@@ -7,13 +7,16 @@ export default class extends AView {
 	}
 
 	async getHtml(){
+
+		const testheader = this.createTestParagraph('dashboard.testheader');
 		const header = this.createHeader('Welcome to Pong game!', 'h1');
         const p1 = this.createParagraph("You are successfully running a Pong game.");
         const p2 = this.createParagraphWithLink("Start a one-vs-one game", "/one-vs-one");
         const p3 = this.createParagraphWithLink("Start your tournament", "/tournaments");
         const p4 = this.createParagraphWithLink("Checkout how your friends are doing", "/friends");
+
 		
-		this.updateView(header, p1, p2, p3, p4);
+		this.updateView(testheader, header, p1, p2, p3, p4);
 		return ;
 	}
 }

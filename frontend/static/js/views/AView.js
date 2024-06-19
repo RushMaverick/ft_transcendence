@@ -12,7 +12,7 @@ export default class {
 	async getHtml(){
 		return "";
 	}
-
+	
 	updateView(...elements){
 		const container = document.querySelector('main');
 		const canvas = document.querySelector('canvas');
@@ -26,6 +26,7 @@ export default class {
 			if (element)
 				container.appendChild(element);
 		});
+		document.dispatchEvent(new CustomEvent('viewUpdated'));
 	}
 
 	createHeader(text, headerSize) {
@@ -37,6 +38,13 @@ export default class {
     createParagraph(text) {
         const p = document.createElement('p');
         p.textContent = text;
+        return p;
+    }
+
+    createTestParagraph(langkey) {
+        const p = document.createElement('p');
+		// p.textContent = 'ei vieläkään';
+		p.setAttribute('lang-key', langkey);
         return p;
     }
 
