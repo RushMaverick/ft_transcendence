@@ -7,11 +7,10 @@ export default class extends AView {
 	}
 
 	async getHtml(){
-		return `
-			<h1>Friends</h1>
-			<p>
-				You have no friends.	
-			</p>
-			`;
+		const friends = this.createHeader('friends', 'h2');
+		const p = this.createParagraph('You have no friends');
+
+		this.updateView(friends, p);
+		return ;
 	}
 }
