@@ -69,8 +69,8 @@ const router = async () => {
 			result: [location.pathname]
 		};
 	}
-	//if we want, we can do 404 here when it is no match
-	
+
+	//comment out to remove login for testing
 	if (match.route.authRequired && !window.isLoggedIn) {
 		console.log(`Access to ${match.route.path} is restricted.`);
 		navigateTo("/login");
@@ -88,9 +88,6 @@ document.addEventListener("DOMContentLoaded", () => {
 	document.body.addEventListener("click", e => {
 		if (e.target.matches("[data-link]")) {
 			e.preventDefault();
-			// if (location.pathname === "/pong") {
-			// 	// Add functionality for unloading the pong script.
-			// }
 			navigateTo(e.target.href);
 		}
 		//if link element has data-link attribute, we want to prevent default behavior
