@@ -36,7 +36,6 @@ class PongGame {
 		//Setup cube1 bounding box
 		this.cube1Bounds = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());
 		this.cube1Bounds.setFromObject(this.cube);
-		console.log(this.cube1Bounds);
 		
         this.geometry2 = new THREE.BoxGeometry(5, 15, 2);
 		this.cube2 = new THREE.Mesh(this.geometry2, this.material);
@@ -48,7 +47,6 @@ class PongGame {
 		//Setup cube2 bounding box
 		this.cube2Bounds = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());
 		this.cube2Bounds.setFromObject(this.cube2);
-		console.log(this.cube2Bounds);
 
         this.scene.add(this.cube, this.cube2);
     }
@@ -173,7 +171,6 @@ class PongGame {
 	}
 
     animate() {
-		// console.log("animate");
 		if (!this.isAnimating)
 			return;
 		requestAnimationFrame(() => this.animate());
@@ -182,7 +179,9 @@ class PongGame {
 		this.cube1Bounds.copy(this.cube.geometry.boundingBox).applyMatrix4(this.cube.matrixWorld);
 		this.cube2Bounds.copy(this.cube2.geometry.boundingBox).applyMatrix4(this.cube2.matrixWorld);
 		
-		console.log(this.cube1Bounds);
+		if (this.cube1Bounds.intersectsBox(this.borderBounds) || this.cube1Bounds.intersectsBox(this.border2Bounds)){
+			console.log("Collision detected");
+		}
 		// checkCollision();
 		this.ball.position.x += 0.25;
 		this.renderer.render(this.scene, this.camera);
