@@ -1,3 +1,5 @@
+import PongGame from "./pongThree.js";
+
 export default class {
 	constructor(params){
 		this.params = params;
@@ -13,6 +15,12 @@ export default class {
 
 	updateView(...elements){
 		const container = document.querySelector('main');
+		const canvas = document.querySelector('canvas');
+		const pong = document.querySelector('pong');
+		if (canvas && window.location.pathname != '/pong' && PongGame.instance){
+			canvas.remove();
+			PongGame.instance.stopAnimate();
+		}
 		container.innerHTML = '';
 		elements.forEach((element) => {
 			if (element)
@@ -66,5 +74,24 @@ export default class {
 		button.textContent = text;
 		return button;
 	}
+
+	createGame(name){
+		// Create the game div
+		const gameDiv = document.createElement('div');
+		gameDiv.id = name; // Assign an ID to easily select the game later
+		gameDiv.classList.add(name);
+	
+		// Create a new PongGame instance
+		const pong = new PongGame();
+		pong.animate();
+
+		// Append the game div to the body (or another element)
+		document.body.appendChild(gameDiv);
+		document.body.appendChild(pong.renderer.domElement);
+		
+		// Return the game div for potential further manipulation
+		return gameDiv;
+	}
+	
 
 }
