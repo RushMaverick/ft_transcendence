@@ -14,12 +14,12 @@ class PongGame {
 		this.isAnimating = true;
         this.scene = new THREE.Scene();
         this.createCubes();
-		this.setupBall();
         this.setupLighting();
         this.setupCamera();
         this.setupRenderer();
         this.handleKeyPresses();
 		this.createBorders();
+		this.setupBall();
     }
 
     createCubes() {
@@ -54,9 +54,13 @@ class PongGame {
 	createBorders() {
 		this.geometry3 = new THREE.BoxGeometry(200, 1, 2);
 		this.geometry4 = new THREE.BoxGeometry(200, 1, 2);
+		
+		this.material2 = new THREE.MeshLambertMaterial({
+            color: 0xaeaa97
+        });
 
-		this.border = new THREE.Mesh(this.geometry3, this.material);
-		this.border2 = new THREE.Mesh(this.geometry4, this.material);
+		this.border = new THREE.Mesh(this.geometry3, this.material2);
+		this.border2 = new THREE.Mesh(this.geometry4, this.material2);
 		
 		this.border.position.x = 10;
 		this.border.position.y = 0;
@@ -96,7 +100,8 @@ class PongGame {
 		this.ball.position.z = 0;
 
 		//setup ball bounding box
-		this.ballBounds = new THREE.Sphere(this.ball.position.add, 2);
+		this.ballBounds = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());;
+		this.ballBounds.setFromObject(this.ball);
 
 		this.ball.castShadow = true;
 		this.ball.receiveShadow = true;
@@ -104,21 +109,21 @@ class PongGame {
 	}
 
     setupCamera() {
-	// Setting up camera
-	this.aspectRatio = window.innerWidth / window.innerHeight;
-	this.cameraWidth = 250;
-	this.cameraHeight = this.cameraWidth / this.aspectRatio;
+		// Setting up camera
+		this.aspectRatio = window.innerWidth / window.innerHeight;
+		this.cameraWidth = 250;
+		this.cameraHeight = this.cameraWidth / this.aspectRatio;
 
-	this.camera = new THREE.OrthographicCamera(
-		this.cameraWidth / -2, // left
-		this.cameraWidth / 2, // right
-		this.cameraHeight / 2, // top
-		this.cameraHeight / -2, // bottom
-		0, // near plane
-		100000 // far plane
-	);
-	this.camera.position.set(100, 200, 200);
-	this.camera.lookAt(0, 2, 0);
+		this.camera = new THREE.OrthographicCamera(
+			this.cameraWidth / -2, // left
+			this.cameraWidth / 2, // right
+			this.cameraHeight / 2, // top
+			this.cameraHeight / -2, // bottom
+			0, // near plane
+			100000 // far plane
+		);
+		this.camera.position.set(100, 200, 200);
+		this.camera.lookAt(0, 2, 0);
     }
 
     setupRenderer() {
@@ -146,7 +151,6 @@ class PongGame {
                 case 'ArrowDown':
                     this.cube2.position.z += this.speed;
                     break;
-				//cycle through camera views
 				case 'p':
 					// Camera view 1
 					this.camera.position.set(0, 200, 0);
@@ -165,9 +169,36 @@ class PongGame {
             }
         });
     }
+	
+	cubeFlash() {
+		this.cube.material.transparent = true;
+		this.cube.material.opacity = 0.5;
+		this.cube.material.color = new THREE.Color(Math.random() * 0xffffff);
+	}
 
-	checkCollision() {
+	sphereFlash() {
+		this.ball.material.transparent = true;
+		this.ball.material.opacity = 0.5;
+		this.ball.material.color = new THREE.Color(Math.random() * 0xffffff);
+	}
 
+	collisionChecking() {
+		if (this.cube1Bounds.intersectsBox(this.borderBounds) || this.cube1Bounds.intersectsBox(this.border2Bounds)
+			|| this.cube2Bounds.intersectsBox(this.borderBounds) || this.cube2Bounds.intersectsBox(this.border2Bounds)
+			|| this.ballBounds.intersectsBox(this.cube1Bounds) || this.ballBounds.intersectsBox(this.cube2Bounds)){
+			this.cubeFlash();
+		}
+		else {
+			this.cube.material.opacity = 1;
+			this.cube.material.color = new THREE.Color(0xaeaa97);
+		}
+		if (this.ballBounds.intersectsBox(this.cube1Bounds) || this.ballBounds.intersectsBox(this.cube2Bounds)){
+			this.sphereFlash();
+		}
+		else {
+			this.ball.material.opacity = 1;
+			this.ball.material.color = new THREE.Color(0xaeaa97);
+		}
 	}
 
     animate() {
@@ -178,11 +209,9 @@ class PongGame {
 			this.ball.position.x = 0;
 		this.cube1Bounds.copy(this.cube.geometry.boundingBox).applyMatrix4(this.cube.matrixWorld);
 		this.cube2Bounds.copy(this.cube2.geometry.boundingBox).applyMatrix4(this.cube2.matrixWorld);
+		this.ballBounds.copy(this.ball.geometry.boundingBox).applyMatrix4(this.ball.matrixWorld);
+		this.collisionChecking();
 		
-		if (this.cube1Bounds.intersectsBox(this.borderBounds) || this.cube1Bounds.intersectsBox(this.border2Bounds)){
-			console.log("Collision detected");
-		}
-		// checkCollision();
 		this.ball.position.x += 0.25;
 		this.renderer.render(this.scene, this.camera);
     }
