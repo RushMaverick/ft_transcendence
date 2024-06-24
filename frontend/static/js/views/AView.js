@@ -1,4 +1,4 @@
-import PongGame from "./pongThree.js";
+import PongGame from "./gameCanvas/pongThree.js";
 
 export default class {
 	constructor(params){

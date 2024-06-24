@@ -1,4 +1,4 @@
-import PongGame from "./pongThree.js";
+import PongGame from "./gameCanvas/pongThree.js";
 import AView from "./AView.js";
 
 export default class extends AView {
