@@ -36,6 +36,7 @@ export default class {
 	createHeader(text, headerSize) {
 		const header = document.createElement(headerSize);
         header.textContent = text;
+		header.className = 'h1';
         return header;
     }
 
@@ -43,6 +44,7 @@ export default class {
         const p = document.createElement('p');
         p.textContent = text;
 		p.innerHTML = text.replace(/\t/g, '&emsp;&emsp;');
+		p.className = 'p';
         return p;
     }
 

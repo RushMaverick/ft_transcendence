@@ -35,6 +35,14 @@ nav button {
   margin: 0 10px;
 }
 
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: rgb(255, 255, 255);
+  margin-bottom: 20px;
+}
+
 main {
   display: flex;
   justify-content: center;
@@ -75,12 +83,10 @@ main {
   top: calc(50% - 10px);
 } */
 
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  color: rgb(255, 255, 255);
-  margin-bottom: 20px;
+h1 {
+  font-size: 40px;
+  letter-spacing: 1px;
+  margin-left: 5px;
 }
 
 body {
@@ -90,24 +96,35 @@ body {
   font-size: 18px;
 }
 
+p {
+  margin-left: 10px;
+}
+
 .nav {
   position: fixed;
+  padding: 10px;
   top: 0;
   left: 0;
-  width: var(--nav-width);
+  width: 180px;
   height: 100vh;
   background: #222222;
+  text-align: center;
 }
 
-.nav__link {
-  display: block;
-  padding: 12px 18px;
+.nav a {
+  color: #dbe4cc;
   text-decoration: none;
-  color: #eeeeee;
-  font-weight: 500;
+  font-size: 20px;
+  display: inline-block;
+  padding: 6px 12px;
+  margin: 0 10px;
+  transition: background-color 0.3s ease;
 }
 
-.nav__link:hover {
+/* .nav__link {
+  text-decoration: none; */
+
+.nav a:hover {
   background: rgba(255, 255, 255, 0.05);
 }
 
