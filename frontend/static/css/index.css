@@ -15,14 +15,6 @@
   width: 800px;
 }
 
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  color: rgb(255, 255, 255);
-  margin-bottom: 20px;
-}
-
 header h1 {
   font-size: 3em;
   letter-spacing: 5px;
@@ -83,6 +75,14 @@ main {
   top: calc(50% - 10px);
 } */
 
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: rgb(255, 255, 255);
+  margin-bottom: 20px;
+}
+
 body {
   --nav-width: 200px;
   margin: 0 0 0 var(--nav-width);
@@ -121,3 +121,59 @@ a {
   color: #009579;
 }
 
+.friend {
+  margin-left: 5px;
+	display: flex;
+	align-items: center;
+	margin-bottom: 10px;
+}
+
+.friend img {
+	border-radius: 50%;
+	width: 50px;
+	height: 50px;
+	margin-right: 10px;
+}
+
+.friend .status {
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	margin-left: 10px;
+}
+
+.friend a {
+  color: #060606;
+}
+
+.friends-profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 20px;
+}
+
+.friends-profile img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  border: 4px solid #ddd;
+  margin-bottom: 15px;
+}
+
+.online-status {
+  display: flex;
+  align-items: center;
+  margin: 5px ;
+}
+
+.friends-profile .status {
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	margin-left: 5px;
+}
