@@ -1,6 +1,7 @@
 import * as THREE from 'three';
-import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
-import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
+import UI from './gameUI.js';
+import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
+
 
 export default class PongGame {
 	static instance;
@@ -14,10 +15,12 @@ export default class PongGame {
 		}
         this.speed = 2.5;
 		this.isAnimating = true;
+		this.UI = new UI();
         this.scene = new THREE.Scene();
         this.createCubes();
         this.setupLighting();
         this.setupCamera();
+		this.setupUI();
         this.setupRenderer();
         this.handleKeyPresses();
 		this.createBorders();
@@ -110,6 +113,41 @@ export default class PongGame {
 		this.scene.add(this.ball);
 	}
 
+	async getText() {
+		try {
+			const response = await fetch('static/js/views/gameCanvas/gameData/gameData.json');
+			if (!response.ok) {
+				throw new Error(`HTTP error status: ${response.status}`);
+			}
+			const data = await response.json();
+			this.message = data.message;
+			// return this.message;
+		} catch (error) {
+			console.error('There was a problem with the fetch operation:', error);
+		}
+	}
+
+	async setupUI() {
+		
+		this.message = this.getText();
+		
+		this.text = document.createElement('p');
+		
+		this.text.textContent = this.message;
+		this.text.style.color = 'black';
+		this.text.style.fontSize = '20px';
+		this.text.style.fontFamily = 'Arial';
+		this.text.style.textAlign = 'center';
+		this.text.style.backgroundColor = 'white';
+		this.text.style.border = '1px solid black';
+		this.text.style.padding = '5px';
+		
+		this.textObject = new CSS2DObject(this.text);
+		
+		this.scene.add(this.textObject);
+		
+	}
+	
     setupCamera() {
 		// Setting up camera
 		this.aspectRatio = window.innerWidth / window.innerHeight;
@@ -205,6 +243,13 @@ export default class PongGame {
 		}
 	}
 
+	updateText() {
+		this.getText();
+		this.text.textContent = this.message;
+		this.textObject = new CSS2DObject(this.text);
+		this.UI.textRenderer.render(this.scene, this.camera);
+	}
+
     animate() {
 		if (!this.isAnimating)
 			return;
@@ -217,6 +262,8 @@ export default class PongGame {
 		this.collisionChecking();
 		
 		this.ball.position.x += 0.25;
+
+		this.updateText();
 		this.renderer.render(this.scene, this.camera);
     }
 
