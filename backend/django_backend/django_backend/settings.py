@@ -34,6 +34,7 @@ ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = [
 	'rest_framework',
+    'rest_framework_simplejwt',
 	'channels',
     'corsheaders',  # for cors policies
 	'daphne',
@@ -164,3 +165,4 @@ SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
     "SIGNING_KEY": SECRET_KEY,
 }
+
