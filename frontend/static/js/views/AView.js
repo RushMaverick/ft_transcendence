@@ -13,6 +13,11 @@ export default class {
 		return "";
 	}
 
+	clearView() {
+		const container = document.querySelector('main');
+		container.innerHTML = '';
+	}
+
 	updateView(...elements){
 		const container = document.querySelector('main');
 		const canvas = document.querySelector('canvas');
@@ -31,12 +36,15 @@ export default class {
 	createHeader(text, headerSize) {
 		const header = document.createElement(headerSize);
         header.textContent = text;
+		header.className = 'h1';
         return header;
     }
 
     createParagraph(text) {
         const p = document.createElement('p');
         p.textContent = text;
+		p.innerHTML = text.replace(/\t/g, '&emsp;&emsp;');
+		p.className = 'p';
         return p;
     }
 
@@ -75,6 +83,19 @@ export default class {
 		return button;
 	}
 
+	async fetchJsonData(url) {
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`HTTP error status: ${response.status}`);
+            }
+            return await response.json();
+        } catch (error) {
+            console.error("Failed to fetch JSON data:", error);
+            return null;
+        }
+    }
+
 	createGame(name){
 		// Create the game div
 		const gameDiv = document.createElement('div');
@@ -92,6 +113,4 @@ export default class {
 		// Return the game div for potential further manipulation
 		return gameDiv;
 	}
-	
-
 }

@@ -10,7 +10,7 @@ export default class extends AView {
 
 	async getHtml(){
 
-		const title = this.createHeader('Register', 'h2');
+		const title = this.createHeader('Register', 'h1');
 		title.classList.add('text-center');
 
 		const form = this.createForm('registerform');
