@@ -2,7 +2,7 @@ from django.contrib.auth.models import  User
 from rest_framework import status, viewsets
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from .serializers import FriendsSerializer
+from .serializers import FriendsSerializer, FriendsListSerializer
 from user.permissions import IsAuthenticatedOrCreateOnly, IsUser
 from .models import FriendRequest
 
@@ -10,6 +10,20 @@ class FriendsViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = FriendsSerializer
     permission_classes = [IsAuthenticatedOrCreateOnly, IsUser]
+
+    """Return the list of the friends"""
+    @action(detail=False, methods=['get'], permission_classes=[IsAuthenticatedOrCreateOnly, IsUser])
+    def list_friends(self, request):
+        user = request.user
+        if(user.is_authenticated == False):
+            return(Response({"Warning": "Anonimus User"}, status=status.HTTP_401_UNAUTHORIZED))
+        friends_from = FriendRequest.objects.filter(from_user=user,accepted=True).values_list('to_user', flat=True)
+        friends_to = FriendRequest.objects.filter(to_user=user, accepted=True).values_list('from_user', flat=True)
+
+        friend_ids = list(set(friends_from).union(set(friends_to)))
+        friends = User.objects.filter(id__in=friend_ids)
+        serializer = FriendsListSerializer(friends, many=True)
+        return Response({"friends": serializer.data}, status=status.HTTP_200_OK)
 
     """Send friend request"""
     @action(detail=False, methods=['post'], permission_classes=[IsAuthenticatedOrCreateOnly, IsUser])
@@ -37,7 +51,7 @@ class FriendsViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['post'], permission_classes=[IsAuthenticatedOrCreateOnly, IsUser])
     def accept_request(self,request, pk=None):
         if not request.user.is_authenticated:
-            return Response({"Warning": "User is not authenticated."}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({"Warning": "Anonimus User"}, status=status.HTTP_401_UNAUTHORIZED)
         try:
             friend_request = FriendRequest.objects.get(id=pk, to_user=request.user, accepted=False)
         except FriendRequest.DoesNotExist:
