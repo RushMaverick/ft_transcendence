@@ -71,11 +71,11 @@ const router = async () => {
 	}
 
 	//comment out to remove login for testing
-	if (match.route.authRequired && !window.isLoggedIn) {
-		console.log(`Access to ${match.route.path} is restricted.`);
-		navigateTo("/login");
-		return;
-	}
+	// if (match.route.authRequired && !window.isLoggedIn) {
+	// 	console.log(`Access to ${match.route.path} is restricted.`);
+	// 	navigateTo("/login");
+	// 	return;
+	// }
 	const view = new match.route.view(getParams(match));
 
 	view.getHtml();

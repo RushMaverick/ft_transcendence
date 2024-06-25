@@ -56,7 +56,6 @@ export default class extends AView {
             password: password,
             // profile: {
             //     // avatar: ,
-            //     online: true
             // }
         };
 
