@@ -47,6 +47,6 @@ export default class extends AView {
         const friends = this.createParagraphWithLink("Checkout who is online", "/friends");
 
 		this.updateView(header, userName, userEmail, profilePicutre, message, stats, settings, friends);
-		return container;
+		return ;
 	}
 }
