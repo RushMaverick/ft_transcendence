@@ -110,10 +110,15 @@ document.addEventListener("DOMContentLoaded", () => {
 			e.preventDefault();
 			navigateTo(e.target.href);
 		}
+		if (e.target.matches("[lang-toggle]")) {
+			
+			console.log('we would switch languages to');
+		}
 		//if link element has data-link attribute, we want to prevent default behavior
 		//and sits on the element itself from index.html
 	
 	});
+		//if link element has data-link attribute, we want to prevent default behavior
 
 document.addEventListener('loginSuccess', (event) => {
 	const { path } = event.detail;
