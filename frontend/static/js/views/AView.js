@@ -29,15 +29,17 @@ export default class {
 		document.dispatchEvent(new CustomEvent('viewUpdated'));
 	}
 
-	createHeader(text, headerSize) {
+	createHeader(langkey, text, headerSize) {
 		const header = document.createElement(headerSize);
         header.textContent = text;
+		header.setAttribute('lang-key', langkey);
         return header;
     }
 
-    createParagraph(text) {
+    createParagraph(langkey, text) {
         const p = document.createElement('p');
         p.textContent = text;
+		p.setAttribute('lang-key', langkey);
         return p;
     }
 
@@ -48,25 +50,30 @@ export default class {
         return p;
     }
 
-	createParagraphWithLink(text, href, additionalText) {
+	createParagraphWithLink(langkey, additionalText, href) {
         const p = document.createElement('p');
-		p.textContent = text;
+		p.textContent = "temp";
+		p.setAttribute('lang-key', langkey);
         const link = document.createElement('a');
+		console.log("WE ADD A LINK NOWWW");
+		console.log(href);
+		console.log(additionalText);
         link.href = href;
-        link.textContent = text;
+        link.textContent = "umm hello";
         link.dataset.link = true;
         p.appendChild(link);
-        if (additionalText) {
-            const span = document.createElement('span');
-            span.textContent = additionalText;
-            p.appendChild(span);
-        }
+        // if (additionalText) {
+        //     const span = document.createElement('span');
+        //     span.textContent = additionalText;
+        //     p.appendChild(span);
+        // }
         return p;
     }
 
-	createAnchor(text){
+	createAnchor(langkey, text){
 		const a = document.createElement('a');
         a.textContent = text;
+		a.setAttribute('lang-key', langkey);
         return a;
 	}
 
@@ -80,6 +87,7 @@ export default class {
 		const button = document.createElement('button');
 		button.classList.add(functionality, 'button');
 		button.textContent = text;
+		// button.setAttribute('lang-key', langkey);
 		return button;
 	}
 
