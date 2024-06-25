@@ -34,14 +34,16 @@ class FriendsViewSet(viewsets.ModelViewSet):
         return Response({"detail": "Friend request sent successfully.","friend_request":serializer.data}, status=status.HTTP_201_CREATED)
     
     """Accept friend request"""
-    def accept_request(self,request):
-        print("looaoaoaoaoa")
-        friend_request =  self.get_object()
-        if(friend_request.to_user != request.user):
-            return Response(status=status.HTTP_401_UNAUTHORIZED)
+    @action(detail=True, methods=['post'], permission_classes=[IsAuthenticatedOrCreateOnly, IsUser])
+    def accept_request(self,request, pk=None):
+        if not request.user.is_authenticated:
+            return Response({"Warning": "User is not authenticated."}, status=status.HTTP_401_UNAUTHORIZED)
+        try:
+            friend_request = FriendRequest.objects.get(id=pk, to_user=request.user, accepted=False)
+        except FriendRequest.DoesNotExist:
+            return Response({"Warning":"This Friend Request Does not Exist or has been accepted"}, status=status.HTTP_404_NOT_FOUND)
         friend_request.accepted = True
         friend_request.save()
-        return Response({"detail": "Friend request accepted."}, status=status.HTTP_200_OK)
-
-        
+        serializer = FriendsSerializer(friend_request)
+        return Response({"detail": "Friend request accepted.","friend_request":serializer.data}, status=status.HTTP_200_OK)
             
