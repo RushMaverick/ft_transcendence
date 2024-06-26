@@ -1,0 +1,22 @@
+[
+    {
+        "id": "2",
+        "username": "john_doe",
+        "profile": {
+            "avatar": "https://picsum.photos/200",
+            "online": true
+        },
+        "wins": "2",
+        "loses": "3"
+    },
+    {
+        "id": "3",
+        "username": "jane_doe",
+        "profile": {
+            "avatar": "https://picsum.photos/200",
+            "online": false
+        },
+        "wins": "4",
+        "loses": "1"
+    }
+]

@@ -1,8 +1,79 @@
+from django.shortcuts import render
 from django.contrib.auth.models import  User
 from rest_framework import status, viewsets, permissions
 from rest_framework.response import Response
-from .serializers import UserSerializer, PasswordUpdateSerializer
+from rest_framework.views import APIView
+from rest_framework.parsers import MultiPartParser, FormParser
+from .serializers import UserSerializer, PasswordUpdateSerializer, AvatarSerializer, MatchSerializer
 from .permissions import IsAuthenticatedOrCreateOnly, IsUser
+from .models import Avatar, Match
+
+
+class MatchList(APIView):
+    permission_classes = [IsAuthenticatedOrCreateOnly]
+
+    def get(self, request, format=None):
+        matches = Match.objects.all()
+        serializer = MatchSerializer(matches, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, format=None):
+        serializer = MatchSerializer(data=request.data)
+        if(serializer.is_valid()):
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class PlayerMatchesView(APIView):
+    permissions_classes = [IsAuthenticatedOrCreateOnly]
+
+    def get(self, request, user_id, formant=None):
+        try:
+            player = User.objects.get(id=user_id)
+        except User.DoesNotExist:
+            return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+        matches = Match.objects.filter(player1=player) | Match.objects.filter(player2=player)
+        serializer = MatchSerializer(matches, many=True)
+        return Response(serializer.data)
+
+class AvatarViewSet(APIView):
+    serializer_class = AvatarSerializer
+    parser_classes = [MultiPartParser, FormParser]
+
+    def get(self, request, *args, **kwargs):
+        "Return the current avatar"
+        user = request.user
+        avatar = Avatar.objects.filter(user=user).first()
+        if(avatar):
+            serializer = self.serializer_class(instance=avatar)
+            return Response(serializer.data)
+        else:
+            return Response({"error": "No avatar found."}, status=status.HTTP_404_NOT_FOUND)
+
+    def post(self, request, format=None):
+        "Upload avatar, or update the avatar"
+        user = request.user
+        serializer = self.serializer_class(data=request.data)
+        if(serializer.is_valid()):
+            old_avatar = Avatar.objects.filter(user=user).first()
+            if(old_avatar):
+                old_avatar.image.delete()
+                old_avatar.delete()
+            serializer.save(user=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, *args, **kwargs):
+        "Delete Avatar"
+        user = request.user
+        avatar = Avatar.objects.filter(user=user).first()
+        if(avatar):
+            avatar.image.delete()
+            avatar.delete()
+            return Response({"message": "Avatar deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
+        else:
+            return Response({"error": "No avatar found to delete."}, status=status.HTTP_404_NOT_FOUND)
+
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()

@@ -9,10 +9,10 @@ class Pong:
 		self.room_group_name = None
 		self.thread = None
 		self.tick: int = 1
-		self.game_running: bool = False
 		self.ball: Ball = Ball()
 		self.player1: Player = None
 		self.player2: Player = None
+		self.active: bool = False
 		self.state = {}
 
 	def add_room_group_name(self, room_group_name: str) -> None:
@@ -21,32 +21,45 @@ class Pong:
 	def add_channel_layer(self, channel_layer) -> None:
 		self.channel_layer = channel_layer
 
+<<<<<<< HEAD
 	def add_thread(self, thread) -> None:
 		self.thread = thread
 
 	def add_player(self, player: Player) -> None:
+=======
+	def add_player(self, player: Player) -> Player:
+>>>>>>> b65036b82abc2b7e58ff53b013dddd57fd477e04
 		if player.id == 1:
 			self.player1 = player
+			return self.player1
 		elif player.id == 2:
 			self.player2 = player
+			return self.player2
 
-	def start_game(self) -> None:
-		print("Starting game")
-		self.game_running = True
+	def start(self) -> None:
+		print("start", flush=True)
+		self.active = True
 
-	def stop_game(self) -> None:
-		print("Stopping game")
-		self.game_running = False
+	def stop(self) -> None:
+		print("stop", flush=True)
+		self.active = False
+
+	# def remove_player(self, player: Player) -> None:
+	# 	if player.id == 1:
+	# 		self.player1 = None
+	# 	elif player.id == 2:
+	# 		self.player2 = None
 
 	async def update_state(self) -> None:
-		print("Updating state")
 		self.state = {
-			"player1": {
+			1: {
+				"name": "Player 1",
 				"score": self.player1.score,
 				"x": self.player1.x,
 				"y": self.player1.y,
 			},
-			"player2": {
+			2: {
+				"name": "Player 2",
 				"score": self.player2.score,
 				"x": self.player2.x,
 				"y": self.player2.y,
@@ -56,7 +69,7 @@ class Pong:
 				"y": self.ball.y,
 			},
 		}
-		print (f"{self.room_group_name}")
+		print (f"Sending state to {self.room_group_name}", flush=True)
 		await self.channel_layer.group_send(
 			self.room_group_name, {"type": "game.state", "state": self.state}
 		)
@@ -77,20 +90,25 @@ class Pong:
 			self.ball.reset_position()
 
 	async def game_loop(self) -> None:
+<<<<<<< HEAD
 		print("Game loop")
 		# self.game_running = True
 		print("thread active: ", self.thread["active"], flush=True)
 		while self.thread["active"]:
+=======
+		print("Game loop", flush=True)
+		while self.active:
+>>>>>>> b65036b82abc2b7e58ff53b013dddd57fd477e04
 			if not self.player1 or not self.player2:
-				print("Players not connected")
+				print("Players not connected", flush=True)
 				await asyncio.sleep(1)
 				continue
 			start_time = time.time()
 			self.update_game()
 			await self.update_state()
 			if self.player1.score >= 5 or self.player2.score >= 5:
-				self.stop_game()
-				print("Game Over")
+				self.stop()
+				print("Game Over", flush=True)
 			delta_time = time.time() - start_time
 			sleep_time = 1./self.tick - delta_time
 			if (sleep_time > 0):

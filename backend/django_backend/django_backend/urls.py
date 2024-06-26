@@ -16,14 +16,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-
+from django.conf.urls.static import static
+from django.conf import settings
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
 
 from rest_framework import routers
-from user.views import UserViewSet
+from user.views import UserViewSet, MatchList, PlayerMatchesView
 # from rest_demo import views as rest_views
 
 router = routers.DefaultRouter()
@@ -37,4 +38,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('profile/', include('user.urls')),
+    path('matches/', MatchList.as_view(), name='match-list'),
+	path('matches/player/<int:user_id>/', PlayerMatchesView.as_view(), name='player-matches'),
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
