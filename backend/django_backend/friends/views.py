@@ -39,6 +39,19 @@ class FriendsViewSet(viewsets.ModelViewSet):
     serializer_class = FriendsSerializer
     permission_classes = [IsAuthenticatedOrCreateOnly, IsUser]
 
+    """Return the list of the pending friend requests"""
+    @action(detail=False, methods=['get'], permission_classes=[IsAuthenticatedOrCreateOnly, IsUser])
+    def list_friends_request(self, request):
+        user = request.user
+        if(user.is_authenticated == False):
+            return(Response({"Warning": "Anonimus User"}, status=status.HTTP_401_UNAUTHORIZED))
+        friends_to = FriendRequest.objects.filter(to_user=user, accepted=False).values_list('from_user', flat=True)
+
+        request_ids = list(set(friends_to))
+        requests = FriendRequest.objects.filter(id=request_ids)
+        serializer = FriendsListSerializer(requests, many=True)
+        return Response({"Pending Friend request": serializer.data}, status=status.HTTP_200_OK)
+
     """Return the list of the friends"""
     @action(detail=False, methods=['get'], permission_classes=[IsAuthenticatedOrCreateOnly, IsUser])
     def list_friends(self, request):
