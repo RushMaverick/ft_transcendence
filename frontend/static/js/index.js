@@ -87,8 +87,8 @@ window.addEventListener("popstate", router);
 document.addEventListener("viewUpdated", () => {
     console.log("well at least this works?");
     let translations;
-
-    fetch('./static/js/fi.json')
+	const language = window.localStorage.getItem('language');
+    fetch('./static/js/' + language + '.json')
    .then(response => response.json())
    .then(data => {
         translations = data; // Store the imported translations
@@ -111,8 +111,10 @@ document.addEventListener("DOMContentLoaded", () => {
 			navigateTo(e.target.href);
 		}
 		if (e.target.matches("[lang-toggle]")) {
-			
-			console.log('we would switch languages to');
+			const language = e.target.getAttribute('language');
+        	console.log('Language set for this button:', language);
+			window.localStorage.setItem('language', language);
+			document.dispatchEvent(new CustomEvent('viewUpdated'));
 		}
 		//if link element has data-link attribute, we want to prevent default behavior
 		//and sits on the element itself from index.html

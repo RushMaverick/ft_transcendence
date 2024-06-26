@@ -52,7 +52,7 @@ export default class {
         const p = document.createElement('p');
 		p.textContent = 'ei vieläkään';
 		p.setAttribute('lang-key', langkey);
-		p.innerHTML = text.replace(/\t/g, '&emsp;&emsp;');
+		//p.innerHTML = text.replace(/\t/g, '&emsp;&emsp;');
 		p.className = 'p';
         return p;
     }

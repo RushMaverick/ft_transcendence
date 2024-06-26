@@ -12,16 +12,18 @@ export default class extends AView {
 		};
 	}
 
-	fetchName(userData){
+	fetchName(langkey, userData){
 		const base = document.createElement('section');
 		const name = this.userData.name;
+		base.setAttribute(langkey);
 		base.textContent = 'username : ' + name;
 		
 		return base;
 	}
 	
-	fetchEmail(userData){
+	fetchEmail(langkey, userData){
 		const base = document.createElement('section');
+		base.setAttribute(langkey);
 		const email = this.userData.email;
 		base.textContent = 'email : ' + email;
 		
@@ -37,14 +39,14 @@ export default class extends AView {
 	}
 
 	async getHtml(userData){
-		const header = this.createHeader('Welcome User!', 'h1');
-		const userName = this.fetchName(userData);
-		const userEmail = this.fetchEmail(userData);
+		const header = this.createHeader('profile.testheader', 'Welcome User!', 'h1');
+		const userName = this.fetchName('profile.username', userData);
+		const userEmail = this.fetchEmail('profile.email', userData);
 		const profilePicutre = this.fetchPicture(userData);
         const message = this.createParagraph("Here you could see your profile page.");
-        const stats = this.createParagraphWithLink("Check out your game stats", "/statistics");
-        const settings = this.createParagraphWithLink("Change settings from here", "/settings");
-        const friends = this.createParagraphWithLink("Checkout who is online", "/friends");
+        const stats = this.createParagraphWithLink('profile.link1', "Check out your game stats", "/statistics");
+        const settings = this.createParagraphWithLink('profile.link2', "Change settings from here", "/settings");
+        const friends = this.createParagraphWithLink('profile.link3', "Checkout who is online", "/friends");
 
 		this.updateView(header, userName, userEmail, profilePicutre, message, stats, settings, friends);
 		return ;
