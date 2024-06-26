@@ -37,17 +37,18 @@ export default class extends AView {
 	}
 
 	async getHtml(userData){
-		const header = this.createHeader('profile.testheader', 'h1');
-		const userNameBase = this.createParagraph('profile.usernamebase');
+		const header = this.createHeader('.testheader', 'h1');
+		const userNameBase = this.createParagraph('usernamebase');
 		const userName= this.fetchName(userData);
-		const userEmailBase = this.createParagraph('profile.emailbase');
+		const userEmailBase = this.createParagraph('emailbase');
 		const userEmail = this.fetchEmail(userData);
 		const profilePicutre = this.fetchPicture(userData);
         const message = this.createParagraph("Here you could see your profile page.");
-        const stats = this.createParagraphWithLink('profile.link1', "Check out your game stats", "/statistics");
-        const settings = this.createParagraphWithLink('profile.link2', "Change settings from here", "/settings");
-        const friends = this.createParagraphWithLink('profile.link3', "Checkout who is online", "/friends");
+        const stats = this.createLink('link1', "Check out your game stats", "/statistics");
+        const settings = this.createLink('link2', "Change settings from here", "/settings");
+        const friends = this.createLink('link3', "Checkout who is online", "/friends");
 
+		window.localStorage.setItem('page', 'Profile');
 		this.updateView(header, userNameBase, userName, userEmailBase, userEmail, profilePicutre, message, stats, settings, friends);
 		return ;
 	}

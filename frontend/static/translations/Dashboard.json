@@ -1,0 +1,23 @@
+{
+	"english":
+	{
+		"testheader": "hello hullo and welcome to this test",
+		"header": "welcome to pong game",
+		"welcome": "you are successfully running a pong game.",
+		"onevsone": "start a one-vs-one-game",
+		"tournament": "start your tounament",
+		"friends": "check out how your friends are doing"
+	},
+
+	"finnish":
+	{
+		"testheader": "heippuli ja tervetuloa pong peliin",
+		"header": "heippuli ja tervetuloa pong peliin",
+		"welcome": "jipii! sie onnistuit ajamaan pongia",
+		"onevsone": "aloita yks-vs-yks pelo",
+		"tournament": "aloita turnaus",
+		"friends": "kurkkaa miten sun kamut voi"
+	}
+}
+
+

@@ -87,16 +87,19 @@ window.addEventListener("popstate", router);
 document.addEventListener("viewUpdated", () => {
     console.log("well at least this works?");
     let translations;
-	const language = window.localStorage.getItem('language');
-    fetch('./static/translations/' + language + '.json')
-   .then(response => response.json())
+	const page = window.localStorage.getItem('page');
+	console.log('page = ' + page);
+    fetch('./static/translations/' + page + '.json')
+   .then(response => response.text())
    .then(data => {
-        translations = data; // Store the imported translations
+        translations = JSON.parse(data);
+		const language = window.localStorage.getItem('language');
+		const currentTranslations = translations[language]; // Store the imported translations
         const elementsToTranslate = document.querySelectorAll('[lang-key]');
         elementsToTranslate.forEach(element => {
             const key = element.getAttribute('lang-key');
-            if (translations[key]) {
-                element.textContent = translations[key];
+            if (currentTranslations[key]) {
+                element.textContent = currentTranslations[key];
                 console.log(element.textContent);
             }
         });

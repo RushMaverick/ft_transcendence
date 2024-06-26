@@ -1,0 +1,22 @@
+{
+	"finnish":
+	{
+		"testheader": "heippuli ja tervetuloa profiiliin",
+		"usernamebase": "käyttäjätunnus: ",
+		"emailbase": "sähköposti: ",
+		"link1": "aloita yks-vs-yks pelo ",
+		"link2": "aloita turnaus ",
+		"link3": "kurkkaa miten sun kamut voi "
+	},
+
+	"english":
+	{
+		"testheader": "helloups and welcome to your profile",
+		"usernamebase": "username: ",
+		"emailbase": "email: ",
+		"link1": "start 1 vs 1 game ",
+		"link2": "start a tournament ",
+		"link3": "check how your friends are doing "
+	}
+
+}
