@@ -9,14 +9,22 @@ from .models import FriendRequest
 
 #FriendViewSet:
 
-# In this view we have 2 POST Methods which are:
-# - send_request: This method get the current log in user, and check it if its authenticated. Then we request via
-# Postman the user name of the friend, and check if that username exist in the User information. If everything is alright, we create the
-# friend request in the model. We return that the friend request has been accepted.
-# - accept_request: In this case we need to be log in with the user who is gonna accept the friend request, and we check the ID of the friend
-# request and check if accept=false, in that way we now that the friend request needs to be accepted. If the Friend request does not exist, throw 
-# an execeptio. If everything is okey, we set accepted=True in the current Friend request, in that way we ensure that the friend request has 
-# been accepted.
+# In this view, we have two POST methods:
+# 
+# - send_request: This method handles sending a friend request.
+#   - First, it gets the currently logged-in user and checks if they are authenticated.
+#   - Next, it requires the username of the friend to be provided via Postman or another client.
+#   - The method checks if this username exists in the User model.
+#   - If the username exists and the user is valid, a friend request is created in the database.
+#   - The method then returns a response indicating that the friend request has been successfully sent.
+# 
+# - accept_request: This method handles accepting a friend request.
+#   - The logged-in user who wants to accept the request must be authenticated.
+#   - The method takes the ID of the friend request and checks if it exists and has not yet been accepted (accepted=False).
+#   - If the friend request does not exist or has already been accepted, an exception is thrown.
+#   - If everything is in order, the method sets accepted=True for the friend request, marking it as accepted.
+#   - A response is returned to confirm that the friend request has been accepted.
+# 
 # Then we have one GET method, which means we are asking for information:
 # - list_friends: This method returns the list of friends for the logged-in user. 
 #   Here's how it works:
