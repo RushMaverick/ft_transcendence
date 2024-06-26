@@ -117,7 +117,7 @@ export default class extends AView {
 		friendsList.innerHTML = '';
 
 		// const result = await response.json();
-		await this.fetchJsonData('static/js/views/search.json');
+		const result = await this.fetchJsonData('static/js/views/search.json');
 		if (result && result.length > 0) {
 			result.forEach(friend => {
 				friendsList.appendChild(this.createFriendItem(friend));
@@ -126,6 +126,5 @@ export default class extends AView {
 			const noResultsMessage = this.createParagraph(`No Such User Found: ${username}`);
 			friendsList.appendChild(noResultsMessage);
 		}
-		this.updateView(friendsList);
 	}
 }
