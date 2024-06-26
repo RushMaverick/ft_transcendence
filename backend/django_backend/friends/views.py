@@ -26,6 +26,7 @@ from .models import FriendRequest
 #   - A response is returned to confirm that the friend request has been accepted.
 # 
 # Then we have 2 GET methods, which means we are asking for information:
+
 # - list_friends: This method returns the list of friends for the logged-in user. 
 #   Here's how it works:
 #   - First, it identifies the friend requests in which the current user is involved. This includes friend requests where the user is the sender (from_user) 
@@ -34,6 +35,15 @@ from .models import FriendRequest
 #   - Once it has identified these requests, it extracts the IDs of the other users who are part of these accepted friend requests.
 #   - Using these user IDs, it queries the User model to get the details of the users who are friends with the current user, and stores them in a variable called 'friends'.
 #   - Finally, it returns the list of friends.
+
+# - list_friends_request: This method returns the list of pending friend requests for the logged-in user. 
+#   Here's how it works:
+#   - First, it identifies the pending request in which the current user is involved. This includes friend requests where the user is the the receiver (to_user).
+#   - It checks if the 'accepted' field is set to False, indicating that the friend request has not been accepted.
+#   - Checks if there are pending friend request, if its not the case we return a Response where we specify that there is not pending friend requests.
+#   - Once it has identified these pending requests, we got the information from the serializer.
+#   - Finally, it returns the list of the pending the friends requests.
+
 class FriendsViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = FriendsSerializer
