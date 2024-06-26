@@ -6,6 +6,26 @@ from .serializers import FriendsSerializer, FriendsListSerializer
 from user.permissions import IsAuthenticatedOrCreateOnly, IsUser
 from .models import FriendRequest
 
+
+#FriendViewSet:
+
+# In this view we have 2 POST Methods which are:
+# - send_request: This method get the current log in user, and check it if its authenticated. Then we request via
+# Postman the user name of the friend, and check if that username exist in the User information. If everything is alright, we create the
+# friend request in the model. We return that the friend request has been accepted.
+# - accept_request: In this case we need to be log in with the user who is gonna accept the friend request, and we check the ID of the friend
+# request and check if accept=false, in that way we now that the friend request needs to be accepted. If the Friend request does not exist, throw 
+# an execeptio. If everything is okey, we set accepted=True in the current Friend request, in that way we ensure that the friend request has 
+# been accepted.
+# Then we have one GET method, which means we are asking for information:
+# - list_friends: This method returns the list of friends for the logged-in user. 
+#   Here's how it works:
+#   - First, it identifies the friend requests in which the current user is involved. This includes friend requests where the user is the sender (from_user) 
+#     or the receiver (to_user).
+#   - It checks if the 'accepted' field is set to True, indicating that the friend request has been accepted.
+#   - Once it has identified these requests, it extracts the IDs of the other users who are part of these accepted friend requests.
+#   - Using these user IDs, it queries the User model to get the details of the users who are friends with the current user, and stores them in a variable called 'friends'.
+#   - Finally, it returns the list of friends.
 class FriendsViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = FriendsSerializer
