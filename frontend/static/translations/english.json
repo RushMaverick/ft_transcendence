@@ -5,9 +5,9 @@
 	"dashboard.onevsone": "start a one-vs-one-game",
 	"dashboard.tournament": "start your tounament",
 	"dashboard.friends": "check out how your friends are doing",
-	"profile.testheader": "heippuli ja tervetuloa profiiliin",
-	"profile.username": "heippuli ja tervetuloa pong peliin",
-	"profile.email": "email: ",
+	"profile.testheader": "helloups and welcome to your profile",
+	"profile.usernamebase": "username: ",
+	"profile.emailbase": "email: ",
 	"profile.link1": "start 1 vs 1 game",
 	"profile.link2": "start a tournament",
 	"profile.link3": "check how your friends are doing"

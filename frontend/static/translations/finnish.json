@@ -6,8 +6,8 @@
 	"dashboard.tournament": "aloita turnaus",
 	"dashboard.friends": "kurkkaa miten sun kamut voi",
 	"profile.testheader": "heippuli ja tervetuloa profiiliin",
-	"profile.username": "heippuli ja tervetuloa pong peliin",
-	"profile.email": "sähköposti: ",
+	"profile.usernamebase": "käyttäjätunnus: ",
+	"profile.emailbase": "sähköposti: ",
 	"profile.link1": "aloita yks-vs-yks pelo",
 	"profile.link2": "aloita turnaus",
 	"profile.link3": "kurkkaa miten sun kamut voi"
