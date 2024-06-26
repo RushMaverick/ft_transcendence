@@ -25,7 +25,7 @@ from .models import FriendRequest
 #   - If everything is in order, the method sets accepted=True for the friend request, marking it as accepted.
 #   - A response is returned to confirm that the friend request has been accepted.
 # 
-# Then we have one GET method, which means we are asking for information:
+# Then we have 2 GET methods, which means we are asking for information:
 # - list_friends: This method returns the list of friends for the logged-in user. 
 #   Here's how it works:
 #   - First, it identifies the friend requests in which the current user is involved. This includes friend requests where the user is the sender (from_user) 
@@ -45,11 +45,12 @@ class FriendsViewSet(viewsets.ModelViewSet):
         user = request.user
         if(user.is_authenticated == False):
             return(Response({"Warning": "Anonimus User"}, status=status.HTTP_401_UNAUTHORIZED))
-        friends_to = FriendRequest.objects.filter(to_user=user, accepted=False).values_list('from_user', flat=True)
+        
+        pending_request = FriendRequest.objects.filter(to_user=user, accepted=False)
+        if not pending_request.exists():
+            return Response({"Detail": "No pending friend requests."}, status=status.HTTP_200_OK)
 
-        request_ids = list(set(friends_to))
-        requests = FriendRequest.objects.filter(id=request_ids)
-        serializer = FriendsListSerializer(requests, many=True)
+        serializer = FriendsSerializer(pending_request, many=True)
         return Response({"Pending Friend request": serializer.data}, status=status.HTTP_200_OK)
 
     """Return the list of the friends"""
