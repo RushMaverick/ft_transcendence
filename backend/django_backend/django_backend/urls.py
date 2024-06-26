@@ -39,8 +39,9 @@ urlpatterns = [
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('profile/', include('user.urls')),
+    path('friends/', include('friends.urls')),
     path('matches/', MatchList.as_view(), name='match-list'),
-	path('matches/player/<int:user_id>/', PlayerMatchesView.as_view(), name='player-matches'),
-]
+	    path('matches/player/<int:user_id>/', PlayerMatchesView.as_view(), name='player-matches'),
+] 
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
