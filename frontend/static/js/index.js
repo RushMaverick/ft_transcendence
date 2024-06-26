@@ -1,3 +1,9 @@
+//global variable to store the login status(currently without connecting to backend)
+// This will let us the user to be logged in throughout the session
+// window.isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+// console.log(`Initial state: ${window.isLoggedIn}`);
+// but we will not use this for now, we will use temporary checks
+
 import Dashboard from "./views/Dashboard.js";
 import OneVsOne from "./views/OneVsOne.js";
 import Tournaments from "./views/Tournaments.js";
@@ -5,6 +11,9 @@ import Friends from "./views/Friends.js";
 import Pong from "./views/Pong.js";
 import Login from "./views/Login.js";
 import Register from "./views/Register.js";
+import Profile from "./views/Profile.js";
+import Settings from "./views/Settings.js";
+
 
 //match the first character of the string or the start of the string -> "^"
 const pathToRegex = path => new RegExp("^" + path.replace(/\//g, "\\/").replace(/:\w+/g, "(.+)") + "$");
@@ -35,11 +44,13 @@ const router = async () => {
 		{ path: "/", view: Login},
 		{ path: "/login", view: Login },
 		{ path: "/register", view: Register },
-		{ path: "/dashboard", view: Dashboard },
-		{ path: "/one-vs-one", view: OneVsOne},
-		{ path: "/tournaments", view: Tournaments},
-		{ path: "/pong", view: Pong},
-		{ path: "/friends", view: Friends },
+		{ path: "/dashboard", view: Dashboard, authRequired: true },
+		{ path: "/one-vs-one", view: OneVsOne, authRequired: true},
+		{ path: "/tournaments", view: Tournaments, authRequired: true},
+		{ path: "/pong", view: Pong, authRequired: true},
+		{ path: "/friends", view: Friends, authRequired: true },
+		{ path: "/profile", view: Profile, authRequired: true },
+		{ path: "/settings", view: Settings, authRequired: true },
 	];
 
 	//Test each route for potential match. go through each route and find matches and return
@@ -55,16 +66,19 @@ const router = async () => {
 	if (!match){
 		match = {
 			route: routes[0],
-			result : [location.pathname]
+			result: [location.pathname]
 		};
 	}
-	//if we want, we can do 404 here when it is no match
-	
+
+	//comment out to remove login for testing
+	if (match.route.authRequired && !window.isLoggedIn) {
+		console.log(`Access to ${match.route.path} is restricted.`);
+		navigateTo("/login");
+		return;
+	}
 	const view = new match.route.view(getParams(match));
 
-	document.querySelector("#app").innerHTML = await view.getHtml();
-	//select the app element and set the innerHTML to the view of the match route
-
+	view.getHtml();
 };
 
 window.addEventListener("popstate", router);
@@ -72,16 +86,18 @@ window.addEventListener("popstate", router);
 
 document.addEventListener("DOMContentLoaded", () => {
 	document.body.addEventListener("click", e => {
-		if (e.target.matches('[data-action="logged-in"]')) {
-			e.preventDefault();
-			navigateTo("/dashboard");
-		}
-		else if (e.target.matches("[data-link]")) {
+		if (e.target.matches("[data-link]")) {
 			e.preventDefault();
 			navigateTo(e.target.href);
 		}
 		//if link element has data-link attribute, we want to prevent default behavior
 		//and sits on the element itself from index.html
 	});
+
+	document.addEventListener('loginSuccess', (event) => {
+        const { path } = event.detail;
+        navigateTo(path);
+    });
+
 	router();
 });

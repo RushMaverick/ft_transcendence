@@ -24,7 +24,7 @@ from rest_framework_simplejwt.views import (
 )
 
 from rest_framework import routers
-from user.views import UserViewSet
+from user.views import UserViewSet, MatchList, PlayerMatchesView
 # from rest_demo import views as rest_views
 
 router = routers.DefaultRouter()
@@ -39,7 +39,9 @@ urlpatterns = [
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('profile/', include('user.urls')),
-    path('friends/', include('friends.urls'))
+    path('friends/', include('friends.urls')),
+    path('matches/', MatchList.as_view(), name='match-list'),
+	    path('matches/player/<int:user_id>/', PlayerMatchesView.as_view(), name='player-matches'),
 ] 
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

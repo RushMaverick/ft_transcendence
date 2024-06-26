@@ -1,4 +1,4 @@
-import PongGame from "./pongThree.js";
+import PongGame from "./gameCanvas/pongThree.js";
 import AView from "./AView.js";
 
 export default class extends AView {
@@ -8,7 +8,11 @@ export default class extends AView {
 	}
 
 	async getHtml(){
-		const pong = new PongGame();
-		pong.animate();
+		const header = this.createHeader('S U P E R P O N G C H A M P', 'h1');
+		const gameDiv = this.createGame('pong');
+		const p = this.createParagraph("You are successfully running a Super Pongchamp game.");
+		
+		this.updateView(header, gameDiv, p);
+		return ;
 	}
 }

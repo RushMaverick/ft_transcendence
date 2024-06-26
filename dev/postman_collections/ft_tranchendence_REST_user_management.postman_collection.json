@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "a59a48be-0d4d-4aee-8432-4a922cb1dbd2",
+		"_postman_id": "bf806440-95bb-4f09-9e60-3196c00e2dbc",
 		"name": "ft_tranchendence_REST_user_management",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "34463511"
+		"_exporter_id": "2745372"
 	},
 	"item": [
 		{
@@ -27,7 +27,6 @@
 					{
 						"key": "",
 						"value": "",
-						"type": "text",
 						"disabled": true
 					}
 				],
@@ -149,8 +148,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Bearer {{access_token}}",
-						"type": "text"
+						"value": "Bearer {{access_token}}"
 					}
 				],
 				"url": {
@@ -211,8 +209,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Bearer {{access_token}}",
-						"type": "text"
+						"value": "Bearer {{access_token}}"
 					}
 				],
 				"url": {
@@ -379,8 +376,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Bearer {{access_token}}",
-						"type": "text"
+						"value": "Bearer {{access_token}}"
 					}
 				],
 				"body": {
@@ -461,8 +457,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Bearer {{access_token}}",
-						"type": "text"
+						"value": "Bearer {{access_token}}"
 					}
 				],
 				"body": {
@@ -511,8 +506,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Bearer {{access_token}}",
-						"type": "text"
+						"value": "Bearer {{access_token}}"
 					}
 				],
 				"url": {
@@ -523,6 +517,64 @@
 					"path": [
 						"user",
 						"{{user_id}}",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Avatar",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{access_token}}"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/profile/avatar/",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"profile",
+						"avatar",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Upload Avatar",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{access_token}}"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "image",
+							"type": "file",
+							"src": "/home/stte/Pictures/73K9yOv.jpeg"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseUrl}}/profile/avatar/",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"profile",
+						"avatar",
 						""
 					]
 				}
