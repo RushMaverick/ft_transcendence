@@ -1,7 +1,6 @@
 import * as THREE from 'three';
 import UI from './gameUI.js';
-import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
-
+import { CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
 
 export default class PongGame {
 	static instance;
@@ -13,16 +12,17 @@ export default class PongGame {
 			PongGame.instance.startAnimate();
 			return PongGame.instance;
 		}
-        this.speed = 2.5;
+		
+		this.speed = 2.5;
 		this.isAnimating = true;
 		this.UI = new UI();
-        this.scene = new THREE.Scene();
-        this.createCubes();
-        this.setupLighting();
-        this.setupCamera();
+		this.scene = new THREE.Scene();
+		this.createCubes();
+		this.setupLighting();
+		this.setupCamera();
 		this.setupUI();
-        this.setupRenderer();
-        this.handleKeyPresses();
+		this.setupRenderer();
+		this.handleKeyPresses();
 		this.createBorders();
 		this.setupBall();
     }
@@ -127,6 +127,7 @@ export default class PongGame {
 		}
 	}
 
+
 	async setupUI() {
 		
 		this.message = this.getText();
@@ -136,16 +137,17 @@ export default class PongGame {
 		this.text.textContent = this.message;
 		this.text.style.color = 'black';
 		this.text.style.fontSize = '20px';
-		this.text.style.fontFamily = 'Arial';
+		this.text.style.fontFamily = 'tiny5';
 		this.text.style.textAlign = 'center';
 		this.text.style.backgroundColor = 'white';
 		this.text.style.border = '1px solid black';
 		this.text.style.padding = '5px';
 		
 		this.textObject = new CSS2DObject(this.text);
+		//Change this to be dynamic
+		this.textObject.position.set(0, 100, 0);
 		
 		this.scene.add(this.textObject);
-		
 	}
 	
     setupCamera() {
@@ -223,10 +225,14 @@ export default class PongGame {
 	}
 
 	collisionChecking() {
+		//Move bounding boxes with objects
+		this.cube1Bounds.copy(this.cube.geometry.boundingBox).applyMatrix4(this.cube.matrixWorld);
+		this.cube2Bounds.copy(this.cube2.geometry.boundingBox).applyMatrix4(this.cube2.matrixWorld);
+		this.ballBounds.copy(this.ball.geometry.boundingBox).applyMatrix4(this.ball.matrixWorld);
+
 		if (this.cube1Bounds.intersectsBox(this.borderBounds) || this.cube1Bounds.intersectsBox(this.border2Bounds)
 			|| this.cube2Bounds.intersectsBox(this.borderBounds) || this.cube2Bounds.intersectsBox(this.border2Bounds)
 			|| this.ballBounds.intersectsBox(this.cube1Bounds) || this.ballBounds.intersectsBox(this.cube2Bounds)){
-			
 				//Debug feature
 			this.cubeFlash();
 		}
@@ -256,9 +262,7 @@ export default class PongGame {
 		requestAnimationFrame(() => this.animate());
 		if (this.ball.position.x > 70 || this.ball.position.x < -70)
 			this.ball.position.x = 0;
-		this.cube1Bounds.copy(this.cube.geometry.boundingBox).applyMatrix4(this.cube.matrixWorld);
-		this.cube2Bounds.copy(this.cube2.geometry.boundingBox).applyMatrix4(this.cube2.matrixWorld);
-		this.ballBounds.copy(this.ball.geometry.boundingBox).applyMatrix4(this.ball.matrixWorld);
+
 		this.collisionChecking();
 		
 		this.ball.position.x += 0.25;
