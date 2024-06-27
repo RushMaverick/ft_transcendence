@@ -95,6 +95,9 @@ class FriendsViewSet(viewsets.ModelViewSet):
         if user == friend_user:
             return Response({"Warning": "You cannot send a friend request to yourself."}, status=status.HTTP_400_BAD_REQUEST)
         
+        if FriendRequest.objects.filter(from_user=user, to_user=friend_user, accepted=False).exists() or FriendRequest.objects.filter(from_user=friend_user, to_user=user,  accepted=False).exists():
+            return Response({"Warning": "This Friend Request has already been sent or received."}, status=status.HTTP_200_OK)
+        
         friend_request = FriendRequest.objects.create(from_user=user, to_user=friend_user, accepted=False)
         serializer = FriendsSerializer(friend_request)
         return Response({"detail": "Friend request sent successfully.","friend_request":serializer.data}, status=status.HTTP_201_CREATED)
