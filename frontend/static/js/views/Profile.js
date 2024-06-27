@@ -37,7 +37,7 @@ export default class extends AView {
 	}
 
 	async getHtml(userData){
-		const header = this.createHeader('.testheader', 'h1');
+		const header = this.createHeader('testheader', 'h2');
 		const userNameBase = this.createParagraph('usernamebase');
 		const userName= this.fetchName(userData);
 		const userEmailBase = this.createParagraph('emailbase');

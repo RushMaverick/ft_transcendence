@@ -85,7 +85,6 @@ window.addEventListener("popstate", router);
 
 // Dynamically import the translation file
 document.addEventListener("viewUpdated", () => {
-    console.log("well at least this works?");
     let translations;
 	const page = window.localStorage.getItem('page');
 	console.log('page = ' + page);
@@ -100,7 +99,6 @@ document.addEventListener("viewUpdated", () => {
             const key = element.getAttribute('lang-key');
             if (currentTranslations[key]) {
                 element.textContent = currentTranslations[key];
-                console.log(element.textContent);
             }
         });
     })
@@ -115,7 +113,6 @@ document.addEventListener("DOMContentLoaded", () => {
 		}
 		if (e.target.matches("[lang-toggle]")) {
 			const language = e.target.getAttribute('language');
-        	console.log('Language set for this button:', language);
 			window.localStorage.setItem('language', language);
 			document.dispatchEvent(new CustomEvent('viewUpdated'));
 		}
