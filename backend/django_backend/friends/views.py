@@ -97,6 +97,8 @@ class FriendsViewSet(viewsets.ModelViewSet):
         
         if FriendRequest.objects.filter(from_user=user, to_user=friend_user, accepted=False).exists() or FriendRequest.objects.filter(from_user=friend_user, to_user=user,  accepted=False).exists():
             return Response({"Warning": "This Friend Request has already been sent or received."}, status=status.HTTP_200_OK)
+        elif FriendRequest.objects.filter(from_user=user, to_user=friend_user, accepted=True).exists() or FriendRequest.objects.filter(from_user=friend_user, to_user=user,  accepted=True).exists():
+            return Response({"Detail": "They are friends already"}, status=status.HTTP_200_OK)
         
         friend_request = FriendRequest.objects.create(from_user=user, to_user=friend_user, accepted=False)
         serializer = FriendsSerializer(friend_request)
