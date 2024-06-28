@@ -34,4 +34,4 @@ class OnlineConsumer(AsyncWebsocketConsumer):
             disconnect_user.last_connection = timezone.now()
             disconnect_user.save()
         except OnlineStatus.DoesNotExist:
-            pass 
+            pass
