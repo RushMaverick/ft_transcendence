@@ -57,3 +57,12 @@ class Match(models.Model):
 
     def __str__(self):
         return "%s and %s" % (self.player1.username, self.player2.username)
+
+
+class UserOnlineStatus(models.Model):
+    user = models.OneToOneField(
+    User,
+    on_delete=models.CASCADE,
+    )
+    is_online = models.BooleanField(default=False)
+    last_connection = models.DateTimeField()
