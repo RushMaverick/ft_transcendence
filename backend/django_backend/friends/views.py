@@ -25,7 +25,8 @@ from .models import FriendRequest
 #   - If everything is in order, the method sets accepted=True for the friend request, marking it as accepted.
 #   - A response is returned to confirm that the friend request has been accepted.
 # 
-# Then we have one GET method, which means we are asking for information:
+# Then we have 2 GET methods, which means we are asking for information:
+
 # - list_friends: This method returns the list of friends for the logged-in user. 
 #   Here's how it works:
 #   - First, it identifies the friend requests in which the current user is involved. This includes friend requests where the user is the sender (from_user) 
@@ -34,10 +35,33 @@ from .models import FriendRequest
 #   - Once it has identified these requests, it extracts the IDs of the other users who are part of these accepted friend requests.
 #   - Using these user IDs, it queries the User model to get the details of the users who are friends with the current user, and stores them in a variable called 'friends'.
 #   - Finally, it returns the list of friends.
+
+# - list_friends_request: This method returns the list of pending friend requests for the logged-in user. 
+#   Here's how it works:
+#   - First, it identifies the pending request in which the current user is involved. This includes friend requests where the user is the the receiver (to_user).
+#   - It checks if the 'accepted' field is set to False, indicating that the friend request has not been accepted.
+#   - Checks if there are pending friend request, if its not the case we return a Response where we specify that there is not pending friend requests.
+#   - Once it has identified these pending requests, we got the information from the serializer.
+#   - Finally, it returns the list of the pending the friends requests.
+
 class FriendsViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = FriendsSerializer
     permission_classes = [IsAuthenticatedOrCreateOnly, IsUser]
+
+    """Return the list of the pending friend requests"""
+    @action(detail=False, methods=['get'], permission_classes=[IsAuthenticatedOrCreateOnly, IsUser])
+    def list_friends_request(self, request):
+        user = request.user
+        if(user.is_authenticated == False):
+            return(Response({"Warning": "Anonimus User"}, status=status.HTTP_401_UNAUTHORIZED))
+        
+        pending_request = FriendRequest.objects.filter(to_user=user, accepted=False)
+        if not pending_request.exists():
+            return Response({"Detail": "No pending friend requests."}, status=status.HTTP_200_OK)
+
+        serializer = FriendsSerializer(pending_request, many=True)
+        return Response({"Pending Friend request": serializer.data}, status=status.HTTP_200_OK)
 
     """Return the list of the friends"""
     @action(detail=False, methods=['get'], permission_classes=[IsAuthenticatedOrCreateOnly, IsUser])
@@ -70,6 +94,11 @@ class FriendsViewSet(viewsets.ModelViewSet):
 
         if user == friend_user:
             return Response({"Warning": "You cannot send a friend request to yourself."}, status=status.HTTP_400_BAD_REQUEST)
+        
+        if FriendRequest.objects.filter(from_user=user, to_user=friend_user, accepted=False).exists() or FriendRequest.objects.filter(from_user=friend_user, to_user=user,  accepted=False).exists():
+            return Response({"Warning": "This Friend Request has already been sent or received."}, status=status.HTTP_200_OK)
+        elif FriendRequest.objects.filter(from_user=user, to_user=friend_user, accepted=True).exists() or FriendRequest.objects.filter(from_user=friend_user, to_user=user,  accepted=True).exists():
+            return Response({"Detail": "They are friends already"}, status=status.HTTP_200_OK)
         
         friend_request = FriendRequest.objects.create(from_user=user, to_user=friend_user, accepted=False)
         serializer = FriendsSerializer(friend_request)
