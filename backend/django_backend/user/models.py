@@ -59,10 +59,10 @@ class Match(models.Model):
         return "%s and %s" % (self.player1.username, self.player2.username)
 
 
-class UserOnlineStatus(models.Model):
+class OnlineStatus(models.Model):
     user = models.OneToOneField(
     User,
     on_delete=models.CASCADE,
     )
     is_online = models.BooleanField(default=False)
-    last_connection = models.DateTimeField()
+    last_connection = models.DateTimeField(auto_now_add=True)
