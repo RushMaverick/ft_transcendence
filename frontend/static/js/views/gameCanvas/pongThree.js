@@ -30,11 +30,11 @@ export default class PongGame {
 		this.socket = new WebSocket(`ws://localhost:8000/ws/game/${roomname}/`);
 		this.socket.onopen = function() {
 			console.log('WebSocket connection established.');
-		  };
+		};
 		this.socket.onmessage = function(event) {
 			const message = JSON.parse(event.data);
-			console.log('Received message:', message);
-		  };
+			console.log(message);
+		};
 	}
     createCubes() {
         this.geometry = new THREE.BoxGeometry(5, 15, 2);
@@ -215,6 +215,12 @@ export default class PongGame {
 	}
 
 	collisionChecking() {
+		//Update bounding boxes
+		this.cube1Bounds.copy(this.cube.geometry.boundingBox).applyMatrix4(this.cube.matrixWorld);
+		this.cube2Bounds.copy(this.cube2.geometry.boundingBox).applyMatrix4(this.cube2.matrixWorld);
+		this.ballBounds.copy(this.ball.geometry.boundingBox).applyMatrix4(this.ball.matrixWorld);
+
+		//Check for collisions
 		if (this.cube1Bounds.intersectsBox(this.borderBounds) || this.cube1Bounds.intersectsBox(this.border2Bounds)
 			|| this.cube2Bounds.intersectsBox(this.borderBounds) || this.cube2Bounds.intersectsBox(this.border2Bounds)
 			|| this.ballBounds.intersectsBox(this.cube1Bounds) || this.ballBounds.intersectsBox(this.cube2Bounds)){
@@ -226,6 +232,8 @@ export default class PongGame {
 			this.cube.material.opacity = 1;
 			this.cube.material.color = new THREE.Color(0xaeaa97);
 		}
+
+		//Check for collisions with ball
 		if (this.ballBounds.intersectsBox(this.cube1Bounds) || this.ballBounds.intersectsBox(this.cube2Bounds)){
 			this.sphereFlash();
 		}
@@ -241,9 +249,7 @@ export default class PongGame {
 		requestAnimationFrame(() => this.animate());
 		if (this.ball.position.x > 70 || this.ball.position.x < -70)
 			this.ball.position.x = 0;
-		this.cube1Bounds.copy(this.cube.geometry.boundingBox).applyMatrix4(this.cube.matrixWorld);
-		this.cube2Bounds.copy(this.cube2.geometry.boundingBox).applyMatrix4(this.cube2.matrixWorld);
-		this.ballBounds.copy(this.ball.geometry.boundingBox).applyMatrix4(this.ball.matrixWorld);
+
 		this.collisionChecking();
 		
 		this.ball.position.x += 0.25;
