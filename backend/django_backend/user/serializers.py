@@ -43,6 +43,9 @@ class AvatarSerializer(serializers.ModelSerializer):
             instance.save()
             return instance
 
+# OnlineStatusSerializer:
+# This serializer is designed to get the Online Status from an user, so for this we use model OnlineStatus
+# and we use as a fields the user id, username, is_online and the last connection of the user
 class OnlineStatusSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user.username', read_only=True)
     class Meta:

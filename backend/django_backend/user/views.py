@@ -8,7 +8,12 @@ from .serializers import UserSerializer, PasswordUpdateSerializer, AvatarSeriali
 from .permissions import IsAuthenticatedOrCreateOnly, IsUser
 from .models import Avatar, Match, OnlineStatus
 
+#OnlineStatusView:
 
+# In this view, we have a get method:
+# Then we have 2 GET methods, which means we are asking for information:
+#   - First, we try to get the Online Status of a user, if the user has not been registered then we throw an exception.
+#   - If the User exists then we return the user status, which have the info define in the serializer fields.
 class OnlineStatusView(APIView):
     permission_classes = [IsAuthenticatedOrCreateOnly]
 
