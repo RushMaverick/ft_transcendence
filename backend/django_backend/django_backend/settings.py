@@ -41,6 +41,7 @@ INSTALLED_APPS = [
 	'pong',
 	'user',
     'friends',
+	'tournaments',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

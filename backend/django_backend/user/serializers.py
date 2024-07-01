@@ -2,35 +2,7 @@ from django.contrib.auth.models import  User
 from rest_framework import serializers
 from django.contrib.auth.password_validation import validate_password
 from rest_framework.validators import UniqueValidator
-from .models import Avatar, Match
-
-class MatchSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Match
-        fields = '__all__'
-
-    def validate(self, data):
-        if 'player1' not in data:
-            raise serializers.ValidationError({
-                'player1': 'This field is required.',
-            })
-        if 'player2' not in data:
-             raise serializers.ValidationError({
-                'player2': 'This field is required.'
-            })
-        if 'winner' not in data:
-            raise serializers.ValidationError({
-                'winner': 'This field is required.'
-            })
-        if data['player1'] == data['player2']:
-            raise serializers.ValidationError({
-                'player1': 'Player 1 and Player 2 cannot be the same.'
-            })
-        if data['winner'] != data['player1'] and data['winner'] != data['player2']:
-            raise serializers.ValidationError({
-                'winner': 'Winner must be either Player 1 or Player 2.'
-            })
-        return data
+from .models import Avatar
 
 class AvatarSerializer(serializers.ModelSerializer):
 
