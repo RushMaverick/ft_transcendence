@@ -112,7 +112,7 @@ export default class PongGame {
 
     setupCamera() {
 		// Setting up camera
-		this.aspectRatio = window.innerWidth / window.innerHeight;
+		this.aspectRatio = window.innerWidth / window.innerHeight; // should we have a static aspect ratio for clarity?
 		this.cameraWidth = 250;
 		this.cameraHeight = this.cameraWidth / this.aspectRatio;
 
@@ -218,6 +218,16 @@ export default class PongGame {
 		
 		this.ball.position.x += 0.25;
 		this.renderer.render(this.scene, this.camera);
+		window.addEventListener('resize', () => {
+			if (window.innerWidth > window.innerHeight) 
+			{
+				this.camera.aspectRatio = window.innerWidth / window.innerHeight; // static aspect ratio for the canvas?
+				this.camera.updateProjectionMatrix();
+				this.renderer.setSize(window.innerWidth/ 1.3, window.innerHeight / 1.3); // static aspect ratio for the canvas would be implemented here?
+			}
+					
+		},false)
+		
     }
 
     startAnimate() {
