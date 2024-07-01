@@ -131,8 +131,8 @@ export default class PongGame {
 
     setupCamera() {
 		// Setting up camera
-		this.aspectRatio = window.innerWidth / window.innerHeight; // should we have a static aspect ratio for clarity?
-		this.cameraWidth = 250;
+		this.aspectRatio = window.innerWidth / window.innerHeight;
+		this.cameraWidth = 350;
 		this.cameraHeight = this.cameraWidth / this.aspectRatio;
 
 		this.camera = new THREE.OrthographicCamera(
@@ -257,7 +257,6 @@ export default class PongGame {
 			}
 					
 		},false)
-		
     }
 
     startAnimate() {
