@@ -28,17 +28,14 @@ class JWTAuthenticationMiddleware(BaseMiddleware):
 		try:
 			authorization = dict((x.decode('ascii').lower(), y.decode('ascii')) for x, y in scope['headers'])
 			token = authorization.get('authorization', '').split('Bearer ')[1] if 'authorization' in authorization else None
-		except:
-			scope['user'] = AnonymousUser()
-			return await self.inner(scope, receive, send)
-		try:
+			# print(f"Token: {token}", flush=True)
+			if (not token):
+				scope['user'] = AnonymousUser()
+				return await self.inner(scope, receive, send)
 			UntypedToken(token)
-		except (InvalidToken, TokenError):
-			print("Invalid token")
-			scope['user'] = AnonymousUser()
-		else:
-			print("Valid token")
+			# print("Valid token", flush=True)
 			decoded_data = jwt_decode(token, settings.SECRET_KEY, algorithms=['HS256'])
 			scope['user'] = await get_user(decoded_data)
-
+		except:
+			scope['user'] = AnonymousUser()
 		return await self.inner(scope, receive, send)
