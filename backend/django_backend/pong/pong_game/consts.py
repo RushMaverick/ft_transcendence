@@ -1,5 +1,5 @@
-MAP_WIDTH: int = 25
-MAP_HEIGHT: int = 10
+MAP_WIDTH: int = 200
+MAP_HEIGHT: int = 150
 
 PLAYER_HEIGHT: int = 3
 

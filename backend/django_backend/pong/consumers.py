@@ -10,13 +10,12 @@ class GameConsumer(AsyncWebsocketConsumer):
 
 
     async def connect(self):
-        user = self.scope['user']
-        print(f"User: {user}")
-        if not user.is_authenticated:
-            print("User not authenticated")
-            await self.close()
+        # user = self.scope['user']
+        # print(f"User: {user}")
+        # if not user.is_authenticated:
+        #     print("User not authenticated")
+        #     await self.close()
 
-        #Todo: make a new thread for each game
         self.game_room = self.scope["url_route"]["kwargs"]["room_name"]
         self.room_group_name = f"game_{self.game_room}"
 
@@ -26,13 +25,12 @@ class GameConsumer(AsyncWebsocketConsumer):
 
         self.pong_game = Games.games[self.game_room]
 
+        # Socket stuff
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
         if not self.pong_game.channel_layer:
             self.pong_game.add_channel_layer(self.channel_layer)
-
         if not self.pong_game.room_group_name:
             self.pong_game.add_room_group_name(self.room_group_name)
-
         # Add player to game
         if not self.pong_game.player1:
             self.player = Player(1, "Player 1")
@@ -44,7 +42,7 @@ class GameConsumer(AsyncWebsocketConsumer):
         if self.pong_game.player1 and self.pong_game.player2:
                 Games.start_game(self.game_room)
 
-        print (f"Connected to {self.room_group_name}")
+        print (f"Connected to {self.room_group_name}", flush=True)
         await self.accept()
 
 
