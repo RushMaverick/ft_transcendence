@@ -20,6 +20,7 @@ class Player(Collider):
 		elif direction == "down":
 			self.move_down = True
 
+
 	def update_position(self) -> None:
 		if self.move_up:
 			if (self.y <= 0):

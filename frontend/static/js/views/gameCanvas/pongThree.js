@@ -12,6 +12,7 @@ export default class PongGame {
 			PongGame.instance.startAnimate();
 			return PongGame.instance;
 		}
+		this.joinGame();
         this.speed = 2.5;
 		this.isAnimating = true;
         this.scene = new THREE.Scene();
@@ -24,6 +25,17 @@ export default class PongGame {
 		this.setupBall();
     }
 
+	joinGame() {
+		let roomname = 'testroom';
+		this.socket = new WebSocket(`ws://localhost:8000/ws/game/${roomname}/`);
+		this.socket.onopen = function() {
+			console.log('WebSocket connection established.');
+		};
+		this.socket.onmessage = function(event) {
+			const message = JSON.parse(event.data);
+			console.log(message);
+		};
+	}
     createCubes() {
         this.geometry = new THREE.BoxGeometry(5, 15, 2);
         this.material = new THREE.MeshLambertMaterial({
@@ -53,35 +65,42 @@ export default class PongGame {
         this.scene.add(this.cube, this.cube2);
     }
 
-	createBorders() {
-		this.geometry3 = new THREE.BoxGeometry(200, 1, 2);
-		this.geometry4 = new THREE.BoxGeometry(200, 1, 2);
-		
-		this.material2 = new THREE.MeshLambertMaterial({
+    createBorders() {
+        this.borderGeo = new THREE.BoxGeometry(200, 1, 2);
+        this.planeGeo = new THREE.PlaneGeometry(200, 150, 2);
+        
+        this.borderMaterial = new THREE.MeshLambertMaterial({
             color: 0xaeaa97
         });
+        this.border3Material = new THREE.MeshLambertMaterial({
+			transparent: true,
+			opacity: 0.0,
+        });
 
-		this.border = new THREE.Mesh(this.geometry3, this.material2);
-		this.border2 = new THREE.Mesh(this.geometry4, this.material2);
-		
-		this.border.position.x = 10;
-		this.border.position.y = 0;
-		this.border.position.z = 50;
-		
-		this.border2.position.x = 5;
-		this.border2.position.y = 0;
-		this.border2.position.z = -50;
+        this.border = new THREE.Mesh(this.borderGeo, this.borderMaterial);
+        this.border2 = new THREE.Mesh(this.borderGeo, this.borderMaterial);
+        this.plane = new THREE.Mesh(this.planeGeo, this.border3Material);
+        
+        this.border.position.x = 0;
+        this.border.position.y = 0;
+        this.border.position.z = 75;
+        
+        this.border2.position.x = 0;
+        this.border2.position.y = 0;
+        this.border2.position.z = -75;
 
-		//Setup border bounding box
-		this.borderBounds = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());
-		this.borderBounds.setFromObject(this.border);
+        this.plane.rotateOnAxis(new THREE.Vector3(-1, 0, 0), Math.PI / 2);
 
-		//Setup border2 bounding box
-		this.border2Bounds = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());
-		this.border2Bounds.setFromObject(this.border2);
+        //Setup border bounding box
+        this.borderBounds = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());
+        this.borderBounds.setFromObject(this.border);
 
-		this.scene.add(this.border, this.border2);
-	}
+        //Setup border2 bounding box
+        this.border2Bounds = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());
+        this.border2Bounds.setFromObject(this.border2);
+
+        this.scene.add(this.border, this.border2, this.plane);
+}
 
     setupLighting() {
 		this.ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
@@ -113,7 +132,7 @@ export default class PongGame {
     setupCamera() {
 		// Setting up camera
 		this.aspectRatio = window.innerWidth / window.innerHeight;
-		this.cameraWidth = 250;
+		this.cameraWidth = 350;
 		this.cameraHeight = this.cameraWidth / this.aspectRatio;
 
 		this.camera = new THREE.OrthographicCamera(
@@ -141,17 +160,28 @@ export default class PongGame {
         document.addEventListener('keydown', (e) => {
             switch (e.key) {
                 case 'w':
-                    this.cube.position.z -= this.speed;
-					console.log("w");
+					this.socket.send(JSON.stringify({
+						'cmd': 'move',
+						'cmd_args': 'up'
+					}));
                     break;
                 case 's':
-                    this.cube.position.z += this.speed;
+					this.socket.send(JSON.stringify({
+						'cmd': 'move',
+						'cmd_args': 'down'
+					}));
                     break;
                 case 'ArrowUp':
-                    this.cube2.position.z -= this.speed;
+					this.socket.send(JSON.stringify({
+						'cmd': 'move',
+						'cmd_args': 'up'
+					}));
                     break;
                 case 'ArrowDown':
-                    this.cube2.position.z += this.speed;
+					this.socket.send(JSON.stringify({
+						'cmd': 'move',
+						'cmd_args': 'down'
+					}));
                     break;
 				case 'p':
 					// Camera view 1
@@ -185,6 +215,12 @@ export default class PongGame {
 	}
 
 	collisionChecking() {
+		//Update bounding boxes
+		this.cube1Bounds.copy(this.cube.geometry.boundingBox).applyMatrix4(this.cube.matrixWorld);
+		this.cube2Bounds.copy(this.cube2.geometry.boundingBox).applyMatrix4(this.cube2.matrixWorld);
+		this.ballBounds.copy(this.ball.geometry.boundingBox).applyMatrix4(this.ball.matrixWorld);
+
+		//Check for collisions
 		if (this.cube1Bounds.intersectsBox(this.borderBounds) || this.cube1Bounds.intersectsBox(this.border2Bounds)
 			|| this.cube2Bounds.intersectsBox(this.borderBounds) || this.cube2Bounds.intersectsBox(this.border2Bounds)
 			|| this.ballBounds.intersectsBox(this.cube1Bounds) || this.ballBounds.intersectsBox(this.cube2Bounds)){
@@ -196,6 +232,8 @@ export default class PongGame {
 			this.cube.material.opacity = 1;
 			this.cube.material.color = new THREE.Color(0xaeaa97);
 		}
+
+		//Check for collisions with ball
 		if (this.ballBounds.intersectsBox(this.cube1Bounds) || this.ballBounds.intersectsBox(this.cube2Bounds)){
 			this.sphereFlash();
 		}
@@ -211,9 +249,7 @@ export default class PongGame {
 		requestAnimationFrame(() => this.animate());
 		if (this.ball.position.x > 70 || this.ball.position.x < -70)
 			this.ball.position.x = 0;
-		this.cube1Bounds.copy(this.cube.geometry.boundingBox).applyMatrix4(this.cube.matrixWorld);
-		this.cube2Bounds.copy(this.cube2.geometry.boundingBox).applyMatrix4(this.cube2.matrixWorld);
-		this.ballBounds.copy(this.ball.geometry.boundingBox).applyMatrix4(this.ball.matrixWorld);
+
 		this.collisionChecking();
 		
 		this.ball.position.x += 0.25;

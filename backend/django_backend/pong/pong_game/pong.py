@@ -21,14 +21,7 @@ class Pong:
 	def add_channel_layer(self, channel_layer) -> None:
 		self.channel_layer = channel_layer
 
-<<<<<<< HEAD
-	def add_thread(self, thread) -> None:
-		self.thread = thread
-
-	def add_player(self, player: Player) -> None:
-=======
 	def add_player(self, player: Player) -> Player:
->>>>>>> b65036b82abc2b7e58ff53b013dddd57fd477e04
 		if player.id == 1:
 			self.player1 = player
 			return self.player1
@@ -90,15 +83,8 @@ class Pong:
 			self.ball.reset_position()
 
 	async def game_loop(self) -> None:
-<<<<<<< HEAD
-		print("Game loop")
-		# self.game_running = True
-		print("thread active: ", self.thread["active"], flush=True)
-		while self.thread["active"]:
-=======
 		print("Game loop", flush=True)
 		while self.active:
->>>>>>> b65036b82abc2b7e58ff53b013dddd57fd477e04
 			if not self.player1 or not self.player2:
 				print("Players not connected", flush=True)
 				await asyncio.sleep(1)
