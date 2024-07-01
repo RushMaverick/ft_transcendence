@@ -32,12 +32,13 @@ export default class PongGame {
 			console.log('WebSocket connection established.');
 		};
 		this.socket.onmessage = function(event) {
-			const message = JSON.parse(event.data);
-			console.log(message['1'].name);
+			// console.log(this)
+			PongGame.instance.message = JSON.parse(event.data);
 		};
 	}
 
     createCubes() {
+		console.log(this)
         this.geometry = new THREE.BoxGeometry(5, 15, 2);
         this.material = new THREE.MeshLambertMaterial({
             color: 0xaeaa97
@@ -253,7 +254,10 @@ export default class PongGame {
 
 		this.collisionChecking();
 		
-		this.ball.position.x += 0.25;
+		// this.ball.position.x = this.message['ball'].x;
+		// this.cube.position.z = this.message['1'].z;
+		// console.log(this.message['1'].y);
+		// console.log(this.message);
 		this.renderer.render(this.scene, this.camera);
 		window.addEventListener('resize', () => {
 			if (window.innerWidth > window.innerHeight) 
