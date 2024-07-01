@@ -33,9 +33,10 @@ export default class PongGame {
 		};
 		this.socket.onmessage = function(event) {
 			const message = JSON.parse(event.data);
-			console.log(message);
+			console.log(message['1'].name);
 		};
 	}
+
     createCubes() {
         this.geometry = new THREE.BoxGeometry(5, 15, 2);
         this.material = new THREE.MeshLambertMaterial({
