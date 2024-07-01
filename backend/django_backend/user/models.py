@@ -8,6 +8,7 @@ class OnlineStatus(models.Model):
     )
     is_online = models.BooleanField(default=False)
     last_connection = models.DateTimeField(auto_now_add=True)
+    
 
 def upload_to(instance, filename):
     return 'images/{filename}'.format(filename=filename)

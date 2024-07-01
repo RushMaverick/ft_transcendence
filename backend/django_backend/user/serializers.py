@@ -43,6 +43,12 @@ class AvatarSerializer(serializers.ModelSerializer):
             instance.save()
             return instance
 
+class OnlineStatusSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source='user.username', read_only=True)
+    class Meta:
+        model = OnlineStatus
+        fields = ['user','username','is_online', 'last_connection']
+
 class UserSerializer(serializers.ModelSerializer):
     username = serializers.CharField(required=True, validators=[UniqueValidator(queryset=User.objects.all())])
     password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
@@ -52,7 +58,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'avatar', 'password', 'password2']
+        fields = ['id', 'username', 'avatar','password', 'password2']
 
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:
@@ -93,8 +99,3 @@ class PasswordUpdateSerializer(serializers.ModelSerializer):
         instance.set_password(validated_data['new_password'])
         instance.save()
         return instance
-
-class OnlineStatusSerializer(serializers.ModelSerialize):
-    class Meta:
-        model = OnlineStatus
-        fields = ['user','is_online', 'last_connection']

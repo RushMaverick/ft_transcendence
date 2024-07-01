@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from asgiref.sync import sync_to_async
 from .models import OnlineStatus
 from django.utils import timezone
+from rest_framework.response import Response
 
 class OnlineConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -10,9 +11,11 @@ class OnlineConsumer(AsyncWebsocketConsumer):
         if self.user.is_authenticated:
           await self.set_user_online(self.user)
         await self.accept()
-    async def disconect(self, close_code):
+
+    async def disconnect(self, close_code):
         if self.user.is_authenticated:
           await self.set_user_offline(self.user)
+    
     async def receive(self):
        pass
     

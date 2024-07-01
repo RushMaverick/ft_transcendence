@@ -15,7 +15,7 @@ class OnlineStatusView(APIView):
     def get(self,request,userID):
         try:
             user_status = OnlineStatus.objects.get(user_id=userID)
-        except user_status.DoesNotExist:
+        except OnlineStatus.DoesNotExist:
             return Response({"Warning": "User not found."}, status=status.HTTP_404_NOT_FOUND)
         
         serializer = OnlineStatusSerializer(user_status)
@@ -109,6 +109,8 @@ class UserViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
+        user = serializer.instance
+        OnlineStatus.objects.create(user=user, is_online=False)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
