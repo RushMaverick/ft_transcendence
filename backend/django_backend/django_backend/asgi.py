@@ -22,12 +22,13 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django_backend.settings')
 
 from django_backend.routing import websocket_urlpatterns
 
+# Remember for check the user online status the JWT should be uncomment 
 application = ProtocolTypeRouter({
     "http": django_asgi_app,
 	"websocket": AllowedHostsOriginValidator(
-            # JWTAuthenticationMiddleware(
+            JWTAuthenticationMiddleware(
                     URLRouter(websocket_urlpatterns)
-            # )
+            )
         )
 })
 
