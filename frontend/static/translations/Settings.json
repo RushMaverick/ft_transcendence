@@ -1,0 +1,16 @@
+{
+	"finnish":
+	{
+		"testheader": "heippuli ja tervetuloa profiiliin",
+		"usernamebase": "käyttäjätunnus: "
+	
+	},
+
+	"english":
+	{
+		"testheader": "helloups and welcome to your profile",
+		"usernamebase": "username: "
+
+	}
+
+}
