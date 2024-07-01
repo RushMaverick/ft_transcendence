@@ -1,16 +1,26 @@
 {
 	"finnish":
 	{
-		"testheader": "heippuli ja tervetuloa profiiliin",
-		"usernamebase": "käyttäjätunnus: "
-	
+		"testheader": "heippatirallaa ja tervetuloa asetuksiin",
+		"user-name": "käyttäjätunnus: ",
+		"first-name": "etunimi: ",
+		"last-name": "sukunimi: ",
+		"email": "sähköposti: ",
+		"password": "uusi salasana: ",
+		"password-again": "uusi salasana uudelleen: ",
+		"language": "kieli: "
 	},
 
 	"english":
 	{
-		"testheader": "helloups and welcome to your profile",
-		"usernamebase": "username: "
-
+		"testheader": "helloups and welcome to settings",
+		"user-name": "username: ",
+		"first-name": "first name: ",
+		"last-name": "last name: ",
+		"email": "email: ",
+		"password": "new password: ",
+		"password-again": "new password again: ",
+		"language": "language: "
 	}
 
 }
