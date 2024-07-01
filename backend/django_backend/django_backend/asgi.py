@@ -25,9 +25,9 @@ from django_backend.routing import websocket_urlpatterns
 application = ProtocolTypeRouter({
     "http": django_asgi_app,
 	"websocket": AllowedHostsOriginValidator(
-            JWTAuthenticationMiddleware(
+            # JWTAuthenticationMiddleware(
                     URLRouter(websocket_urlpatterns)
-            )
+            # )
         )
 })
 

@@ -10,11 +10,11 @@ class GameConsumer(AsyncWebsocketConsumer):
 
 
     async def connect(self):
-        user = self.scope['user']
-        print(f"User: {user}")
-        if not user.is_authenticated:
-            print("User not authenticated")
-            await self.close()
+        # user = self.scope['user']
+        # print(f"User: {user}")
+        # if not user.is_authenticated:
+        #     print("User not authenticated")
+        #     await self.close()
 
         #Todo: make a new thread for each game
         self.game_room = self.scope["url_route"]["kwargs"]["room_name"]
