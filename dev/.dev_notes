@@ -1,0 +1,7 @@
+URL FOR websockets: ws://localhost:3000/ws/game/[room_name]/
+
+![alt text](image.png)
+
+To do:
+figure out how to connect to the url provided.
+Figure out how to send the available commands through socket.emit()

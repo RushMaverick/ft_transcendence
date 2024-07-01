@@ -3,11 +3,11 @@ from .player import Player
 from .ball import Ball
 from . import consts
 
-
 class Pong:
 	def __init__(self):
 		self.channel_layer = None
 		self.room_group_name = None
+		self.thread = None
 		self.tick: int = 1
 		self.ball: Ball = Ball()
 		self.player1: Player = None
@@ -99,4 +99,5 @@ class Pong:
 			sleep_time = 1./self.tick - delta_time
 			if (sleep_time > 0):
 				await asyncio.sleep(sleep_time)
+		print("Game loop ended", flush=True)
 
