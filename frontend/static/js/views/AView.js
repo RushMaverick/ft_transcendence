@@ -104,7 +104,6 @@ export default class {
 	
 		// Create a new PongGame instance
 		const pong = new PongGame();
-		pong.animate();
 
 		// Append the game div to the body (or another element)
 		document.body.appendChild(gameDiv);
