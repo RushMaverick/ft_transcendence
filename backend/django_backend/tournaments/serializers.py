@@ -35,6 +35,15 @@ class MatchSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({
                 'winner': 'Winner must be either Player 1 or Player 2.'
             })
+        if 'tournament' in data:
+            tournament_id = data['tournament'].id
+            player1_id = data['player1'].id
+            player2_id = data['player2'].id
+
+            player1_in_tournament = TournamentPlayer.objects.filter(tournament=tournament_id, player=player1_id).exists()
+            player2_in_tournament = TournamentPlayer.objects.filter(tournament=tournament_id, player=player2_id).exists()
+            if not player1_in_tournament or not player2_in_tournament:
+                raise serializers.ValidationError("Both players must be in the tournament.")
         return data
 
 class TournamentPlayersSerializer(serializers.ModelSerializer):
