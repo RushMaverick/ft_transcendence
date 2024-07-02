@@ -7,38 +7,45 @@ export default class PongGame {
     constructor() {
 		if (!PongGame.instance){
 			PongGame.instance = this;
+			PongGame.instance.enterView();
 		}
 		else{
 			PongGame.instance.startAnimate();
 			return PongGame.instance;
 		}
+		this.handleKeyPresses();
 		this.joinGame();
-        this.speed = 2.5;
-		this.isAnimating = true;
-        this.scene = new THREE.Scene();
+    }
+
+	enterView() {
+		const container = document.querySelector('main');
+		this.scene = new THREE.Scene();
         this.createCubes();
+		this.createBorders();
         this.setupLighting();
         this.setupCamera();
         this.setupRenderer();
-        this.handleKeyPresses();
-		this.createBorders();
 		this.setupBall();
-    }
+		this.renderer.render(this.scene, this.camera);
+	}
 
 	joinGame() {
 		let roomname = 'testroom';
 		this.socket = new WebSocket(`ws://localhost:8000/ws/game/${roomname}/`);
 		this.socket.onopen = function() {
 			console.log('WebSocket connection established.');
+			//Start screen before players have connected.
 		};
+		//This will be used instead of animate() to update the game state.
 		this.socket.onmessage = function(event) {
-			// console.log(this)
 			PongGame.instance.message = JSON.parse(event.data);
+			PongGame.instance.collisionChecking();
+			PongGame.instance.updatePositions();
+			PongGame.instance.renderer.render(PongGame.instance.scene, PongGame.instance.camera);
 		};
 	}
 
     createCubes() {
-		console.log(this)
         this.geometry = new THREE.BoxGeometry(5, 15, 2);
         this.material = new THREE.MeshLambertMaterial({
             color: 0xaeaa97
@@ -244,21 +251,24 @@ export default class PongGame {
 			this.ball.material.color = new THREE.Color(0xaeaa97);
 		}
 	}
+	updatePositions() {
+		//Update cube positions
+		// console.log(this.message['ball'].x)
+		// console.log(this.message);
+		this.cube.position.z = this.message['1'].z;
+		this.cube2.position.z = this.message['2'].z;
+		this.ball.position.x = this.message['ball'].x;
+		// this.ball.position.y = this.message['ball'].y;
+		// this.ball.position.z = this.message['ball'].z;
+	}
 
     animate() {
 		if (!this.isAnimating)
 			return;
 		requestAnimationFrame(() => this.animate());
-		if (this.ball.position.x > 70 || this.ball.position.x < -70)
-			this.ball.position.x = 0;
-
-		this.collisionChecking();
-		
-		// this.ball.position.x = this.message['ball'].x;
 		// this.cube.position.z = this.message['1'].z;
 		// console.log(this.message['1'].y);
 		// console.log(this.message);
-		this.renderer.render(this.scene, this.camera);
 		window.addEventListener('resize', () => {
 			if (window.innerWidth > window.innerHeight) 
 			{
