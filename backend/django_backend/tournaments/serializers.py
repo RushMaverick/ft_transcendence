@@ -38,9 +38,23 @@ class MatchSerializer(serializers.ModelSerializer):
         return data
 
 class TournamentPlayersSerializer(serializers.ModelSerializer):
-	class Meta:
-		model = TournamentPlayer
-		fields = '__all__'
+    class Meta:
+        model = TournamentPlayer
+        fields = '__all__'
+
+    def validate(self, data):
+        print("Data:", data, flush=True)
+        try:
+            tournament_id = data['tournament'].id
+            player_id = data['player'].id
+        except KeyError:
+            raise serializers.ValidationError("Both tournament and player fields are required.")
+        existing_participant = TournamentPlayer.objects.filter(tournament=tournament_id, player=player_id).exists()
+        if existing_participant:
+            raise serializers.ValidationError("A user can only participate once per tournament.")
+        return data
+
+
 
 class TournamentSerializer(serializers.ModelSerializer):
 	name = serializers.CharField(required=True, validators=[UniqueValidator(queryset=Tournament.objects.all())])
@@ -54,30 +68,6 @@ class TournamentSerializer(serializers.ModelSerializer):
 		model = Tournament
 		fields = ['id', 'name', 'date', 'creator', 'players', 'matches']
 		# fields = '__all__'
-
-	# def get_players(self, instance):
-	# 	return [player.player.id for player in obj.tournament_players.all()]
-	def get_players(self, obj):
-		"""
-		Return a list of dictionaries containing player IDs and names.
-		Each dictionary contains 'id' and 'name' keys.
-		"""
-		players_info = []
-		for player in obj.tournament_player_set.all():
-			players_info.append({'id': player.player.id, 'name': player.player.username})
-		return players_info
-
-	def get_creator(self, obj):
-		"""
-		Return the creator's information.
-		"""
-		creator = obj.creator
-		if creator:
-			return {
-				'id': creator.id,
-				'username': creator.username
-			}
-		return None
 
 	# def get_matches(self, obj):
 	# 	"""

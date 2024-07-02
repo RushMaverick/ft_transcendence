@@ -87,10 +87,10 @@ def join_tournament(request, tournament_id):
 	user = request.user
 	if(user.is_authenticated == False):
 		return(Response({"Warning": "Anonimus User"}, status=status.HTTP_401_UNAUTHORIZED))
-	serializer = TournamentPlayersSerializer(data=request.data)
+	serializer = TournamentPlayersSerializer(data={"tournament": tournament_id, "player": user.id})
 	if not serializer.is_valid():
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-	tournament = Tournament.objects.get(id=tournament_id)
+	tournament = Tournament.objects.get(id=serializer.data['tournament'])
 	if tournament:
 		TournamentPlayer.objects.create(tournament=tournament, player=user)
 		return Response({"message": "You have been registered to the tournament"}, status=status.HTTP_200_OK)
@@ -107,3 +107,4 @@ def list_registered_tournaments(request):
 	tournaments = TournamentPlayer.objects.filter(player=user)
 	serializer = TournamentPlayersSerializer(tournaments, many=True)
 	return Response({"tournaments": serializer.data}, status=status.HTTP_200_OK)
+
