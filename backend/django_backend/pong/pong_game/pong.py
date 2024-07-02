@@ -8,7 +8,7 @@ class Pong:
 		self.channel_layer = None
 		self.room_group_name = None
 		self.thread = None
-		self.tick: int = 1
+		self.tick: int = 60
 		self.ball: Ball = Ball()
 		self.player1: Player = None
 		self.player2: Player = None
@@ -49,13 +49,13 @@ class Pong:
 				"name": "Player 1",
 				"score": self.player1.score,
 				"x": self.player1.x,
-				"y": self.player1.y,
+				"z": self.player1.z,
 			},
 			2: {
 				"name": "Player 2",
 				"score": self.player2.score,
 				"x": self.player2.x,
-				"y": self.player2.y,
+				"z": self.player2.z,
 			},
 			"ball": {
 				"x": self.ball.x,

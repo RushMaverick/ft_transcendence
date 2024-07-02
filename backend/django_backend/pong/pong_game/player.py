@@ -8,6 +8,7 @@ class Player(Collider):
 		self.name: str = name
 		self.x: int = consts.PLAYER1_START_X if id == 1 else consts.PLAYER2_START_X
 		self.y: int = consts.PLAYER1_START_Y if id == 1 else consts.PLAYER2_START_Y
+		self.z: int = consts.PLAYER1_START_Z if id == 1 else consts.PLAYER2_START_Z
 		self.height: int = consts.PLAYER_HEIGHT
 		self.width: int = 1
 		self.move_up: bool = False
@@ -23,13 +24,13 @@ class Player(Collider):
 
 	def update_position(self) -> None:
 		if self.move_up:
-			if (self.y <= 0):
-				return
-			self.y -= 1
+			# if (self.z <= 0):
+			# 	return
+			self.z -= 1
 			self.move_up = False
 
 		elif self.move_down:
-			if (self.y + self.height >= consts.MAP_HEIGHT):
-				return
-			self.y += 1
+			# if (self.z + self.height >= consts.MAP_HEIGHT):
+			# 	return
+			self.z += 1
 			self.move_down = False
