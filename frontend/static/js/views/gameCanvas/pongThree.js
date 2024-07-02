@@ -30,13 +30,15 @@ export default class PongGame {
 		this.socket = new WebSocket(`ws://localhost:8000/ws/game/${roomname}/`);
 		this.socket.onopen = function() {
 			console.log('WebSocket connection established.');
-		  };
+		};
 		this.socket.onmessage = function(event) {
-			const message = JSON.parse(event.data);
-			console.log('Received message:', message);
-		  };
+			// console.log(this)
+			PongGame.instance.message = JSON.parse(event.data);
+		};
 	}
+
     createCubes() {
+		console.log(this)
         this.geometry = new THREE.BoxGeometry(5, 15, 2);
         this.material = new THREE.MeshLambertMaterial({
             color: 0xaeaa97
@@ -215,6 +217,12 @@ export default class PongGame {
 	}
 
 	collisionChecking() {
+		//Update bounding boxes
+		this.cube1Bounds.copy(this.cube.geometry.boundingBox).applyMatrix4(this.cube.matrixWorld);
+		this.cube2Bounds.copy(this.cube2.geometry.boundingBox).applyMatrix4(this.cube2.matrixWorld);
+		this.ballBounds.copy(this.ball.geometry.boundingBox).applyMatrix4(this.ball.matrixWorld);
+
+		//Check for collisions
 		if (this.cube1Bounds.intersectsBox(this.borderBounds) || this.cube1Bounds.intersectsBox(this.border2Bounds)
 			|| this.cube2Bounds.intersectsBox(this.borderBounds) || this.cube2Bounds.intersectsBox(this.border2Bounds)
 			|| this.ballBounds.intersectsBox(this.cube1Bounds) || this.ballBounds.intersectsBox(this.cube2Bounds)){
@@ -226,6 +234,8 @@ export default class PongGame {
 			this.cube.material.opacity = 1;
 			this.cube.material.color = new THREE.Color(0xaeaa97);
 		}
+
+		//Check for collisions with ball
 		if (this.ballBounds.intersectsBox(this.cube1Bounds) || this.ballBounds.intersectsBox(this.cube2Bounds)){
 			this.sphereFlash();
 		}
@@ -241,13 +251,23 @@ export default class PongGame {
 		requestAnimationFrame(() => this.animate());
 		if (this.ball.position.x > 70 || this.ball.position.x < -70)
 			this.ball.position.x = 0;
-		this.cube1Bounds.copy(this.cube.geometry.boundingBox).applyMatrix4(this.cube.matrixWorld);
-		this.cube2Bounds.copy(this.cube2.geometry.boundingBox).applyMatrix4(this.cube2.matrixWorld);
-		this.ballBounds.copy(this.ball.geometry.boundingBox).applyMatrix4(this.ball.matrixWorld);
+
 		this.collisionChecking();
 		
-		this.ball.position.x += 0.25;
+		// this.ball.position.x = this.message['ball'].x;
+		// this.cube.position.z = this.message['1'].z;
+		// console.log(this.message['1'].y);
+		// console.log(this.message);
 		this.renderer.render(this.scene, this.camera);
+		window.addEventListener('resize', () => {
+			if (window.innerWidth > window.innerHeight) 
+			{
+				this.camera.aspectRatio = window.innerWidth / window.innerHeight; // static aspect ratio for the canvas?
+				this.camera.updateProjectionMatrix();
+				this.renderer.setSize(window.innerWidth/ 1.3, window.innerHeight / 1.3); // static aspect ratio for the canvas would be implemented here?
+			}
+					
+		},false)
     }
 
     startAnimate() {
