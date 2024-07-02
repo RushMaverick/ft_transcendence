@@ -1,15 +1,15 @@
 {
 	"finnish":
 	{
-		"testheader": "heippuli ja tervetuloa profiiliin",
-		"usernamebase": "käyttäjätunnus: "
+		"header": "TURNAJAISET",
+		"welcome": "täältä löytäisit tournamentsit "
 
 	},
 
 	"english":
 	{
-		"testheader": "helloups and welcome to your profile",
-		"usernamebase": "username: "
+		"header": "TOURNAMENTS",
+		"welcome": "here you would find the tournaments "
 
 	}
 

@@ -1,26 +1,28 @@
 {
 	"finnish":
 	{
-		"testheader": "heippatirallaa ja tervetuloa asetuksiin",
-		"user-name": "käyttäjätunnus: ",
-		"first-name": "etunimi: ",
-		"last-name": "sukunimi: ",
+		"header": "heippatirallaa ja tervetuloa asetuksiin",
+		"username": "käyttäjätunnus: ",
+		"firstname": "etunimi: ",
+		"lastname": "sukunimi: ",
 		"email": "sähköposti: ",
-		"password": "uusi salasana: ",
-		"password-again": "uusi salasana uudelleen: ",
-		"language": "kieli: "
+		"password": "salasana: ",
+		"password-again": "salasana uudelleen: ",
+		"language": "kieli: ",
+		"button": "tallenna: "
 	},
 
 	"english":
 	{
-		"testheader": "helloups and welcome to settings",
-		"user-name": "username: ",
-		"first-name": "first name: ",
-		"last-name": "last name: ",
+		"header": "helloups and welcome to settings",
+		"username": "username: ",
+		"firstname": "first name: ",
+		"lastname": "last name: ",
 		"email": "email: ",
 		"password": "new password: ",
 		"password-again": "new password again: ",
-		"language": "language: "
+		"language": "language: ",
+		"button": "save: "
 	}
 
 }

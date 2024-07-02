@@ -95,12 +95,16 @@ document.addEventListener("viewUpdated", () => {
 		const language = window.localStorage.getItem('language');
 		const currentTranslations = translations[language]; // Store the imported translations
         const elementsToTranslate = document.querySelectorAll('[lang-key]');
-        elementsToTranslate.forEach(element => {
+        console.log('starting translations, looking for keys');
+		elementsToTranslate.forEach(element => {
+			console.log(element);
             const key = element.getAttribute('lang-key');
             if (currentTranslations[key]) {
-                element.textContent = currentTranslations[key];
+				element.textContent = currentTranslations[key];
+				console.log(element.textContent);
             }
         });
+		console.log('translations finished');
     })
    .catch(error => console.error('Error loading translation file:', error));
 });
