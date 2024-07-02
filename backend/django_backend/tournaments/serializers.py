@@ -7,9 +7,6 @@ from user.serializers import UserSerializer
 
 
 class MatchSerializer(serializers.ModelSerializer):
-    # player1 = UserSerializer(read_only=True)
-    # player2 = UserSerializer(read_only=True)
-    # winner = UserSerializer(read_only=True)
     class Meta:
         model = Match
         fields = '__all__'
@@ -44,6 +41,13 @@ class MatchSerializer(serializers.ModelSerializer):
             player2_in_tournament = TournamentPlayer.objects.filter(tournament=tournament_id, player=player2_id).exists()
             if not player1_in_tournament or not player2_in_tournament:
                 raise serializers.ValidationError("Both players must be in the tournament.")
+        return data
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['player1'] = UserSerializer(instance.player1).data
+        data['player2'] = UserSerializer(instance.player2).data
+        data['winner'] = UserSerializer(instance.winner).data
         return data
 
 class TournamentPlayersSerializer(serializers.ModelSerializer):
