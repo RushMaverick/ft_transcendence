@@ -18,7 +18,7 @@ export default class {
 		container.innerHTML = '';
 	}
 
-	updateView(...elements){
+	updateView( ...elements){
 		const container = document.querySelector('main');
 		const canvas = document.querySelector('canvas');
 		const pong = document.querySelector('pong');
@@ -31,42 +31,66 @@ export default class {
 			if (element)
 				container.appendChild(element);
 		});
+		document.dispatchEvent(new CustomEvent('viewUpdated'));
 	}
 
-	createHeader(text, headerSize) {
+	createHeader(langkey, text, headerSize) {
 		const header = document.createElement(headerSize);
         header.textContent = text;
-		header.className = 'h1';
+		header.setAttribute('lang-key', langkey);
         return header;
     }
 
-    createParagraph(text) {
+    createParagraph(langkey, text) {
         const p = document.createElement('p');
         p.textContent = text;
-		p.innerHTML = text.replace(/\t/g, '&emsp;&emsp;');
+		p.setAttribute('lang-key', langkey);
+        return p;
+    }
+
+    createTestParagraph(langkey) {
+        const p = document.createElement('p');
+		p.textContent = 'ei vieläkään';
+		p.setAttribute('lang-key', langkey);
+		// p.innerHTML = text.replace(/\t/g, '&emsp;&emsp;'); this was giving errors for text not being defined, sunny can you check this
 		p.className = 'p';
         return p;
     }
 
-	createParagraphWithLink(text, href, additionalText) {
-        const p = document.createElement('p');
-		p.textContent = text;
-        const link = document.createElement('a');
-        link.href = href;
-        link.textContent = text;
-        link.dataset.link = true;
-        p.appendChild(link);
-        if (additionalText) {
-            const span = document.createElement('span');
-            span.textContent = additionalText;
-            p.appendChild(span);
-        }
-        return p;
-    }
+	// //lets try to figure out if we can make this work somehow? right now, is not used
+	// createParagraphWithLink(langkey, additionalText, href) {
+    //     const p = document.createElement('p');
+	// 	p.textContent = "temp";
+	// 	p.setAttribute('lang-key', langkey);
+    //     const link = document.createElement('a');
+	// 	console.log("WE ADD A LINK NOWWW");
+	// 	console.log(href);
+	// 	console.log(additionalText);
+    //     link.href = href;
+    //     link.textContent = "umm hello";
+    //     link.dataset.link = true;
+    //     p.appendChild(link);
+    //     // if (additionalText) {
+    //     //     const span = document.createElement('span');
+    //     //     span.textContent = additionalText;
+    //     //     p.appendChild(span);
+    //     // }
+    //     return p;
+    // }
 
-	createAnchor(text){
+	createLink(langkey, text, href){
+		const link = document.createElement('a');
+		link.textContent = text;
+		link.href = href;
+		link.dataset.link = true;
+		link.setAttribute('lang-key', langkey);
+		return link;
+	}
+
+	createAnchor(langkey, text){
 		const a = document.createElement('a');
         a.textContent = text;
+		a.setAttribute('lang-key', langkey);
         return a;
 	}
 
@@ -80,6 +104,7 @@ export default class {
 		const button = document.createElement('button');
 		button.classList.add(functionality, 'button');
 		button.textContent = text;
+		// button.setAttribute('lang-key', langkey);
 		return button;
 	}
 

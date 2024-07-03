@@ -1,0 +1,28 @@
+{
+	"finnish":
+	{
+		"header": "heippatirallaa ja tervetuloa asetuksiin",
+		"username": "käyttäjätunnus: ",
+		"firstname": "etunimi: ",
+		"lastname": "sukunimi: ",
+		"email": "sähköposti: ",
+		"password": "salasana: ",
+		"password-again": "salasana uudelleen: ",
+		"language": "kieli: ",
+		"button": "tallenna: "
+	},
+
+	"english":
+	{
+		"header": "helloups and welcome to settings",
+		"username": "username: ",
+		"firstname": "first name: ",
+		"lastname": "last name: ",
+		"email": "email: ",
+		"password": "new password: ",
+		"password-again": "new password again: ",
+		"language": "language: ",
+		"button": "save: "
+	}
+
+}

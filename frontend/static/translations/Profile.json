@@ -1,0 +1,22 @@
+{
+	"finnish":
+	{
+		"testheader": "heippuli ja tervetuloa profiiliin",
+		"usernamebase": "käyttäjätunnus: ",
+		"emailbase": "sähköposti: ",
+		"message": "sää voisit: ",
+		"link1": "tilastot ",
+		"link2": "asetukset "
+	},
+
+	"english":
+	{
+		"testheader": "helloups and welcome to your profile",
+		"usernamebase": "username: ",
+		"emailbase": "email: ",
+		"message": "here you can: ",
+		"link1": "stats ",
+		"link2": "settings "
+	}
+
+}
