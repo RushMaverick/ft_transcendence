@@ -19,10 +19,23 @@
 		"firstname": "first name: ",
 		"lastname": "last name: ",
 		"email": "email: ",
-		"password": "new password: ",
-		"password-again": "new password again: ",
+		"password": "password: ",
+		"password-again": "password again: ",
 		"language": "language: ",
 		"button": "save: "
+	},
+
+	"spanish":
+	{
+		"header": "hola y bienvenidos a la configuración",
+		"username": "nombre de usuario: ",
+		"firstname": "nombre de pila: ",
+		"lastname": "apellido: ",
+		"email": "correo electrónico: ",
+		"password": "contraseña: ",
+		"password-again": "contraseña de nuevo: ",
+		"language": "idioma: ",
+		"button": "ahorrar: "
 	}
 
 }
