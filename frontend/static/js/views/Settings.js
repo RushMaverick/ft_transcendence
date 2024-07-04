@@ -4,7 +4,15 @@ import textInputField from "./TextInputView.js";
 export default class extends AView {
 	constructor(params){
 		super(params);//call the constructor of the parent class
-		this.setTitle("Settings");
+		this.setTitle('Settings');
+	}
+
+	setLanguage(button){
+		if (button.matches('lang-toggke')) {
+			const language = button.getAttribute('language');
+			window.localStorage.setItem('language', language);
+			document.dispatchEvent(new CustomEvent('viewUpdated'));
+		}
 	}
 
 	async getHtml(){
@@ -13,25 +21,28 @@ export default class extends AView {
 		title.classList.add('text-center');
 
 		const form = this.createForm('settings');
+		const firstnameInput = textInputField('firstname', 'Firstname', 'username', 'text');
+		const lastnameInput = textInputField('lastname', 'Lastname', 'password', 'password');
 		const usernameInput = textInputField('username', 'Username', 'username', 'text');
 		const passwordInput = textInputField('password', 'Password', 'password', 'password');
 		const confirmPasswordInput = textInputField('password-again', 'Confirm password', 'confirm-password', 'password');
-		const registerButton = this.createButton('save', 'save');
+		const buttonEn = this.createLanguageButton('english', 'lang-toggle', 'English');
+		const buttonFi = this.createLanguageButton('finnish', 'lang-toggle', 'Finnish');
+		const buttonSp = this.createLanguageButton('spanish', 'lang-toggle', 'Spanish');
+		const signupButton = this.createButton('save', 'save');
+		form.appendChild(firstnameInput);
+		form.appendChild(lastnameInput);
 		form.appendChild(usernameInput);
 		form.appendChild(passwordInput);
 		form.appendChild(confirmPasswordInput);
-		form.appendChild(registerButton);
+		form.appendChild(signupButton);
 		
-		// const loginSuggestion = this.createParagraph('Already have an account?');
-		// const loginLink = this.createAnchor('Log in here');
-		// loginLink.href = '/login';
-		// loginLink.setAttribute("data-link", "");
-		// loginLink.setAttribute('id', "log-in-link");
-		// loginSuggestion.appendChild(loginLink);
-
-		// form.addEventListener('submit', this.handleFormSubmit.bind(this));
+		buttonEn.addEventListener("click", this.setLanguage(buttonEn));
+		buttonFi.addEventListener("click", this.setLanguage(buttonFi));
+		buttonSp.addEventListener("click", this.setLanguage(buttonSp));
+		
 		window.localStorage.setItem('page', 'Settings');
-		this.updateView(title, form);
+		this.updateView(title, form, buttonEn, buttonFi, buttonSp);
 		return ;
 	}
 }

@@ -104,7 +104,14 @@ export default class {
 		const button = document.createElement('button');
 		button.classList.add(functionality, 'button');
 		button.textContent = text;
-		// button.setAttribute('lang-key', langkey);
+		return button;
+	}
+
+	createLanguageButton(language, functionality, text){
+		const button = document.createElement('button');
+		button.classList.add(functionality, 'button');
+		button.textContent = text;
+		button.setAttribute('language', language);
 		return button;
 	}
 
