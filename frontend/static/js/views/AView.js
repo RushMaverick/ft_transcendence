@@ -112,6 +112,7 @@ export default class {
 		button.classList.add(functionality, 'button');
 		button.textContent = text;
 		button.setAttribute('language', language);
+		button.setAttribute('lang-toggle', '');
 		return button;
 	}
 
