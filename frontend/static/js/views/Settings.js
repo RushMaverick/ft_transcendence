@@ -40,6 +40,8 @@ export default class extends AView {
 		return ;
 	}
 
+	//add delete account with a confirmation pop up
+
 	async handleSettingsFormSubmit(event) {
         event.preventDefault(); // Prevent the default form submission behavior
 
