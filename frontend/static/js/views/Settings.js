@@ -19,7 +19,7 @@ export default class extends AView {
 		const usernameInput = textInputField('username', 'Username', 'username', 'text');
 		const passwordInput = textInputField('password', 'Password', 'password', 'password');
 		const confirmPasswordInput = textInputField('password-again', 'Confirm password', 'confirm-password', 'password');
-		const signupButton = this.createButton('submit', 'save');
+		const signupButton = this.createButton('save', 'save');
 		
 		form.appendChild(firstnameInput);
 		form.appendChild(lastnameInput);
@@ -63,27 +63,28 @@ export default class extends AView {
 			lastname: lastname,
 			email: email,
             username: username,
-            password: password,
-			language: language
+            password: password
         };
+		console.log(data);
 
-        try {
-            const response = await fetch(`${import.meta.env.VITE_API_ENDPOINT}/register`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            });
+    //     try {
+	// 		// do I need to create the settings endpoint? maybe we can connect this later
+    //         const response = await fetch(`${import.meta.env.VITE_API_ENDPOINT}/settings`, {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json'
+    //             },
+    //             body: JSON.stringify(data)
+    //         });
 
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
+    //         if (!response.ok) {
+    //             throw new Error('Network response was not ok');
+    //         }
 
-            const responseData = await response.json();
-            console.log(responseData);
-        } catch (error) {
-            console.error('There was a problem with the fetch operation:', error);
-        }
-    }
+    //         const responseData = await response.json();
+    //         console.log(responseData);
+    //     } catch (error) {
+    //         console.error('There was a problem with the fetch operation:', error);
+    //     }
+    // }
 }
