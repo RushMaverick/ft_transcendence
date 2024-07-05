@@ -51,24 +51,23 @@ export default class extends AView {
         const confirmPassword = event.target['confirm-password'].value;
 
         if (password !== confirmPassword) {
-            alert("Passwords do not match!");
+            alert('Passwords do not match!');
             return;
         }
 
-		const newID = uuidv4();
         // Create the JSON object to be sent
         const data = {
-            id: newID,
 			firstname: firstname,
 			lastname: lastname,
 			email: email,
             username: username,
             password: password
         };
+
 		console.log(data);
 
+	// do I need to create the settings endpoint? maybe we can connect this later
     //     try {
-	// 		// do I need to create the settings endpoint? maybe we can connect this later
     //         const response = await fetch(`${import.meta.env.VITE_API_ENDPOINT}/settings`, {
     //             method: 'POST',
     //             headers: {
@@ -86,5 +85,5 @@ export default class extends AView {
     //     } catch (error) {
     //         console.error('There was a problem with the fetch operation:', error);
     //     }
-    // }
+    }
 }
