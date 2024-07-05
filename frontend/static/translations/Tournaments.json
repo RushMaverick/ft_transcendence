@@ -11,6 +11,13 @@
 		"header": "TOURNAMENTS",
 		"welcome": "here you would find the tournaments "
 
+	},
+
+	"spanish":
+	{
+		"header": "TORNEOS",
+		"welcome": "aquí encontrarías los torneos "
+
 	}
 
 }

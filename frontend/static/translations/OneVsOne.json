@@ -2,7 +2,7 @@
 	"finnish":
 	{
 		"header": "YKS VEEÄS YKS",
-		"welcome": "täältä pelailisit"
+		"welcome": "täältä pelailisit yks vs yks"
 
 	},
 
@@ -10,6 +10,13 @@
 	{
 		"header": "ONE VS ONE",
 		"welcome": "here you would find the one vs one games "
+
+	},
+
+	"spanish":
+	{
+		"header": "UNO CONTRA UNO",
+		"welcome": "Aquí encontrarías los juegos uno contra uno "
 
 	}
 

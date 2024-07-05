@@ -87,7 +87,6 @@ window.addEventListener("popstate", router);
 document.addEventListener("viewUpdated", () => {
     let translations;
 	const page = window.localStorage.getItem('page');
-	console.log('page = ' + page);
     fetch('./static/translations/' + page + '.json')
    .then(response => response.text())
    .then(data => {
