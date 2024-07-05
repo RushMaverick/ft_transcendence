@@ -14,7 +14,8 @@ export default class extends AView {
 
 		const form = this.createForm('settings');
 		const firstnameInput = textInputField('firstname', 'Firstname', 'firstname', 'text');
-		const lastnameInput = textInputField('lastname', 'Lastname', 'lastname', 'password');
+		const lastnameInput = textInputField('lastname', 'Lastname', 'lastname', 'text');
+		const emailInput = textInputField('email', 'Email', 'email', 'text');
 		const usernameInput = textInputField('username', 'Username', 'username', 'text');
 		const passwordInput = textInputField('password', 'Password', 'password', 'password');
 		const confirmPasswordInput = textInputField('password-again', 'Confirm password', 'confirm-password', 'password');
@@ -22,12 +23,13 @@ export default class extends AView {
 		
 		form.appendChild(firstnameInput);
 		form.appendChild(lastnameInput);
+		form.appendChild(emailInput);
 		form.appendChild(usernameInput);
 		form.appendChild(passwordInput);
 		form.appendChild(confirmPasswordInput);
 		form.appendChild(signupButton);
 
-		form.addEventListener('submit', this.handleFormSubmit.bind(this));
+		form.addEventListener('submit', this.handleSettingsFormSubmit.bind(this));
 		
 		const buttonEn = this.createLanguageButton('english', 'lang-toggle', 'English');
 		const buttonFi = this.createLanguageButton('finnish', 'lang-toggle', 'Finnish');
@@ -41,6 +43,9 @@ export default class extends AView {
 	async handleSettingsFormSubmit(event) {
         event.preventDefault(); // Prevent the default form submission behavior
 
+        const firstname = event.target.firstname.value;
+        const lastname = event.target.lastname.value;
+        const email = event.target.email.value;
         const username = event.target.username.value;
         const password = event.target.password.value;
         const confirmPassword = event.target['confirm-password'].value;
@@ -56,6 +61,7 @@ export default class extends AView {
             id: newID,
 			firstname: firstname,
 			lastname: lastname,
+			email: email,
             username: username,
             password: password,
 			language: language
