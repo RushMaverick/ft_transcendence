@@ -62,7 +62,7 @@ class Pong:
 				"y": self.ball.y,
 			},
 		}
-		print (f"Sending state to {self.room_group_name}", flush=True)
+		# print (f"Sending state to {self.room_group_name}", flush=True)
 		await self.channel_layer.group_send(
 			self.room_group_name, {"type": "game.state", "state": self.state}
 		)
@@ -73,6 +73,7 @@ class Pong:
 		self.player2.update_position()
 
 		if self.ball.is_colliding(self.player1) or self.ball.is_colliding(self.player2):
+			print ('Collision with player', flush=True)
 			self.ball.dx *= -1
 
 		if self.ball.x < 0:
@@ -92,9 +93,9 @@ class Pong:
 			start_time = time.time()
 			self.update_game()
 			await self.update_state()
-			if self.player1.score >= 5 or self.player2.score >= 5:
-				self.stop()
-				print("Game Over", flush=True)
+			# if self.player1.score >= 5 or self.player2.score >= 5:
+			# 	self.stop()
+			# 	print("Game Over", flush=True)
 			delta_time = time.time() - start_time
 			sleep_time = 1./self.tick - delta_time
 			if (sleep_time > 0):

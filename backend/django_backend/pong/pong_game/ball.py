@@ -7,8 +7,8 @@ class Ball(Collider):
 		self.y: int = consts.BALL_START_Y
 		self.dx: int = consts.BALL_START_DX
 		self.dy: int = consts.BALL_START_DY
-		self.width: int = 1
-		self.height: int = 1
+		self.width: int = 5
+		self.height: int = 5
 
 	def update_position(self) -> None:
 		self.x += self.dx
@@ -18,7 +18,7 @@ class Ball(Collider):
 			self.dy *= -1
 
 	def reset_position(self) -> None:
-		self.x = consts.MAP_WIDTH // 2
-		self.y = consts.MAP_HEIGHT // 2
+		self.x = 0
+		self.y = 0
 		self.dx = -self.dx
 		self.dy = -self.dy
