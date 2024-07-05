@@ -54,11 +54,11 @@ export default class extends AView {
         // Create the JSON object to be sent
         const data = {
             id: newID,
+			firstname: firstname,
+			lastname: lastname,
             username: username,
             password: password,
-            // profile: {
-            //     // avatar: ,
-            // }
+			language: language
         };
 
         try {
