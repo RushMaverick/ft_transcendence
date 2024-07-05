@@ -1,7 +1,7 @@
 {
 	"finnish":
 	{
-		"header": "heippatirallaa ja tervetuloa asetuksiin",
+		"header": "Päivitä käyttäjätietoja",
 		"username": "käyttäjätunnus: ",
 		"firstname": "etunimi: ",
 		"lastname": "sukunimi: ",
@@ -14,7 +14,7 @@
 
 	"english":
 	{
-		"header": "helloups and welcome to settings",
+		"header": "Update user information",
 		"username": "username: ",
 		"firstname": "first name: ",
 		"lastname": "last name: ",
@@ -27,7 +27,7 @@
 
 	"spanish":
 	{
-		"header": "hola y bienvenidos a la configuración",
+		"header": "Actualizar información del usuario",
 		"username": "nombre de usuario: ",
 		"firstname": "nombre de pila: ",
 		"lastname": "apellido: ",
