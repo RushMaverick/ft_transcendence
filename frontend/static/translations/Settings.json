@@ -9,7 +9,8 @@
 		"password": "salasana: ",
 		"password-again": "salasana uudelleen: ",
 		"language": "kieli: ",
-		"button": "tallenna: "
+		"savebutton": "tallenna muutokset: ",
+		"deletebutton": "poista käyttäjä: "
 	},
 
 	"english":
@@ -22,7 +23,8 @@
 		"password": "password: ",
 		"password-again": "password again: ",
 		"language": "language: ",
-		"button": "save: "
+		"savebutton": "save changes: ",
+		"deletebutton": "delete account: "
 	},
 
 	"spanish":
@@ -35,7 +37,8 @@
 		"password": "contraseña: ",
 		"password-again": "contraseña de nuevo: ",
 		"language": "idioma: ",
-		"button": "ahorrar: "
+		"savebutton": "ahorrar: ",
+		"deletebutton": "delete account in spanish: "
 	}
 
 }
