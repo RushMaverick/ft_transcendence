@@ -105,23 +105,17 @@ document.addEventListener("viewUpdated", () => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-	
-	if(document.getElementById('languageSelect')){
-		const selectElement = document.getElementById('languageSelect');
-  		selectElement.addEventListener('change', (event) => {
-	  		const selectedLanguage = event.target.value;
-			window.localStorage.setItem('language', selectedLanguage);
-	   		document.dispatchEvent(new CustomEvent('viewUpdated'));
-		
-		})
-	}
-
 	document.body.addEventListener("click", e => {
 		if (e.target.matches("[data-link]")) {
 			e.preventDefault();
 			navigateTo(e.target.href);
 		}
 		if (e.target.matches("[lang-toggle]")) {
+			const selectedLanguage = e.target.getAttribute('language');
+			window.localStorage.setItem('language', selectedLanguage);
+			document.dispatchEvent(new CustomEvent('viewUpdated'));
+		}
+		if (e.target.matches("languageSelect")) {
 			const selectedLanguage = e.target.getAttribute('language');
 			window.localStorage.setItem('language', selectedLanguage);
 			document.dispatchEvent(new CustomEvent('viewUpdated'));

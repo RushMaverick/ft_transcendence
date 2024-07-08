@@ -13,9 +13,6 @@ export default class extends AView {
 		title.classList.add('text-center');
 
 		const form = this.createForm('settings');
-		const firstnameInput = textInputField('firstname', 'Firstname', 'firstname', 'text');
-		const lastnameInput = textInputField('lastname', 'Lastname', 'lastname', 'text');
-		const emailInput = textInputField('email', 'Email', 'email', 'text');
 		const usernameInput = textInputField('username', 'Username', 'username', 'text');
 		const passwordInput = textInputField('password', 'Password', 'password', 'password');
 		const confirmPasswordInput = textInputField('password-again', 'Confirm password', 'confirm-password', 'password');
@@ -25,21 +22,24 @@ export default class extends AView {
 		form.appendChild(passwordInput);
 		form.appendChild(confirmPasswordInput);
 		form.appendChild(signupButton);
-
 		form.addEventListener('submit', this.handleSettingsFormSubmit.bind(this));
-		
-		const buttonEn = this.createLanguageButton('english', 'lang-toggle', 'English');
-		const buttonFi = this.createLanguageButton('finnish', 'lang-toggle', 'Finnish');
-		const buttonSp = this.createLanguageButton('spanish', 'lang-toggle', 'Spanish');
-
+	
 		const select = document.createElement('select');
 		select.setAttribute('id', 'languageSelect');
 		select.classList.add('translations');
-		['english', 'finnish', 'spanish'].forEach((lang, index) => {
+		['english', 'finnish', 'spanish'].forEach((lang) => {
 			const option = document.createElement('option');
             option.text = lang;
+			option.setAttribute('lang-key', lang);
             select.appendChild(option);
 		});
+		if(select){
+			  select.addEventListener('change', (event) => {
+				const selectedLanguage = event.target.value;
+				window.localStorage.setItem('language', selectedLanguage);
+				document.dispatchEvent(new CustomEvent('viewUpdated'));
+			})
+		}
 		
 		const buttonDel = this.createButton('deletebutton', 'delete', 'delete account');
 		buttonDel.addEventListener('click', (event) => {
@@ -52,13 +52,10 @@ export default class extends AView {
 				console.log(data);
 				console.log('deleting account'); //for monitoring
 			}
-			else{
-				console.log('pressed cancel'); //for monitoring
-			}
 		});
 
 		window.localStorage.setItem('page', 'Settings');
-		this.updateView(title, form, select, buttonEn, buttonFi, buttonSp, buttonDel);
+		this.updateView(title, form, select, buttonDel);
 		return ;
 	}
 
