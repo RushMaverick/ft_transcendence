@@ -19,7 +19,7 @@ export default class extends AView {
 		const usernameInput = textInputField('username', 'Username', 'username', 'text');
 		const passwordInput = textInputField('password', 'Password', 'password', 'password');
 		const confirmPasswordInput = textInputField('password-again', 'Confirm password', 'confirm-password', 'password');
-		const signupButton = this.createButton('save', 'save');
+		const signupButton = this.createButton('savebutton', 'save', 'save');
 		
 		form.appendChild(firstnameInput);
 		form.appendChild(lastnameInput);
@@ -34,6 +34,10 @@ export default class extends AView {
 		const buttonEn = this.createLanguageButton('english', 'lang-toggle', 'English');
 		const buttonFi = this.createLanguageButton('finnish', 'lang-toggle', 'Finnish');
 		const buttonSp = this.createLanguageButton('spanish', 'lang-toggle', 'Spanish');
+
+		const buttonDel = this.createButton('deletebutton', 'delete', 'delete account');
+
+
 		
 		window.localStorage.setItem('page', 'Settings');
 		this.updateView(title, form, buttonEn, buttonFi, buttonSp);

@@ -100,9 +100,10 @@ export default class {
 		return form
 	}
 
-	createButton(functionality, text){
+	createButton(langkey, functionality, text){
 		const button = document.createElement('button');
 		button.classList.add(functionality, 'button');
+		button.setAttribute('lang-key', langkey);
 		button.textContent = text;
 		return button;
 	}
