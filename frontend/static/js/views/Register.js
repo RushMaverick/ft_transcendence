@@ -46,7 +46,7 @@ export default class extends AView {
 		const loginSuggestion = this.createParagraph('Already have an account?');
 		const loginLink = this.createAnchor('Log in here');
 		loginLink.href = '/login';
-		loginLink.setAttribute("data-link", "");
+		loginLink.setAttribute('data-link', "");
 		loginLink.setAttribute('id', "log-in-link");
 		loginSuggestion.appendChild(loginLink);
 

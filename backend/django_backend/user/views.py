@@ -1,13 +1,57 @@
 from django.shortcuts import render
-from django.contrib.auth.models import  User 
+from django.contrib.auth.models import  User
 from rest_framework import status, viewsets, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.parsers import MultiPartParser, FormParser
-from .serializers import UserSerializer, PasswordUpdateSerializer, AvatarSerializer
+from .serializers import UserSerializer, PasswordUpdateSerializer, AvatarSerializer, MatchSerializer, OnlineStatusSerializer
 from .permissions import IsAuthenticatedOrCreateOnly, IsUser
-from .models import Avatar
+from .models import Avatar, Match, OnlineStatus
 
+#OnlineStatusView:
+
+# In this view, we have a get method:
+# Then we have 2 GET methods, which means we are asking for information:
+#   - First, we try to get the Online Status of a user, if the user has not been registered then we throw an exception.
+#   - If the User exists then we return the user status, which have the info define in the serializer fields.
+class OnlineStatusView(APIView):
+    permission_classes = [IsAuthenticatedOrCreateOnly]
+
+    def get(self,request,userID):
+        try:
+            user_status = OnlineStatus.objects.get(user_id=userID)
+        except OnlineStatus.DoesNotExist:
+            return Response({"Warning": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = OnlineStatusSerializer(user_status)
+        return Response({"User_status": serializer.data}, status=status.HTTP_200_OK)
+
+class MatchList(APIView):
+    permission_classes = [IsAuthenticatedOrCreateOnly]
+
+    def get(self, request, format=None):
+        matches = Match.objects.all()
+        serializer = MatchSerializer(matches, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, format=None):
+        serializer = MatchSerializer(data=request.data)
+        if(serializer.is_valid()):
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class PlayerMatchesView(APIView):
+    permissions_classes = [IsAuthenticatedOrCreateOnly]
+
+    def get(self, request, user_id, formant=None):
+        try:
+            player = User.objects.get(id=user_id)
+        except User.DoesNotExist:
+            return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+        matches = Match.objects.filter(player1=player) | Match.objects.filter(player2=player)
+        serializer = MatchSerializer(matches, many=True)
+        return Response(serializer.data)
 
 class AvatarViewSet(APIView):
     serializer_class = AvatarSerializer
@@ -22,7 +66,7 @@ class AvatarViewSet(APIView):
             return Response(serializer.data)
         else:
             return Response({"error": "No avatar found."}, status=status.HTTP_404_NOT_FOUND)
-    
+
     def post(self, request, format=None):
         "Upload avatar, or update the avatar"
         user = request.user
@@ -35,7 +79,7 @@ class AvatarViewSet(APIView):
             serializer.save(user=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
     def delete(self, request, *args, **kwargs):
         "Delete Avatar"
         user = request.user
@@ -45,7 +89,7 @@ class AvatarViewSet(APIView):
             avatar.delete()
             return Response({"message": "Avatar deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
         else:
-            return Response({"error": "No avatar found to delete."}, status=status.HTTP_404_NOT_FOUND)   
+            return Response({"error": "No avatar found to delete."}, status=status.HTTP_404_NOT_FOUND)
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -70,6 +114,8 @@ class UserViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
+        user = serializer.instance
+        OnlineStatus.objects.create(user=user, is_online=False)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 

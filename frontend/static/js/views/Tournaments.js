@@ -7,9 +7,10 @@ export default class extends AView {
 	}
 
 	async getHtml(){
-		const header = this.createHeader('Tournaments', 'h1');
-		const p = this.createParagraph("You have no tournaments.");
+		const header = this.createHeader('header', 'Tournaments', 'h2');
+		const p = this.createParagraph('welcome', 'You have no tournaments.');
 		
+		window.localStorage.setItem('page', 'Tournaments');
 		this.updateView(header, p);
 		return ;
 	}
