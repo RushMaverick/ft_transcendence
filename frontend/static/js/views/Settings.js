@@ -21,9 +21,6 @@ export default class extends AView {
 		const confirmPasswordInput = textInputField('password-again', 'Confirm password', 'confirm-password', 'password');
 		const signupButton = this.createButton('savebutton', 'save', 'save');
 		
-		form.appendChild(firstnameInput);
-		form.appendChild(lastnameInput);
-		form.appendChild(emailInput);
 		form.appendChild(usernameInput);
 		form.appendChild(passwordInput);
 		form.appendChild(confirmPasswordInput);
@@ -35,6 +32,15 @@ export default class extends AView {
 		const buttonFi = this.createLanguageButton('finnish', 'lang-toggle', 'Finnish');
 		const buttonSp = this.createLanguageButton('spanish', 'lang-toggle', 'Spanish');
 
+		const select = document.createElement('select');
+		select.setAttribute('id', 'languageSelect');
+		select.classList.add('translations');
+		['english', 'finnish', 'spanish'].forEach((lang, index) => {
+			const option = document.createElement('option');
+            option.text = lang;
+            select.appendChild(option);
+		});
+		
 		const buttonDel = this.createButton('deletebutton', 'delete', 'delete account');
 		buttonDel.addEventListener('click', (event) => {
 			event.preventDefault();
@@ -50,8 +56,9 @@ export default class extends AView {
 				console.log('pressed cancel'); //for monitoring
 			}
 		});
+
 		window.localStorage.setItem('page', 'Settings');
-		this.updateView(title, form, buttonEn, buttonFi, buttonSp, buttonDel);
+		this.updateView(title, form, select, buttonEn, buttonFi, buttonSp, buttonDel);
 		return ;
 	}
 
@@ -59,9 +66,6 @@ export default class extends AView {
 	async handleSettingsFormSubmit(event) {
         event.preventDefault(); // Prevent the default form submission behavior
 
-        const firstname = event.target.firstname.value;
-        const lastname = event.target.lastname.value;
-        const email = event.target.email.value;
         const username = event.target.username.value;
         const password = event.target.password.value;
         const confirmPassword = event.target['confirm-password'].value;
@@ -73,9 +77,6 @@ export default class extends AView {
 
         // Create the JSON object to be sent
         const data = {
-			firstname: firstname,
-			lastname: lastname,
-			email: email,
             username: username,
             password: password
         };

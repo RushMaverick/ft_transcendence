@@ -105,6 +105,11 @@ document.addEventListener("viewUpdated", () => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
+	const selectElement = document.getElementById('languageSelect');
+	selectElement.addEventListener('change', (event) => {
+		const selectedLanguage = event.target.value;
+		this.setLanguage(selectedLanguage);
+	};
 	document.body.addEventListener("click", e => {
 		if (e.target.matches("[data-link]")) {
 			e.preventDefault();
