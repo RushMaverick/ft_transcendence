@@ -108,7 +108,8 @@ document.addEventListener("DOMContentLoaded", () => {
 	const selectElement = document.getElementById('languageSelect');
 	selectElement.addEventListener('change', (event) => {
 		const selectedLanguage = event.target.value;
-		this.setLanguage(selectedLanguage);
+		window.localStorage.setItem('language', selectedLanguage);
+		document.dispatchEvent(new CustomEvent('viewUpdated'));
 	});
 
 	document.body.addEventListener("click", e => {
@@ -117,8 +118,8 @@ document.addEventListener("DOMContentLoaded", () => {
 			navigateTo(e.target.href);
 		}
 		if (e.target.matches("[lang-toggle]")) {
-			const language = e.target.getAttribute('language');
-			window.localStorage.setItem('language', language);
+			const selectedLanguage = e.target.getAttribute('language');
+			window.localStorage.setItem('language', selectedLanguage);
 			document.dispatchEvent(new CustomEvent('viewUpdated'));
 		}
 		//if link element has data-link attribute, we want to prevent default behavior
