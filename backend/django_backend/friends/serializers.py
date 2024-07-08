@@ -34,6 +34,8 @@ class FriendsSerializer(serializers.ModelSerializer):
 # FriendsListSerializer:
 # This serializer is designed to list the friends from an user, so for this we use model user
 # and we use as a fields the id of the user and the username
+# We also have is_online, which is getting from Online Status model, so that is why we call the fuction
+# get_ which is gonna provided if a user is_online.
 class FriendsListSerializer(serializers.ModelSerializer):
     is_online = serializers.SerializerMethodField()
     class Meta:
