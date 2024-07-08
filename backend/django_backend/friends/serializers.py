@@ -43,8 +43,5 @@ class FriendsListSerializer(serializers.ModelSerializer):
         fields = ['id', 'username', 'is_online']
 
     def get_is_online(self, obj):
-        try:
-            user_status = OnlineStatus.objects.get(user=obj)
-            return user_status.is_online
-        except OnlineStatus.DoesNotExist:
-            return False
+        user_status = OnlineStatus.objects.get(user=obj)
+        return user_status.is_online
