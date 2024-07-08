@@ -3,9 +3,6 @@
 	{
 		"header": "Päivitä käyttäjätietoja",
 		"username": "käyttäjätunnus: ",
-		"firstname": "etunimi: ",
-		"lastname": "sukunimi: ",
-		"email": "sähköposti: ",
 		"password": "salasana: ",
 		"password-again": "salasana uudelleen: ",
 		"language": "kieli: ",
@@ -17,9 +14,6 @@
 	{
 		"header": "Update user information",
 		"username": "username: ",
-		"firstname": "first name: ",
-		"lastname": "last name: ",
-		"email": "email: ",
 		"password": "password: ",
 		"password-again": "password again: ",
 		"language": "language: ",
@@ -31,9 +25,6 @@
 	{
 		"header": "Actualizar información del usuario",
 		"username": "nombre de usuario: ",
-		"firstname": "nombre de pila: ",
-		"lastname": "apellido: ",
-		"email": "correo electrónico: ",
 		"password": "contraseña: ",
 		"password-again": "contraseña de nuevo: ",
 		"language": "idioma: ",
