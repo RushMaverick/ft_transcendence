@@ -8,25 +8,47 @@ export default class extends AView {
 		this.setTitle("Register");
 	}
 
+	fileInputField(labelText, name) {
+		const container = document.createElement('div');
+		container.classList.add('form-group');
+		
+		const label = document.createElement('label');
+		label.setAttribute('for', name);
+		label.textContent = labelText;
+		
+		const input = document.createElement('input');
+		input.setAttribute('type', 'file');
+		input.setAttribute('id', name);
+		input.setAttribute('name', name);
+		input.classList.add('form-control');
+		
+		container.appendChild(label);
+		container.appendChild(input);
+		
+		return container;
+	}
+
 	async getHtml(){
 
-		const title = this.createHeader('Register', 'h1');
+		const title = this.createHeader('register', 'Register', 'h1');
 		title.classList.add('text-center');
 
 		const form = this.createForm('registerform');
-		const usernameInput = textInputField('Username', 'username', 'text');
-		const passwordInput = textInputField('Password', 'password', 'password');
-		const confirmPasswordInput = textInputField('Confirm password', 'confirm-password', 'password');
+		const usernameInput = textInputField('Username', 'Username', 'username', 'text');
+		const passwordInput = textInputField('Password', 'Password', 'password', 'password');
+		const confirmPasswordInput = textInputField('Confirm password','Confirm password', 'confirm-password', 'password');
+		const avatarInput = this.fileInputField('Avatar', 'avatar');
 		const registerButton = this.createButton('register', 'Register');
 		form.appendChild(usernameInput);
 		form.appendChild(passwordInput);
 		form.appendChild(confirmPasswordInput);
+		form.appendChild(avatarInput);
 		form.appendChild(registerButton);
 		
-		const loginSuggestion = this.createParagraph('Already have an account?');
-		const loginLink = this.createAnchor('Log in here');
+		const loginSuggestion = this.createParagraph('login', 'Already have an account?');
+		const loginLink = this.createAnchor('login-link', 'Log in here');
 		loginLink.href = '/login';
-		loginLink.setAttribute("data-link", "");
+		loginLink.setAttribute('data-link', "");
 		loginLink.setAttribute('id', "log-in-link");
 		loginSuggestion.appendChild(loginLink);
 
@@ -39,9 +61,17 @@ export default class extends AView {
 	async handleFormSubmit(event) {
         event.preventDefault(); // Prevent the default form submission behavior
 
-        const username = event.target.username.value;
-        const password = event.target.password.value;
-        const confirmPassword = event.target['confirm-password'].value;
+		// Create the JSON object to be sent
+		const formData = new FormData(event.target);
+		const username = formData.get('username');
+		const password = formData.get('password');
+		const confirmPassword = formData.get('confirm-password');
+		const avatar = formData.get('avatar');
+
+		if (!username || !password || !confirmPassword) {
+			alert("Please fill in all required fields.");
+			return;
+		}
 
         if (password !== confirmPassword) {
             alert("Passwords do not match!");
@@ -49,23 +79,16 @@ export default class extends AView {
         }
 
 		const newID = uuidv4();
-        // Create the JSON object to be sent
-        const data = {
-            id: newID,
-            username: username,
-            password: password,
-            // profile: {
-            //     // avatar: ,
-            // }
-        };
+		formData.append('id', newID);
+
+		for (let [key, value] of formData.entries()) {
+			console.log(key, value);
+		}
 
         try {
             const response = await fetch(`${import.meta.env.VITE_API_ENDPOINT}/register`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
+                body: formData
             });
 
             if (!response.ok) {
@@ -79,18 +102,3 @@ export default class extends AView {
         }
     }
 }
-	// return `
-	// 	<h1>Register</h1>
-	// 		<p>Already have an account? <a href="/login" data-link>Login here</a></p>
-	// 		<br>
-	// 		<form action="/register.php" class="registerForm">
-	// 			<div class="input-group">
-	// 				<p>Please type your username and password</p>
-	// 				<label for="username" class="label">Username</label>
-	// 				<input type="text" id="username" class="input"><br>
-	// 				<label for="password" class="label">Password</label>
-	// 				<input type="text" id="password" class="input">
-	// 			</div>
-	// 		<button class = "login button" data-action="registered">
-	// 			Register</button>
-	// 	`;

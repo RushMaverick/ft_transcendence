@@ -4,7 +4,7 @@ from user.models import User
 
 # Create your models here.
 # FriendsRequest Model:
-# This serializer is designed to define the fields present in our FriendRequest model, which is used for managing 
+# This model is designed to define the fields present in our FriendRequest model, which is used for managing 
 # friend requests between users. The key fields included in this serializer are:
 
 # - 'from_user': This represents the user who is sending the friend request. It's important to track who initiated 
