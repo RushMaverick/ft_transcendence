@@ -1,6 +1,8 @@
 from django.contrib.auth.models import  User
 from rest_framework import serializers
 from .models import FriendRequest
+from user.models import OnlineStatus
+
 
 
 # FriendsSerializer:
@@ -33,6 +35,14 @@ class FriendsSerializer(serializers.ModelSerializer):
 # This serializer is designed to list the friends from an user, so for this we use model user
 # and we use as a fields the id of the user and the username
 class FriendsListSerializer(serializers.ModelSerializer):
+    is_online = serializers.SerializerMethodField()
     class Meta:
         model = User
-        fields = ['id', 'username']
+        fields = ['id', 'username', 'is_online']
+
+    def get_is_online(self, obj):
+        try:
+            user_status = OnlineStatus.objects.get(user=obj)
+            return user_status.is_online
+        except OnlineStatus.DoesNotExist:
+            return False
