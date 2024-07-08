@@ -36,15 +36,29 @@ export default class extends AView {
 		const buttonSp = this.createLanguageButton('spanish', 'lang-toggle', 'Spanish');
 
 		const buttonDel = this.createButton('deletebutton', 'delete', 'delete account');
-
-
-		
+		buttonDel.addEventListener('click', this.handleDeleteAccount());
+	
 		window.localStorage.setItem('page', 'Settings');
 		this.updateView(title, form, buttonEn, buttonFi, buttonSp);
 		return ;
 	}
 
 	//add delete account with a confirmation pop up
+
+	async handleDeleteAccount(event){
+		event.preventDefault();
+		if (window.confirm('Are you sure you want to delete the Pong account?')){
+			const data = {
+				delete: true,
+			};
+			console.log(data);
+			console.log('deleting account');
+		}
+		else{
+			console.log('pressed cancel');
+		}
+
+	}
 
 	async handleSettingsFormSubmit(event) {
         event.preventDefault(); // Prevent the default form submission behavior
