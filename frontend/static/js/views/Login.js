@@ -11,19 +11,19 @@ export default class extends AView {
 	}
 
 	async getHtml(){
-		const title = this.createHeader('Log in', 'h1');
+		const title = this.createHeader('Log-in', 'Log In', 'h1');
 		title.classList.add('text-center');
 	
 		const form = this.createForm('loginform');
-		const usernameInput = textInputField('Username', 'username', 'text');
-		const passwordInput = textInputField('Password', 'password', 'password');
+		const usernameInput = textInputField('Username', 'Username', 'username', 'text');
+		const passwordInput = textInputField('Password', 'Password', 'password', 'password');
 		const loginButton = this.createButton('login', 'Login');
 		form.appendChild(usernameInput);
 		form.appendChild(passwordInput);
 		form.appendChild(loginButton);
 		
-		const registerSuggestion = this.createParagraph('Dont have an account?');
-		const registerLink = this.createAnchor('Register here');
+		const registerSuggestion = this.createParagraph('register', 'Don\'t have an account?');
+		const registerLink = this.createAnchor('register-link', 'Register here');
 		registerLink.href = '/register';
 		registerLink.setAttribute("data-link", "");
 		registerLink.setAttribute('id', "register-link");
@@ -45,51 +45,31 @@ export default class extends AView {
 		const data = {
 				username: username,
 				password: password
-			};
-			// Mocking the backend response for now
-			const mockResponse = (username === 'user' && password === '123') 
-			? { success: true, message: 'Login successful' }
-			: { success: false, message: 'Invalid username or password' };
-			
-			// Simulate a delay of website by 1 second
-			await new Promise(resolve => setTimeout(resolve, 1000));
-			
-			if (mockResponse.success) {
-				console.log('Login successful');
-				window.isLoggedIn = true;
-				console.log(`Updated from login.js: ${window.isLoggedIn}`);
-				//sending event for login success
-				const loginEvent = new CustomEvent('loginSuccess', { detail: { path: '/dashboard'} });
-				document.dispatchEvent(loginEvent);
-			} else {
-				console.error('Login failed:', mockResponse.message);
-				alert(mockResponse.message);
+		};
+	
+		try {
+				const response = await fetch(`${import.meta.env.VITE_API_ENDPOINT}/login`, {
+						method: 'POST',
+						headers: {
+								'Content-Type': 'application/json'
+							},
+						body: JSON.stringify(data)
+				});
+
+				if (!response.ok) {
+					throw new Error('Network response was not ok');
+				}
+
+				const responseData = await response.json();
+				if (responseData.success) {
+					window.location.href = '/dashboard';
+				} else {
+					console.error('Login failed:', responseData.message);
+				}
+			} catch (error) {
+				console.error('There was a problem with the fetch operation:', error);
 			}
-		
-		// 	    try {
-		// 		        const response = await fetch(`${import.meta.env.VITE_API_ENDPOINT}/login`, {
-		// 			            method: 'POST',
-		// 			            headers: {
-		// 				                'Content-Type': 'application/json'
-		// 				            },
-        //         body: JSON.stringify(data)
-        //     });
-
-        //     if (!response.ok) {
-        //         throw new Error('Network response was not ok');
-        //     }
-
-        //     const responseData = await response.json();
-		// 	if (responseData.success) {
-        //         window.location.href = '/dashboard';
-        //     } else {
-		// 		console.error('Login failed:', responseData.message);
-        //     }
-        // } catch (error) {
-        //     console.error('There was a problem with the fetch operation:', error);
-        // }
-		console.log(import.meta.env.VITE_API_ENDPOINT); // will be deleted later. now currently checkig if .env in frontend works
-
+			console.log(import.meta.env.VITE_API_ENDPOINT); // will be deleted later. now currently checkig if .env in frontend works
     }
 }
 		// return `
