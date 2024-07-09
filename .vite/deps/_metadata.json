@@ -1,0 +1,37 @@
+{
+  "hash": "57b531a6",
+  "configHash": "3fc9fb30",
+  "lockfileHash": "e3b0c442",
+  "browserHash": "12443e9e",
+  "optimized": {
+    "three": {
+      "src": "../../frontend/node_modules/three/build/three.module.js",
+      "file": "three.js",
+      "fileHash": "0ec85b33",
+      "needsInterop": false
+    },
+    "three/addons/geometries/TextGeometry.js": {
+      "src": "../../frontend/node_modules/three/examples/jsm/geometries/TextGeometry.js",
+      "file": "three_addons_geometries_TextGeometry__js.js",
+      "fileHash": "c5565b8d",
+      "needsInterop": false
+    },
+    "three/examples/jsm/loaders/FontLoader.js": {
+      "src": "../../frontend/node_modules/three/examples/jsm/loaders/FontLoader.js",
+      "file": "three_examples_jsm_loaders_FontLoader__js.js",
+      "fileHash": "f3906003",
+      "needsInterop": false
+    },
+    "uuid": {
+      "src": "../../frontend/node_modules/uuid/dist/esm-browser/index.js",
+      "file": "uuid.js",
+      "fileHash": "1c0f363e",
+      "needsInterop": false
+    }
+  },
+  "chunks": {
+    "chunk-2NMZJFLA": {
+      "file": "chunk-2NMZJFLA.js"
+    }
+  }
+}
