@@ -113,9 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		if (e.target.matches("[lang-toggle]")) {
 			document.body.addEventListener('change', (event) => {
 				if (event.target.matches("[lang-toggle]")) {
-					console.log("we detected the language");
 					const selectedLanguage = event.target.value;
-					console.log(selectedLanguage);
 					if (selectedLanguage){
 						const language = selectedLanguage.toLowerCase();
 						window.localStorage.setItem('language', language);
