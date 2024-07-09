@@ -100,11 +100,20 @@ export default class {
 		return form
 	}
 
-	createButton(functionality, text){
+	createButton(langkey, functionality, text){
+		const button = document.createElement('button');
+		button.classList.add(functionality, 'button');
+		button.setAttribute('lang-key', langkey);
+		button.textContent = text;
+		return button;
+	}
+
+	createLanguageButton(language, functionality, text){
 		const button = document.createElement('button');
 		button.classList.add(functionality, 'button');
 		button.textContent = text;
-		// button.setAttribute('lang-key', langkey);
+		button.setAttribute('language', language);
+		button.setAttribute('lang-toggle', '');
 		return button;
 	}
 
@@ -129,7 +138,6 @@ export default class {
 	
 		// Create a new PongGame instance
 		const pong = new PongGame();
-		pong.animate();
 
 		// Append the game div to the body (or another element)
 		document.body.appendChild(gameDiv);

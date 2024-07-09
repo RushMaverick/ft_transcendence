@@ -17,6 +17,16 @@
 		"onevsone": "aloita yks-vs-yks pelo",
 		"tournament": "aloita turnaus",
 		"friends": "kurkkaa miten sun kamut voi"
+	},
+
+	"spanish":
+	{
+		"testheader": "hola bienvenido y a esta prueba",
+		"header": "bienvenido",
+		"welcome": "bienvenido",
+		"onevsone": "comenzar uno contra uno",
+		"tournament": "comenzar un torneo",
+		"friends": "mira cómo están tus amigos"
 	}
 }
 

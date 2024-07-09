@@ -1,28 +1,35 @@
 {
 	"finnish":
 	{
-		"header": "heippatirallaa ja tervetuloa asetuksiin",
+		"header": "Päivitä käyttäjätietoja",
 		"username": "käyttäjätunnus: ",
-		"firstname": "etunimi: ",
-		"lastname": "sukunimi: ",
-		"email": "sähköposti: ",
 		"password": "salasana: ",
 		"password-again": "salasana uudelleen: ",
 		"language": "kieli: ",
-		"button": "tallenna: "
+		"savebutton": "tallenna muutokset",
+		"deletebutton": "poista käyttäjä "
 	},
 
 	"english":
 	{
-		"header": "helloups and welcome to settings",
+		"header": "Update user information",
 		"username": "username: ",
-		"firstname": "first name: ",
-		"lastname": "last name: ",
-		"email": "email: ",
-		"password": "new password: ",
-		"password-again": "new password again: ",
+		"password": "password: ",
+		"password-again": "password again: ",
 		"language": "language: ",
-		"button": "save: "
+		"savebutton": "save changes",
+		"deletebutton": "delete account "
+	},
+
+	"spanish":
+	{
+		"header": "Actualizar información del usuario",
+		"username": "nombre de usuario: ",
+		"password": "contraseña: ",
+		"password-again": "contraseña de nuevo: ",
+		"language": "idioma: ",
+		"savebutton": "ahorrar",
+		"deletebutton": "delete account in spanish "
 	}
 
 }

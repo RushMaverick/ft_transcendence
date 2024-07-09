@@ -87,7 +87,6 @@ window.addEventListener("popstate", router);
 document.addEventListener("viewUpdated", () => {
     let translations;
 	const page = window.localStorage.getItem('page');
-	console.log('page = ' + page);
     fetch('./static/translations/' + page + '.json')
    .then(response => response.text())
    .then(data => {
@@ -112,8 +111,13 @@ document.addEventListener("DOMContentLoaded", () => {
 			navigateTo(e.target.href);
 		}
 		if (e.target.matches("[lang-toggle]")) {
-			const language = e.target.getAttribute('language');
-			window.localStorage.setItem('language', language);
+			const selectedLanguage = e.target.getAttribute('language');
+			window.localStorage.setItem('language', selectedLanguage);
+			document.dispatchEvent(new CustomEvent('viewUpdated'));
+		}
+		if (e.target.matches("languageSelect")) {
+			const selectedLanguage = e.target.getAttribute('language');
+			window.localStorage.setItem('language', selectedLanguage);
 			document.dispatchEvent(new CustomEvent('viewUpdated'));
 		}
 		//if link element has data-link attribute, we want to prevent default behavior
