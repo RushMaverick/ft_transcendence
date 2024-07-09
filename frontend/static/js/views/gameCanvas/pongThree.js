@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import WebGL from 'three/addons/capabilities/WebGL.js';
 import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
 
@@ -7,45 +8,65 @@ export default class PongGame {
     constructor() {
 		if (!PongGame.instance){
 			PongGame.instance = this;
+			PongGame.instance.enterView();
 		}
 		else{
 			PongGame.instance.startAnimate();
 			return PongGame.instance;
 		}
+		//Check if WebGL2 is available, error means WebGL2 is not available on the browser
+		if ( WebGL.isWebGL2Available() ) {
+			console.log('WebGL2 is available')
+		} else {
+		
+			const warning = WebGL.getWebGL2ErrorMessage();
+			document.getElementById( 'container' ).appendChild( warning );
+		}
+		this.handleKeyPresses();
 		this.joinGame();
-        this.speed = 2.5;
-		this.isAnimating = true;
-        this.scene = new THREE.Scene();
+    }
+
+	enterView() {
+		const container = document.querySelector('main');
+		this.scene = new THREE.Scene();
         this.createCubes();
+		this.createBorders();
         this.setupLighting();
         this.setupCamera();
         this.setupRenderer();
-        this.handleKeyPresses();
-		this.createBorders();
 		this.setupBall();
-    }
+		this.renderer.render(this.scene, this.camera);
+	}
 
 	joinGame() {
 		let roomname = 'testroom';
 		this.socket = new WebSocket(`ws://localhost:8000/ws/game/${roomname}/`);
+		this.socket.onerror = function(error) {
+			console.error("WebSocket Error:", error);
+		};
 		this.socket.onopen = function() {
 			console.log('WebSocket connection established.');
+			//Start screen before players have connected.
 		};
+		//This will be used instead of animate() to update the game state.
 		this.socket.onmessage = function(event) {
-			// console.log(this)
 			PongGame.instance.message = JSON.parse(event.data);
+			PongGame.instance.collisionChecking();
+			PongGame.instance.updatePositions();
+			// console.log(PongGame.instance.message['1'].z);
+			// console.log(PongGame.instance.message['2'].z);
+			PongGame.instance.renderer.render(PongGame.instance.scene, PongGame.instance.camera);
 		};
 	}
 
     createCubes() {
-		console.log(this)
         this.geometry = new THREE.BoxGeometry(5, 15, 2);
         this.material = new THREE.MeshLambertMaterial({
             color: 0xaeaa97
         });
         this.cube = new THREE.Mesh(this.geometry, this.material);
-        this.cube.position.x = -70;
-		this.cube.rotation.x = 300
+        this.cube.position.x = 10;
+		// this.cube.rotation.y = 300
 		this.cube.castShadow = true;
 		this.cube.receiveShadow = true;
 
@@ -55,8 +76,8 @@ export default class PongGame {
 		
         this.geometry2 = new THREE.BoxGeometry(5, 15, 2);
 		this.cube2 = new THREE.Mesh(this.geometry2, this.material);
-		this.cube2.position.x = 70;
-		this.cube2.rotation.x = 300
+		this.cube2.position.x = 190;
+		// this.cube2.rotation.y = 300
 		this.cube2.castShadow = true;
 		this.cube2.receiveShadow = true;
 
@@ -68,30 +89,22 @@ export default class PongGame {
     }
 
     createBorders() {
-        this.borderGeo = new THREE.BoxGeometry(200, 1, 2);
-        this.planeGeo = new THREE.PlaneGeometry(200, 150, 2);
+        this.borderGeo = new THREE.BoxGeometry(200, 2, 2);
         
         this.borderMaterial = new THREE.MeshLambertMaterial({
             color: 0xaeaa97
         });
-        this.border3Material = new THREE.MeshLambertMaterial({
-			transparent: true,
-			opacity: 0.0,
-        });
 
         this.border = new THREE.Mesh(this.borderGeo, this.borderMaterial);
         this.border2 = new THREE.Mesh(this.borderGeo, this.borderMaterial);
-        this.plane = new THREE.Mesh(this.planeGeo, this.border3Material);
         
-        this.border.position.x = 0;
+        this.border.position.x = 100;
         this.border.position.y = 0;
-        this.border.position.z = 75;
+        this.border.position.z = 0;
         
-        this.border2.position.x = 0;
-        this.border2.position.y = 0;
-        this.border2.position.z = -75;
-
-        this.plane.rotateOnAxis(new THREE.Vector3(-1, 0, 0), Math.PI / 2);
+        this.border2.position.x = 100;
+        this.border2.position.y = 150;
+        this.border2.position.z = 0;
 
         //Setup border bounding box
         this.borderBounds = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());
@@ -101,7 +114,7 @@ export default class PongGame {
         this.border2Bounds = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());
         this.border2Bounds.setFromObject(this.border2);
 
-        this.scene.add(this.border, this.border2, this.plane);
+        this.scene.add(this.border, this.border2);
 }
 
     setupLighting() {
@@ -114,6 +127,7 @@ export default class PongGame {
 
 	setupBall() {
 		this.geometry5 = new THREE.SphereGeometry(2, 32, 32);
+		this.debugDot = new THREE.Mesh(new THREE.SphereGeometry(1, 32, 32), new THREE.MeshBasicMaterial({color: 0xff0000}));
 		this.material = new THREE.MeshLambertMaterial({
 			color: 0xaeaa97
 		});
@@ -122,13 +136,17 @@ export default class PongGame {
 		this.ball.position.y = 0;
 		this.ball.position.z = 0;
 
+		this.debugDot.position.x = 0;
+		this.debugDot.position.y = 0;
+		this.debugDot.position.z = 0;
+
 		//setup ball bounding box
 		this.ballBounds = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());;
 		this.ballBounds.setFromObject(this.ball);
 
 		this.ball.castShadow = true;
 		this.ball.receiveShadow = true;
-		this.scene.add(this.ball);
+		this.scene.add(this.ball, this.debugDot);
 	}
 
     setupCamera() {
@@ -145,8 +163,8 @@ export default class PongGame {
 			0, // near plane
 			100000 // far plane
 		);
-		this.camera.position.set(100, 200, 200);
-		this.camera.lookAt(0, 2, 0);
+		this.camera.position.set(100, 75, 100);
+		this.camera.lookAt(100, 75, 0);
     }
 
     setupRenderer() {
@@ -244,21 +262,24 @@ export default class PongGame {
 			this.ball.material.color = new THREE.Color(0xaeaa97);
 		}
 	}
+	updatePositions() {
+		//Update cube positions
+		// console.log(this.message['ball'].x)
+		// console.log(this.message);
+		this.cube.position.y = this.message['1'].y;
+		this.cube2.position.y = this.message['2'].y;
+		this.ball.position.y = this.message['ball'].y;
+		this.cube.position.x = this.message['1'].x;
+		this.cube2.position.x = this.message['2'].x;
+		this.ball.position.x = this.message['ball'].x;
+		// this.ball.position.y = this.message['ball'].y;
+		// this.ball.position.z = this.message['ball'].z;
+	}
 
     animate() {
 		if (!this.isAnimating)
 			return;
 		requestAnimationFrame(() => this.animate());
-		if (this.ball.position.x > 70 || this.ball.position.x < -70)
-			this.ball.position.x = 0;
-
-		this.collisionChecking();
-		
-		// this.ball.position.x = this.message['ball'].x;
-		// this.cube.position.z = this.message['1'].z;
-		// console.log(this.message['1'].y);
-		// console.log(this.message);
-		this.renderer.render(this.scene, this.camera);
 		window.addEventListener('resize', () => {
 			if (window.innerWidth > window.innerHeight) 
 			{
