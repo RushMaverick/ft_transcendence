@@ -28,7 +28,7 @@ export default class extends AView {
 		const select = document.createElement('select');
 		select.setAttribute('id', 'languageSelect');
 		select.classList.add('translations');
-		['english', 'finnish', 'spanish'].forEach((lang) => {
+		['English', 'Finnish', 'Spanish'].forEach((lang) => {
 			const option = document.createElement('option');
             option.text = lang;
 			option.setAttribute('lang-key', lang);

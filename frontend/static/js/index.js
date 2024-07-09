@@ -122,7 +122,8 @@ document.addEventListener("DOMContentLoaded", () => {
 					const selectedLanguage = event.target.value;
 					console.log(selectedLanguage);
 					if (selectedLanguage){
-						window.localStorage.setItem('language', selectedLanguage);
+						const language = selectedLanguage.toLowerCase();
+						window.localStorage.setItem('language', language);
 						document.dispatchEvent(new CustomEvent('viewUpdated'));
 					}
 				}
