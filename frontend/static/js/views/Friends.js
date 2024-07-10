@@ -6,7 +6,7 @@ export default class extends AView {
 		this.setTitle("Friends");
 	}
 
-	createFriendItem(friend) {
+	createFriendItem(friend, friendsList = true) {
 		const friendDiv = document.createElement('div');
 		friendDiv.classList.add('list-group-item', 'friend');
 	
@@ -29,12 +29,17 @@ export default class extends AView {
 		status.style.backgroundColor = friend.profile.online ? 'green' : 'gray';
 		friendDiv.appendChild(status);
 	
+		if (!friendsList) {
+			const requestButton = this.createButton('request-button', 'btn-primary', 'Request');
+			requestButton.addEventListener('click', () => this.sendFriendRequest(friend.id));
+			friendDiv.appendChild(requestButton);
+		}
+
 		return friendDiv;
 	}
 	
-
 	async getHtml(){
-		const friends = this.createHeader('Friends', 'h1');
+		const friends = this.createHeader('Friends', 'Friends', 'h1');
 		const friendsList =  document.createElement('div');
 		friendsList.className = 'list-group';
 
@@ -68,7 +73,7 @@ export default class extends AView {
 		history.pushState(null, null, `#friends/${friend.id}`);
 		this.clearView();
 	
-		const profileHeader = this.createHeader('Friends', 'h1');
+		const profileHeader = this.createHeader('Friends', friend.username, 'h1');
 	
 		const profileView = document.createElement('div');
 		profileView.classList.add('friends-profile');
@@ -120,11 +125,33 @@ export default class extends AView {
 		const result = await this.fetchJsonData('static/js/views/search.json');
 		if (result && result.length > 0) {
 			result.forEach(friend => {
-				friendsList.appendChild(this.createFriendItem(friend));
+				const friendsList = friend.friendsList; 
+				friendsList.appendChild(this.createFriendItem(friend, friendsList));
 			});
 		} else {
 			const noResultsMessage = this.createParagraph(`No Such User Found: ${username}`);
 			friendsList.appendChild(noResultsMessage);
+		}
+	}
+
+	async sendFriendRequest(friendId) {
+		try {
+			const response = await fetch('/api/sendFriendRequest', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ friendId })
+			});
+			const result = await response.json();
+			if (result.success) {
+				alert('Friend request sent!');
+			} else {
+				alert('Failed to send friend request.');
+			}
+		} catch (error) {
+			console.error('Error sending friend request:', error);
+			alert('An error occurred. Please try again.');
 		}
 	}
 }
