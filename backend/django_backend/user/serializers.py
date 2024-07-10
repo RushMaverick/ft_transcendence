@@ -2,7 +2,7 @@ from django.contrib.auth.models import  User
 from rest_framework import serializers
 from django.contrib.auth.password_validation import validate_password
 from rest_framework.validators import UniqueValidator
-from .models import Avatar
+from .models import Avatar, OnlineStatus
 
 class AvatarSerializer(serializers.ModelSerializer):
 
@@ -15,6 +15,15 @@ class AvatarSerializer(serializers.ModelSerializer):
             instance.save()
             return instance
 
+# OnlineStatusSerializer:
+# This serializer is designed to get the Online Status from an user, so for this we use model OnlineStatus
+# and we use as a fields the user id, username, is_online and the last connection of the user
+class OnlineStatusSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source='user.username', read_only=True)
+    class Meta:
+        model = OnlineStatus
+        fields = ['user','username','is_online', 'last_connection']
+
 class UserSerializer(serializers.ModelSerializer):
     username = serializers.CharField(required=True, validators=[UniqueValidator(queryset=User.objects.all())])
     password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
@@ -24,7 +33,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'avatar', 'password', 'password2']
+        fields = ['id', 'username', 'avatar','password', 'password2']
 
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:
@@ -65,4 +74,3 @@ class PasswordUpdateSerializer(serializers.ModelSerializer):
         instance.set_password(validated_data['new_password'])
         instance.save()
         return instance
-

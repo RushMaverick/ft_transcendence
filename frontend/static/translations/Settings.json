@@ -1,0 +1,35 @@
+{
+	"finnish":
+	{
+		"header": "Päivitä käyttäjätietoja",
+		"username": "käyttäjätunnus: ",
+		"password": "salasana: ",
+		"password-again": "salasana uudelleen: ",
+		"language": "kieli: ",
+		"savebutton": "tallenna muutokset",
+		"deletebutton": "poista käyttäjä "
+	},
+
+	"english":
+	{
+		"header": "Update user information",
+		"username": "username: ",
+		"password": "password: ",
+		"password-again": "password again: ",
+		"language": "language: ",
+		"savebutton": "save changes",
+		"deletebutton": "delete account "
+	},
+
+	"spanish":
+	{
+		"header": "Actualizar información del usuario",
+		"username": "nombre de usuario: ",
+		"password": "contraseña: ",
+		"password-again": "contraseña de nuevo: ",
+		"language": "idioma: ",
+		"savebutton": "ahorrar",
+		"deletebutton": "delete account in spanish "
+	}
+
+}

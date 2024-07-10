@@ -4,9 +4,9 @@ from rest_framework import status, viewsets, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.parsers import MultiPartParser, FormParser
-from .serializers import UserSerializer, PasswordUpdateSerializer, AvatarSerializer
+from .serializers import UserSerializer, PasswordUpdateSerializer, AvatarSerializer, OnlineStatusSerializer
 from .permissions import IsAuthenticatedOrCreateOnly, IsUser
-from .models import Avatar
+from .models import Avatar, OnlineStatus
 
 
 class AvatarViewSet(APIView):
@@ -70,6 +70,8 @@ class UserViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
+        user = serializer.instance
+        OnlineStatus.objects.create(user=user, is_online=False)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
