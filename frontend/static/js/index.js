@@ -111,20 +111,18 @@ document.addEventListener("DOMContentLoaded", () => {
 			navigateTo(e.target.href);
 		}
 		if (e.target.matches("[lang-toggle]")) {
-			const selectedLanguage = e.target.getAttribute('language');
-			window.localStorage.setItem('language', selectedLanguage);
-			document.dispatchEvent(new CustomEvent('viewUpdated'));
+			document.body.addEventListener('change', (event) => {
+				if (event.target.matches("[lang-toggle]")) {
+					const selectedLanguage = event.target.value;
+					if (selectedLanguage){
+						const language = selectedLanguage.toLowerCase();
+						window.localStorage.setItem('language', language);
+						document.dispatchEvent(new CustomEvent('viewUpdated'));
+					}
+				}
+				})
 		}
-		if (e.target.matches("languageSelect")) {
-			const selectedLanguage = e.target.getAttribute('language');
-			window.localStorage.setItem('language', selectedLanguage);
-			document.dispatchEvent(new CustomEvent('viewUpdated'));
-		}
-		//if link element has data-link attribute, we want to prevent default behavior
-		//and sits on the element itself from index.html
-	
 	});
-		//if link element has data-link attribute, we want to prevent default behavior
 
 document.addEventListener('loginSuccess', (event) => {
 	const { path } = event.detail;
