@@ -25,13 +25,13 @@ from rest_framework_simplejwt.views import (
 
 from rest_framework import routers
 from user.views import UserViewSet
-from tournaments.views import MatchList, PlayerMatchesView
+from tournaments.views import MatchListView, PlayerMatchListView
 # from rest_demo import views as rest_views
 
 router = routers.DefaultRouter()
 # router.register(r'users', rest_views.UserViewSet, basename='users')
 # router.register(r'groups', rest_views.GroupViewSet)
-router.register(r'user', UserViewSet, basename='user')
+router.register(r'api/user', UserViewSet, basename='user')
 
 
 urlpatterns = [
@@ -39,11 +39,11 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('profile/', include('user.urls')),
-    path('friends/', include('friends.urls')),
-	path('tournaments/', include('tournaments.urls')),
-    path('matches/', MatchList.as_view(), name='match-list'),
-	    path('matches/player/<int:user_id>/', PlayerMatchesView.as_view(), name='player-matches'),
+    path('api/profile/', include('user.urls')),
+    path('api/friends/', include('friends.urls')),
+    path('api/tournaments/', include('tournaments.urls')),
+    path('api/matches/', MatchListView.as_view(), name='match-list'),
+    path('api/matches/player/<int:user_id>/', PlayerMatchListView.as_view(), name='player-matches'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -14,17 +14,15 @@ class Tournament(models.Model):
         default=None,
         null=True
     )
-    players = models.ManyToManyField(
+    participants = models.ManyToManyField(
         User,  # Reference the related model
-        through='TournamentPlayer',
-        related_name='tournaments',
-        blank=True  # Allow empty relationships
+        through='Participant'
     )
 
     def __str__(self):
         return "%s" % (self.name)
 
-class TournamentPlayer(models.Model):
+class Participant(models.Model):
     tournament = models.ForeignKey(
         Tournament,
         on_delete=models.CASCADE,
@@ -37,19 +35,28 @@ class TournamentPlayer(models.Model):
         related_name='tournament_participation',
         default=None
     )
+    position = models.PositiveIntegerField(default=1)
 
     def __str__(self):
         return "%s" % (self.player)
 
 
+class Round(models.Model):
+    tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE, related_name='rounds')
+    matches = models.ManyToManyField('Match', through='RoundMatch')
+
+    def __str__(self):
+        return "%s" % (self.tournament.name)
+
 class Match(models.Model):
-    tournament = models.ForeignKey(
-        Tournament,
-        on_delete=models.SET_NULL,
-        related_name='matches',
-        default=None,
-        null=True
-    )
+    # tournament = models.ForeignKey(
+    #     Tournament,
+    #     on_delete=models.SET_NULL,
+    #     related_name='matches',
+    #     default=None,
+    #     null=True
+    # )
+    # round = models.ForeignKey(Round, on_delete=models.CASCADE, related_name='matches')
     player1 = models.ForeignKey(
         User,
         on_delete=models.SET_DEFAULT,
@@ -74,3 +81,10 @@ class Match(models.Model):
 
     def __str__(self):
         return "%s and %s" % (self.player1.username, self.player2.username)
+
+class RoundMatch(models.Model):
+    round = models.ForeignKey(Round, on_delete=models.CASCADE, related_name='round_matches')
+    match = models.ForeignKey(Match, on_delete=models.CASCADE, related_name='round_match')
+
+    def __str__(self):
+        return "%s" % (self.match)
