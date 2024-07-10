@@ -8,25 +8,25 @@ export default class extends AView {
 		this.setTitle("Register");
 	}
 
-	fileInputField(labelText, name) {
-		const container = document.createElement('div');
-		container.classList.add('form-group');
+	// fileInputField(labelText, name) {
+	// 	const container = document.createElement('div');
+	// 	container.classList.add('form-group');
 		
-		const label = document.createElement('label');
-		label.setAttribute('for', name);
-		label.textContent = labelText;
+	// 	const label = document.createElement('label');
+	// 	label.setAttribute('for', name);
+	// 	label.textContent = labelText;
 		
-		const input = document.createElement('input');
-		input.setAttribute('type', 'file');
-		input.setAttribute('id', name);
-		input.setAttribute('name', name);
-		input.classList.add('form-control');
+	// 	const input = document.createElement('input');
+	// 	input.setAttribute('type', 'file');
+	// 	input.setAttribute('id', name);
+	// 	input.setAttribute('name', name);
+	// 	input.classList.add('form-control');
 		
-		container.appendChild(label);
-		container.appendChild(input);
+	// 	container.appendChild(label);
+	// 	container.appendChild(input);
 		
-		return container;
-	}
+	// 	return container;
+	// }
 
 	async getHtml(){
 
@@ -37,12 +37,12 @@ export default class extends AView {
 		const usernameInput = textInputField('Username', 'Username', 'username', 'text');
 		const passwordInput = textInputField('Password', 'Password', 'password', 'password');
 		const confirmPasswordInput = textInputField('Confirm password','Confirm password', 'confirm-password', 'password');
-		const avatarInput = this.fileInputField('Avatar', 'avatar');
+		// const avatarInput = this.fileInputField('Avatar', 'avatar');
 		const registerButton = this.createButton('register', 'Register');
 		form.appendChild(usernameInput);
 		form.appendChild(passwordInput);
 		form.appendChild(confirmPasswordInput);
-		form.appendChild(avatarInput);
+		// form.appendChild(avatarInput);
 		form.appendChild(registerButton);
 		
 		const loginSuggestion = this.createParagraph('login', 'Already have an account?');
@@ -62,11 +62,9 @@ export default class extends AView {
         event.preventDefault(); // Prevent the default form submission behavior
 
 		// Create the JSON object to be sent
-		const formData = new FormData(event.target);
-		const username = formData.get('username');
-		const password = formData.get('password');
-		const confirmPassword = formData.get('confirm-password');
-		const avatar = formData.get('avatar');
+        const username = event.target.username.value;
+        const password = event.target.password.value;
+        const confirmPassword = event.target['confirm-password'].value;
 
 		if (!username || !password || !confirmPassword) {
 			alert("Please fill in all required fields.");
@@ -78,25 +76,26 @@ export default class extends AView {
             return;
         }
 
-		const newID = uuidv4();
-		formData.append('id', newID);
-
-		for (let [key, value] of formData.entries()) {
-			console.log(key, value);
-		}
+		const data = {
+            username: username,
+            password: password,
+        };
 
         try {
             const response = await fetch(`${import.meta.env.VITE_API_ENDPOINT}/register`, {
                 method: 'POST',
-                body: formData
-            });
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+			});
+		
+		if (!response.ok) {
+			throw new Error('Network response was not ok');
+		}
 
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-
-            const responseData = await response.json();
-            console.log(responseData);
+		const responseData = await response.json();
+		console.log(responseData);
         } catch (error) {
             console.error('There was a problem with the fetch operation:', error);
         }
