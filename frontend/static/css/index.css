@@ -194,3 +194,10 @@ a {
 	border-radius: 50%;
 	margin-left: 5px;
 }
+
+.pong-button{
+  background-color: #199319;
+  color: white;
+  padding: 15px 25px;
+  text-decoration: none;
+}

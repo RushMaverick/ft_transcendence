@@ -8,11 +8,18 @@ export default class extends AView {
 	}
 
 	async getHtml(){
-		const header = this.createHeader('S U P E R P O N G C H A M P', 'h1');
+		const header = this.createHeader('header', 'S U P E R P O N G C H A M P', 'h1');
+		const onevsButton = this.createAnchor('onevs-button', 'kikkels');
+		onevsButton.href = '/one-vs-one';
+		onevsButton.setAttribute('data-link', "");
+		onevsButton.setAttribute('id', 'onevs-button');
+		onevsButton.classList.add('pong-button');
+
 		const gameDiv = this.createGame('pong');
 		const p = this.createParagraph("You are successfully running a Super Pongchamp game.");
 		
-		this.updateView(header, gameDiv, p);
+		window.localStorage.setItem('page', 'Pong');
+		this.updateView(header, onevsButton, gameDiv, p);
 		return ;
 	}
 }
