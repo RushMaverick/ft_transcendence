@@ -34,11 +34,11 @@ export default class extends AView {
 		title.classList.add('text-center');
 
 		const form = this.createForm('registerform');
-		const usernameInput = textInputField('Username', 'Username', 'username', 'text');
-		const passwordInput = textInputField('Password', 'Password', 'password', 'password');
+		const usernameInput = textInputField('username', 'Username', 'username', 'text');
+		const passwordInput = textInputField('password', 'Password', 'password', 'password');
 		const confirmPasswordInput = textInputField('Confirm password','Confirm password', 'confirm-password', 'password');
 		// const avatarInput = this.fileInputField('Avatar', 'avatar');
-		const registerButton = this.createButton('register', 'Register');
+		const registerButton = this.createButton('register-button', 'Register');
 		form.appendChild(usernameInput);
 		form.appendChild(passwordInput);
 		form.appendChild(confirmPasswordInput);
