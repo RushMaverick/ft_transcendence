@@ -34,15 +34,13 @@ export default class extends AView {
 		title.classList.add('text-center');
 
 		const form = this.createForm('registerform');
-		const usernameInput = textInputField('Username', 'Username', 'username', 'text');
-		const passwordInput = textInputField('Password', 'Password', 'password', 'password');
-		const confirmPasswordInput = textInputField('Confirm password','Confirm password', 'confirm-password', 'password');
-		// const avatarInput = this.fileInputField('Avatar', 'avatar');
-		const registerButton = this.createButton('register', 'Register');
+		const usernameInput = textInputField('username', 'Username', 'username', 'text');
+		const passwordInput = textInputField('password', 'Password', 'password', 'password');
+		const confirmPasswordInput = textInputField('confirm-password','Confirm password', 'confirm-password', 'password');
+		const registerButton = this.createButton('register-button', 'Register');
 		form.appendChild(usernameInput);
 		form.appendChild(passwordInput);
 		form.appendChild(confirmPasswordInput);
-		// form.appendChild(avatarInput);
 		form.appendChild(registerButton);
 		
 		const loginSuggestion = this.createParagraph('login', 'Already have an account?');
@@ -50,11 +48,11 @@ export default class extends AView {
 		loginLink.href = '/login';
 		loginLink.setAttribute('data-link', "");
 		loginLink.setAttribute('id', "log-in-link");
-		loginSuggestion.appendChild(loginLink);
 
 		form.addEventListener('submit', this.handleFormSubmit.bind(this));
-
-		this.updateView(title, form, loginSuggestion);
+		
+		window.localStorage.setItem('page', 'Register');
+		this.updateView(title, form, loginSuggestion, loginLink);
 		return ;
 	}
 
