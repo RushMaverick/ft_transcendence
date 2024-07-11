@@ -9,7 +9,7 @@ export default class extends AView {
 
 	async getHtml(){
 		const header = this.createHeader('header', 'S U P E R P O N G C H A M P', 'h1');
-		const onevsButton = this.createAnchor('onevs-button', 'kikkels');
+		const onevsButton = this.createAnchor('onevs-button', 'onevsone');
 		onevsButton.href = '/one-vs-one';
 		onevsButton.setAttribute('data-link', "");
 		onevsButton.setAttribute('id', 'onevs-button');
