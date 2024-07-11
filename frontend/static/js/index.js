@@ -80,6 +80,16 @@ const router = async () => {
 	view.getHtml();
 };
 
+window.onload = (event) => {
+	console.log("we would add shit to local storage here");
+	console.log(window.localStorage.getItem('language'));
+
+	if (window.localStorage.getItem('language') == null){
+		console.log("local storage izz empty, we add default");
+		window.localStorage.setItem('language', 'english');
+	}
+};
+
 window.addEventListener("popstate", router);
 //this will listen for back and forward buttons in the browser
 // Dynamically import the translation file
