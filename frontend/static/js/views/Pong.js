@@ -13,13 +13,13 @@ export default class extends AView {
 		onevsButton.href = '/one-vs-one';
 		onevsButton.setAttribute('data-link', "");
 		onevsButton.setAttribute('id', 'onevs-button');
-		onevsButton.classList.add('pong-button');
+		onevsButton.classList.add('pongpage-reroute-button');
 
 		const tournaButton = this.createAnchor('tournaments-button', 'tournaments');
 		tournaButton.href = '/tournaments';
 		tournaButton.setAttribute('data-link', "");
 		tournaButton.setAttribute('id', 'tournaments-button');
-		tournaButton.classList.add('pong-button');
+		tournaButton.classList.add('pongpage-reroute-button');
 
 		const gameDiv = this.createGame('pong');
 		const p = this.createParagraph("You are successfully running a Super Pongchamp game.");
