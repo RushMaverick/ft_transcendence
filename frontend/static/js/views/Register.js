@@ -50,7 +50,7 @@ export default class extends AView {
 		loginLink.setAttribute('id', "log-in-link");
 
 		form.addEventListener('submit', this.handleFormSubmit.bind(this));
-
+		window.localStorage.setItem('page', 'Register');
 		this.updateView(title, form, loginSuggestion, loginLink);
 		return ;
 	}
