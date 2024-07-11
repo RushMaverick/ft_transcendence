@@ -6,7 +6,7 @@
             "avatar": "https://picsum.photos/200",
             "online": true
         },
-        "friendsList": true,
+        "isFriend": true,
         "wins": "2",
         "loses": "3"
     },
@@ -17,7 +17,7 @@
             "avatar": "https://picsum.photos/200",
             "online": false
         },
-        "friendsList": true,
+        "isFriend": true,
         "wins": "4",
         "loses": "1"
     }

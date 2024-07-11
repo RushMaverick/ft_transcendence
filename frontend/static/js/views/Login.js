@@ -17,7 +17,7 @@ export default class extends AView {
 		const form = this.createForm('loginform');
 		const usernameInput = textInputField('Username', 'Username', 'username', 'text');
 		const passwordInput = textInputField('Password', 'Password', 'password', 'password');
-		const loginButton = this.createButton('login', 'Login');
+		const loginButton = this.createButton('login', 'login', 'Login');
 		form.appendChild(usernameInput);
 		form.appendChild(passwordInput);
 		form.appendChild(loginButton);
