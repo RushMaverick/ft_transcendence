@@ -36,7 +36,7 @@ export default class extends AView {
 		const form = this.createForm('registerform');
 		const usernameInput = textInputField('username', 'Username', 'username', 'text');
 		const passwordInput = textInputField('password', 'Password', 'password', 'password');
-		const confirmPasswordInput = textInputField('Confirm password','Confirm password', 'confirm-password', 'password');
+		const confirmPasswordInput = textInputField('confirm-password','Confirm password', 'confirm-password', 'password');
 		// const avatarInput = this.fileInputField('Avatar', 'avatar');
 		const registerButton = this.createButton('register-button', 'Register');
 		form.appendChild(usernameInput);
