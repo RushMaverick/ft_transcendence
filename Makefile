@@ -3,6 +3,8 @@ all:
 	@echo "Starting the dev containers"
 	docker compose -f docker-compose.dev.yml build
 	docker compose -f docker-compose.dev.yml up -d
+	npm install --prefix ./frontend
+	npm run dev --prefix ./frontend
 
 dev:
 	@echo "Starting the dev containers"
@@ -37,7 +39,7 @@ vol:
 	docker volume ls
 
 net:
-	@echo "List of the networks running"	
+	@echo "List of the networks running"
 	docker network ls
 
 .PHONY: all dev clean fclean re up ps down vol net
