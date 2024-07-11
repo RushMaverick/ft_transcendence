@@ -48,11 +48,10 @@ export default class extends AView {
 		loginLink.href = '/login';
 		loginLink.setAttribute('data-link', "");
 		loginLink.setAttribute('id', "log-in-link");
-		loginSuggestion.appendChild(loginLink);
 
 		form.addEventListener('submit', this.handleFormSubmit.bind(this));
 
-		this.updateView(title, form, loginSuggestion);
+		this.updateView(title, form, loginSuggestion, loginLink);
 		return ;
 	}
 
