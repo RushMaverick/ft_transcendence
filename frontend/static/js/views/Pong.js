@@ -15,11 +15,17 @@ export default class extends AView {
 		onevsButton.setAttribute('id', 'onevs-button');
 		onevsButton.classList.add('pong-button');
 
+		const tournaButton = this.createAnchor('tournaments-button', 'tournaments');
+		tournaButton.href = '/tournaments';
+		tournaButton.setAttribute('data-link', "");
+		tournaButton.setAttribute('id', 'tournaments-button');
+		tournaButton.classList.add('pong-button');
+
 		const gameDiv = this.createGame('pong');
 		const p = this.createParagraph("You are successfully running a Super Pongchamp game.");
 		
 		window.localStorage.setItem('page', 'Pong');
-		this.updateView(header, onevsButton, gameDiv, p);
+		this.updateView(header, onevsButton, tournaButton, gameDiv, p);
 		return ;
 	}
 }
