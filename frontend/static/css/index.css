@@ -195,9 +195,10 @@ a {
 	margin-left: 5px;
 }
 
-.pong-button{
+.pongpage-reroute-button{
   background-color: #199319;
   color: white;
   padding: 15px 25px;
   text-decoration: none;
+  margin-right: 10px;
 }
