@@ -81,11 +81,7 @@ const router = async () => {
 };
 
 window.onload = (event) => {
-	console.log("we would add shit to local storage here");
-	console.log(window.localStorage.getItem('language'));
-
 	if (window.localStorage.getItem('language') == null){
-		console.log("local storage izz empty, we add default");
 		window.localStorage.setItem('language', 'english');
 	}
 };
