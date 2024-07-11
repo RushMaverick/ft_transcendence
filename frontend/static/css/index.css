@@ -196,7 +196,7 @@ a {
 }
 
 .pongpage-reroute-button{
-  background-color: #199319;
+  background-color: hsl(50, 37%, 26%);
   color: white;
   padding: 15px 25px;
   text-decoration: none;
