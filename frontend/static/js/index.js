@@ -82,7 +82,6 @@ const router = async () => {
 
 window.addEventListener("popstate", router);
 //this will listen for back and forward buttons in the browser
-
 // Dynamically import the translation file
 document.addEventListener("viewUpdated", () => {
     let translations;
@@ -105,7 +104,6 @@ document.addEventListener("viewUpdated", () => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-	window.localStorage.setItem('language', 'english');
 	document.body.addEventListener("click", e => {
 		if (e.target.matches("[data-link]")) {
 			e.preventDefault();
