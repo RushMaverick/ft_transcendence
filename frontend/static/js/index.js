@@ -106,10 +106,8 @@ document.addEventListener("viewUpdated", () => {
 
 document.addEventListener("DOMContentLoaded", () => {
 	document.body.addEventListener("click", e => {
-		console.log("click recorded");
 		if (e.target.matches("[data-link]")) {
 			e.preventDefault();
-			console.log(e.target.href);
 			navigateTo(e.target.href);
 		}
 		if (e.target.matches("[lang-toggle]")) {
