@@ -4,8 +4,8 @@
 		"register": "REKISTERÖIDY",
 		"username": "käyttäjätunnus: ",
 		"password": "salasana: ",
-		"confirm-password": "uusi salasana: ",
-		"register-button": "Etkö ole rekisteröitynyt?",
+		"confirm-password": "salasana uudelleen: ",
+		"register-button": "Rekisteröidy",
 		"login": "Oletko jo rekisteröitynyt?",
 		"login-link": "Kirjaudu sisään täältä"
 
@@ -17,7 +17,7 @@
 		"username": "username: ",
 		"password": "password: ",
 		"confirm-password": "confirm password: ",
-		"register-button": "Dont have an account?",
+		"register-button": "Sign up",
 		"login": "Already have an account?",
 		"login-link": "Log in here"
 	},
@@ -28,7 +28,7 @@
 		"username": "nombre de usuario: ",
 		"password": "contraseña: ",
 		"confirm-password": "contraseña de nuevo: ",
-		"register-button": "¿No tienes una cuenta?",
+		"register-button": "Sign up in spanish",
 		"login": "¿No tienes una cuenta?",
 		"login-link": "Login aquí"
 	}
