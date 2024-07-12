@@ -1,7 +1,8 @@
 import * as THREE from 'three';
 import WebGL from 'three/addons/capabilities/WebGL.js';
-import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
-import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
+import { TTFLoader } from 'three/examples/jsm/loaders/TTFLoader';
+import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
+import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
 
 export default class PongGame {
 	static instance;
@@ -29,12 +30,13 @@ export default class PongGame {
 	enterView() {
 		const container = document.querySelector('main');
 		this.scene = new THREE.Scene();
-        this.createCubes();
-		this.createBorders();
+		this.loadFonts();
+        // this.createCubes();
+		// this.createBorders();
         this.setupLighting();
         this.setupCamera();
         this.setupRenderer();
-		this.setupBall();
+		// this.setupBall();
 		this.renderer.render(this.scene, this.camera);
 	}
 
@@ -58,6 +60,32 @@ export default class PongGame {
 			PongGame.instance.renderer.render(PongGame.instance.scene, PongGame.instance.camera);
 		};
 	}
+
+	loadFonts() {
+		this.ttfLoader = new TTFLoader();
+		this.fontLoader = new FontLoader();
+	   
+		this.ttfLoader.load('static/js/views/gameCanvas/fonts/Tiny5-Regular.ttf', (json) => {
+			this.MontFont = this.fontLoader.parse(json);
+	   
+		   this.textGeo = new TextGeometry('Yeah', {
+			 font: this.MontFont,
+			 // font: Helvfont,
+			 size: 0.2,
+			 depth: 0,
+			 // curveSegments: 12,
+		   });
+
+		   this.textMaterial = new THREE.MeshLambertMaterial({
+            	color: 0xaeaa97
+        	});
+		   this.textMesh = new THREE.Mesh(this.textGeo, this.textMaterial);
+		   this.textMesh.position.set(10, 0, 0);
+		   console.log(this.textMesh);
+		   console.log(this.MontFont);
+		   this.scene.add(this.textMesh);
+		});
+  }
 
     createCubes() {
         this.geometry = new THREE.BoxGeometry(5, 15, 2);
