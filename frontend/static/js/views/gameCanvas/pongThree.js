@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import WebGL from 'three/addons/capabilities/WebGL.js';
 import { TTFLoader } from 'three/examples/jsm/loaders/TTFLoader';
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
+import {Text} from 'troika-three-text'
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
 
 export default class PongGame {
@@ -28,15 +29,15 @@ export default class PongGame {
     }
 
 	enterView() {
-		const container = document.querySelector('main');
+		this.container = document.querySelector('main');
 		this.scene = new THREE.Scene();
 		this.loadFonts();
-        // this.createCubes();
-		// this.createBorders();
+        this.createCubes();
+		this.createBorders();
         this.setupLighting();
         this.setupCamera();
         this.setupRenderer();
-		// this.setupBall();
+		this.setupBall();
 		this.renderer.render(this.scene, this.camera);
 	}
 
@@ -54,38 +55,37 @@ export default class PongGame {
 		this.socket.onmessage = function(event) {
 			PongGame.instance.message = JSON.parse(event.data);
 			PongGame.instance.collisionChecking();
+			PongGame.instance.updateUI();
 			PongGame.instance.updatePositions();
-			// console.log(PongGame.instance.message['1'].z);
-			// console.log(PongGame.instance.message['2'].z);
 			PongGame.instance.renderer.render(PongGame.instance.scene, PongGame.instance.camera);
 		};
+	}
+
+	updateUI() {
+		this.gameText.text = `Player 1: ${this.message['1'].score} Player 2: ${this.message['2'].score}`;
 	}
 
 	loadFonts() {
 		this.ttfLoader = new TTFLoader();
 		this.fontLoader = new FontLoader();
-	   
-		this.ttfLoader.load('static/js/views/gameCanvas/fonts/Tiny5-Regular.ttf', (json) => {
-			this.MontFont = this.fontLoader.parse(json);
-	   
-		   this.textGeo = new TextGeometry('Yeah', {
-			 font: this.MontFont,
-			 // font: Helvfont,
-			 size: 0.2,
-			 depth: 0,
-			 // curveSegments: 12,
-		   });
 
-		   this.textMaterial = new THREE.MeshLambertMaterial({
-            	color: 0xaeaa97
-        	});
-		   this.textMesh = new THREE.Mesh(this.textGeo, this.textMaterial);
-		   this.textMesh.position.set(10, 0, 0);
-		   console.log(this.textMesh);
-		   console.log(this.MontFont);
-		   this.scene.add(this.textMesh);
+		this.ttfLoader.load('static/js/views/gameCanvas/fonts/Tiny5-Regular.ttf', (json) => {
+			PongGame.instance.gameFont = PongGame.instance.fontLoader.parse(json);
+			
+			PongGame.instance.gameText = new Text()
+		
+			// Set properties to configure:
+			PongGame.instance.gameText.text = 'Hello world!'
+			PongGame.instance.gameText.fontSize = 10.0
+			PongGame.instance.gameText.position.x = 10
+
+			PongGame.instance.gameText.color = 0x000000
+			
+			// Update the rendering:
+			PongGame.instance.scene.add(PongGame.instance.gameText)
+
 		});
-  }
+	}
 
     createCubes() {
         this.geometry = new THREE.BoxGeometry(5, 15, 2);
@@ -94,7 +94,6 @@ export default class PongGame {
         });
         this.cube = new THREE.Mesh(this.geometry, this.material);
         this.cube.position.x = 10;
-		// this.cube.rotation.y = 300
 		this.cube.castShadow = true;
 		this.cube.receiveShadow = true;
 
@@ -105,7 +104,6 @@ export default class PongGame {
         this.geometry2 = new THREE.BoxGeometry(5, 15, 2);
 		this.cube2 = new THREE.Mesh(this.geometry2, this.material);
 		this.cube2.position.x = 190;
-		// this.cube2.rotation.y = 300
 		this.cube2.castShadow = true;
 		this.cube2.receiveShadow = true;
 
@@ -155,7 +153,6 @@ export default class PongGame {
 
 	setupBall() {
 		this.geometry5 = new THREE.SphereGeometry(2, 32, 32);
-		this.debugDot = new THREE.Mesh(new THREE.SphereGeometry(1, 32, 32), new THREE.MeshBasicMaterial({color: 0xff0000}));
 		this.material = new THREE.MeshLambertMaterial({
 			color: 0xaeaa97
 		});
@@ -164,9 +161,6 @@ export default class PongGame {
 		this.ball.position.y = 0;
 		this.ball.position.z = 0;
 
-		this.debugDot.position.x = 0;
-		this.debugDot.position.y = 0;
-		this.debugDot.position.z = 0;
 
 		//setup ball bounding box
 		this.ballBounds = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());;
@@ -174,7 +168,7 @@ export default class PongGame {
 
 		this.ball.castShadow = true;
 		this.ball.receiveShadow = true;
-		this.scene.add(this.ball, this.debugDot);
+		this.scene.add(this.ball);
 	}
 
     setupCamera() {
@@ -292,16 +286,14 @@ export default class PongGame {
 	}
 	updatePositions() {
 		//Update cube positions
-		// console.log(this.message['ball'].x)
-		// console.log(this.message);
+
 		this.cube.position.y = this.message['1'].y;
 		this.cube2.position.y = this.message['2'].y;
 		this.ball.position.y = this.message['ball'].y;
 		this.cube.position.x = this.message['1'].x;
 		this.cube2.position.x = this.message['2'].x;
 		this.ball.position.x = this.message['ball'].x;
-		// this.ball.position.y = this.message['ball'].y;
-		// this.ball.position.z = this.message['ball'].z;
+
 	}
 
     animate() {
