@@ -11,13 +11,13 @@ export default class extends AView {
 	}
 
 	async getHtml(){
-		const title = this.createHeader('Log-in', 'Log In', 'h1');
+		const title = this.createHeader('log-in', 'Log In', 'h1');
 		title.classList.add('text-center');
 	
 		const form = this.createForm('loginform');
-		const usernameInput = textInputField('Username', 'Username', 'username', 'text');
-		const passwordInput = textInputField('Password', 'Password', 'password', 'password');
-		const loginButton = this.createButton('login', 'Login');
+		const usernameInput = textInputField('username', 'Username', 'username', 'text');
+		const passwordInput = textInputField('password', 'Password', 'password', 'password');
+		const loginButton = this.createButton('log-in', 'Login');
 		form.appendChild(usernameInput);
 		form.appendChild(passwordInput);
 		form.appendChild(loginButton);
@@ -27,11 +27,11 @@ export default class extends AView {
 		registerLink.href = '/register';
 		registerLink.setAttribute("data-link", "");
 		registerLink.setAttribute('id', "register-link");
-		registerSuggestion.appendChild(registerLink);
 	
 		form.addEventListener('submit', this.handleFormSubmit.bind(this));
 
-		this.updateView(title, form, registerSuggestion);
+		window.localStorage.setItem('page', 'Login');
+		this.updateView(title, form, registerSuggestion, registerLink);
 		return ;
 	}
 	
