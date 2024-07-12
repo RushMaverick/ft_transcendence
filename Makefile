@@ -3,8 +3,7 @@ all:
 	@echo "Starting the dev containers"
 	docker compose -f docker-compose.dev.yml build
 	docker compose -f docker-compose.dev.yml up -d
-	npm install --prefix ./frontend
-	npm run dev --prefix ./frontend
+	cd ./frontend && npm install && npm run dev
 
 dev:
 	@echo "Starting the dev containers"
