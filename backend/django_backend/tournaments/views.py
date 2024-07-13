@@ -1,42 +1,18 @@
-from django.contrib.auth.models import  User
+# from django.contrib.auth.models import  User
 
-from rest_framework import status
+from rest_framework import status, viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 
+
 from user.permissions import IsAuthenticatedOrCreateOnly, IsUser
 
-from .models import Tournament, Participant, Match
-from .serializers import TournamentSerializer, ParticipantSerializer, MatchSerializer
+from .models import Tournament, Participant, Round
+from .serializers import TournamentSerializer, ParticipantSerializer, RoundSerializer
+# from match.serializers import MatchSerializer
 
 
-class MatchListView(APIView):
-    permission_classes = [IsAuthenticatedOrCreateOnly]
-
-    def get(self, request, format=None):
-        matches = Match.objects.all()
-        serializer = MatchSerializer(matches, many=True)
-        return Response(serializer.data)
-
-    def post(self, request, format=None):
-        serializer = MatchSerializer(data=request.data)
-        if(serializer.is_valid()):
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-class PlayerMatchListView(APIView):
-    permissions_classes = [IsAuthenticatedOrCreateOnly]
-
-    def get(self, request, user_id, formant=None):
-        try:
-            player = User.objects.get(id=user_id)
-        except User.DoesNotExist:
-            return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
-        matches = Match.objects.filter(player1=player) | Match.objects.filter(player2=player)
-        serializer = MatchSerializer(matches, many=True)
-        return Response(serializer.data)
 
 class TournamentListView(APIView):
     permission_classes = [IsAuthenticatedOrCreateOnly]
@@ -88,73 +64,54 @@ class TournamentDetailView(APIView):
         else:
             return Response({"message": "Tournament not found"}, status=status.HTTP_404_NOT_FOUND)
 
-# """Return the list of the tournaments"""
+
+class RoundViewSet(viewsets.ModelViewSet):
+    # queryset = Round.objects.all()
+    serializer_class = RoundSerializer
+    permission_classes = [IsAuthenticatedOrCreateOnly]
+
+    # Get all rounds of a tournament
+    def get_queryset(self):
+        queryset = Round.objects.all()
+        tournament_id = self.kwargs.get('tournament_id')
+        if tournament_id is not None:
+            queryset = queryset.filter(tournament_id=tournament_id)
+        return queryset
+
+    # Create a round
+    def perform_create(self, serializer):
+        tournament_id = self.request.data['tournament']
+        tournament = Tournament.objects.get(id=tournament_id)
+        serializer.save(tournament=tournament)
+
+    # Add matches to the round
+    def update(self, request, *args, **kwargs):
+        tournament_id = self.kwargs.get('tournament_id')
+        round_id = int(self.kwargs.get('pk'))
+        try:
+            round_obj = Round.objects.get(tournament_id=tournament_id, round=round_id)
+        except Round.DoesNotExist:
+            return Response({"message": "Round not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        try:
+            match = request.data['match']
+        except KeyError:
+           return Response({"match": ["This field is required."]}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            round_obj.matches.add(match)
+        except:
+            return Response({"message": "Match not found"}, status=status.HTTP_404_NOT_FOUND)
+        return Response({"message": "Match added to the round"}, status=status.HTTP_200_OK)
+
+
+# """Return the list of the tournaments the user is registered to"""
 # @api_view(['GET'])
 # @permission_classes([IsAuthenticatedOrCreateOnly, IsUser])
-# def list_tournaments(request):
+# def list_registered_tournaments(request):
 # 	user = request.user
-# 	print("what ", user, flush=True)
 # 	if(user.is_authenticated == False):
 # 		return(Response({"Warning": "Anonimus User"}, status=status.HTTP_401_UNAUTHORIZED))
-# 	tournaments = Tournament.objects.all()
-# 	serializer = TournamentSerializer(tournaments, many=True)
+# 	tournaments = Participant.objects.filter(player=user)
+# 	serializer = ParticipantSerializer(tournaments, many=True)
 # 	return Response({"tournaments": serializer.data}, status=status.HTTP_200_OK)
-
-# @api_view(['GET'])
-# @permission_classes([IsAuthenticatedOrCreateOnly, IsUser])
-# def get_tournament(request, id):
-# 	user = request.user
-# 	print("what tourney", user, flush=True)
-# 	if(user.is_authenticated == False):
-# 		return(Response({"Warning": "Anonimus User"}, status=status.HTTP_401_UNAUTHORIZED))
-# 	try:
-# 		tournament = Tournament.objects.get(id=id)
-# 	except Tournament.DoesNotExist:
-# 		return Response({"message": "Tournament not found"}, status=status.HTTP_404_NOT_FOUND)
-
-# 	serializer = TournamentSerializer(tournament)
-# 	return Response({"tournament": serializer.data}, status=status.HTTP_200_OK)
-
-# """Create a tournament"""
-# @api_view(['POST'])
-# @permission_classes([IsAuthenticatedOrCreateOnly, IsUser])
-# def create_tournament(request):
-# 	user = request.user
-# 	print("what ", user, flush=True)
-# 	if(user.is_authenticated == False):
-# 		return(Response({"Warning": "Anonimus User"}, status=status.HTTP_401_UNAUTHORIZED))
-# 	serializer = TournamentSerializer(data=request.data)
-# 	if not serializer.is_valid():
-# 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-# 	tournament = Tournament.objects.create(creator=user, **serializer.validated_data)
-# 	serializer = TournamentSerializer(tournament)
-# 	return Response({"tournament": serializer.data}, status=status.HTTP_201_CREATED)
-
-"""Join to a tournament"""
-@api_view(['POST'])
-@permission_classes([IsAuthenticatedOrCreateOnly, IsUser])
-def join_tournament(request, tournament_id):
-	user = request.user
-	if(user.is_authenticated == False):
-		return(Response({"Warning": "Anonimus User"}, status=status.HTTP_401_UNAUTHORIZED))
-	serializer = ParticipantSerializer(data={"tournament": tournament_id, "player": user.id})
-	if not serializer.is_valid():
-		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-	tournament = Tournament.objects.get(id=serializer.data['tournament'])
-	if tournament:
-		Participant.objects.create(tournament=tournament, player=user)
-		return Response({"message": "You have been registered to the tournament"}, status=status.HTTP_200_OK)
-	else:
-		return Response({"message": "Tournament not found"}, status=status.HTTP_404_NOT_FOUND)
-
-"""Return the list of the tournaments the user is registered to"""
-@api_view(['GET'])
-@permission_classes([IsAuthenticatedOrCreateOnly, IsUser])
-def list_registered_tournaments(request):
-	user = request.user
-	if(user.is_authenticated == False):
-		return(Response({"Warning": "Anonimus User"}, status=status.HTTP_401_UNAUTHORIZED))
-	tournaments = Participant.objects.filter(player=user)
-	serializer = ParticipantSerializer(tournaments, many=True)
-	return Response({"tournaments": serializer.data}, status=status.HTTP_200_OK)
 

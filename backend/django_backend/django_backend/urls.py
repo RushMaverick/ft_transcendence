@@ -25,14 +25,9 @@ from rest_framework_simplejwt.views import (
 
 from rest_framework import routers
 from user.views import UserViewSet
-from tournaments.views import MatchListView, PlayerMatchListView
-# from rest_demo import views as rest_views
 
 router = routers.DefaultRouter()
-# router.register(r'users', rest_views.UserViewSet, basename='users')
-# router.register(r'groups', rest_views.GroupViewSet)
 router.register(r'api/user', UserViewSet, basename='user')
-
 
 urlpatterns = [
     path('', include(router.urls)),

@@ -1,7 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
-from rest_framework.validators import UniqueValidator
+# from rest_framework.validators import UniqueValidator
 
+from match.models import Match
 
 class Tournament(models.Model):
     name = models.CharField(max_length=50)
@@ -40,47 +41,13 @@ class Participant(models.Model):
     def __str__(self):
         return "%s" % (self.player)
 
-
 class Round(models.Model):
     tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE, related_name='rounds')
-    matches = models.ManyToManyField('Match', through='RoundMatch')
+    matches = models.ManyToManyField(Match, through='RoundMatch')
+    round = models.PositiveIntegerField(default=1)
 
     def __str__(self):
         return "%s" % (self.tournament.name)
-
-class Match(models.Model):
-    # tournament = models.ForeignKey(
-    #     Tournament,
-    #     on_delete=models.SET_NULL,
-    #     related_name='matches',
-    #     default=None,
-    #     null=True
-    # )
-    # round = models.ForeignKey(Round, on_delete=models.CASCADE, related_name='matches')
-    player1 = models.ForeignKey(
-        User,
-        on_delete=models.SET_DEFAULT,
-        related_name='player1_matches',
-        default=None
-    )
-    player2 = models.ForeignKey(
-        User,
-        on_delete=models.SET_DEFAULT,
-        related_name='player2_matches',
-        default=None
-    )
-    player1_score = models.IntegerField()
-    player2_score = models.IntegerField()
-    winner = models.ForeignKey(
-        User,
-        on_delete=models.SET_DEFAULT,
-        related_name='winner_matches',
-        default=None
-    )
-    date = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return "%s and %s" % (self.player1.username, self.player2.username)
 
 class RoundMatch(models.Model):
     round = models.ForeignKey(Round, on_delete=models.CASCADE, related_name='round_matches')

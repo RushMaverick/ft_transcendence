@@ -1,11 +1,12 @@
-from django.urls import path
-# from .views import list_tournaments, create_tournament, join_tournament, list_registered_tournaments, get_tournament
-from .views import TournamentListView, TournamentDetailView, join_tournament, list_registered_tournaments
+from django.urls import path, include
+from .views import TournamentListView, TournamentDetailView, RoundViewSet
+from rest_framework.routers import DefaultRouter
 
+router = DefaultRouter()
+router.register(r'(?P<tournament_id>\d+)/rounds', RoundViewSet, basename='rounds')
 urlpatterns = [
     path('', TournamentListView.as_view()),
     path('<int:id>/', TournamentDetailView.as_view()),
-    # path('create/', create_tournament),
-    path('join/<int:tournament_id>/', join_tournament),
-    path('joined/', list_registered_tournaments),
+    # path('joined/', list_registered_tournaments),
+    path('', include(router.urls)),
 ]
