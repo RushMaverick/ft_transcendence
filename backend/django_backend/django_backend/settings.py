@@ -33,14 +33,15 @@ ALLOWED_HOSTS = ["*"]
 # Application definition
 
 INSTALLED_APPS = [
-	'rest_framework',
+    'rest_framework',
     'rest_framework_simplejwt',
-	'channels',
+    'channels',
     'corsheaders',  # for cors policies
-	'daphne',
-	'pong',
-	'user',
+    'daphne',
+    'pong',
+    'user',
     'friends',
+    'match',
 	'tournaments',
     'django.contrib.admin',
     'django.contrib.auth',
