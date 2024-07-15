@@ -25,7 +25,7 @@ from rest_framework_simplejwt.views import (
 
 from rest_framework import routers
 from user.views import UserViewSet
-from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
+# from rest_demo import views as rest_views
 
 router = routers.DefaultRouter()
 # router.register(r'users', rest_views.UserViewSet, basename='users')
@@ -40,10 +40,7 @@ urlpatterns = [
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('profile/', include('user.urls')),
     path('friends/', include('friends.urls')),
-    path('matches/', include('match.urls')),
-    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
-    path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
-    path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
+    path('matches/', include('match.urls'))
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
