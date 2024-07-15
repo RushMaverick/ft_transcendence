@@ -65,8 +65,11 @@ export default class extends AView {
 		and information about the played games ans described in this privacy policy.\n\n \
 		We use your username to participate in games and personalize your gaming experience.\n \
 		We use your information about played games to track your progress and create statistics.\n\n \
-		";
+		We retain your personal data only for as long as necessary to fulfill the purposes for which it was collected, \
+		as described in this Privacy Policy. Once your data is no longer needed, we will securely delete or anonymize it.\
 		
+		";
+
 		if (confirm(policy))
 		{
 			const txt = "You pressed OK!";
