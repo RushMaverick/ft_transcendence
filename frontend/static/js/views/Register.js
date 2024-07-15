@@ -60,21 +60,23 @@ export default class extends AView {
         event.preventDefault(); // Prevent the default form submission behavior
 
 		// Create the JSON object to be sent
-		const policy = "PRIVACY POLICY\n\n \
-		 We are committed to protecting and respecting your privacy. \
+		// const popup = document.createElement();
+
+		const policy = "PRIVACY POLICY\n \
+		We are committed to protecting and respecting your privacy. \
 		By registering our website, you consent to the collection and use of your data such as username \
-		and information about the played games ans described in this privacy policy.\n\n \
+		and information about the played games ans described in this privacy policy.\n \
 		We use your username to participate in games and personalize your gaming experience.\n \
-		We use your information about played games to track your progress and create statistics.\n\n \
+		We use your information about played games to track your progress and create statistics.\n \
 		We retain your personal data only for as long as necessary to fulfill the purposes for which it was collected, \
-		as described in this Privacy Policy. Once your data is no longer needed, we will securely delete or anonymize it.\n\n \
-		Under the General Data Protection Regulation (GDPR), you have the following rights:\n\n\
-		Right to Access: You can request a copy of the personal data we hold about you. \n \
-		Right to Rectification: You can request that we correct any inaccurate or incomplete data. \n \
-		Right to Erasure: You can request that we delete your personal data under certain conditions. \n \
-		Right to Restrict Processing: You can request that we restrict the processing of your data under certain conditions. \n \
-		Right to Data Portability: You can request that we transfer your data to another organization, or directly to you, under certain conditions. \n \
-		Right to Object: You can object to our processing of your personal data under certain conditions. \n \
+		as described in this Privacy Policy. Once your data is no longer needed, we will securely delete or anonymize it.\n \
+		Under the General Data Protection Regulation (GDPR), you have the following rights:\n\
+		You can request a copy of the personal data we hold about you. \n \
+		You can request that we correct any inaccurate or incomplete data. \n \
+		You can request that we delete your personal data under certain conditions. \n \
+		You can request that we restrict the processing of your data under certain conditions. \n \
+		You can request that we transfer your data to another organization, or directly to you, under certain conditions. \n \
+		You can object to our processing of your personal data under certain conditions. \n \
 		If you make a request, we have one month to respond to you. \n \
 		If you would like to exercise any of these rights, please contact us at our email: [Your Contact Email].";
 
