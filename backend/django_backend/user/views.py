@@ -125,6 +125,10 @@ class UserViewSet(viewsets.ModelViewSet):
         self.perform_destroy(instance)
         return Response(status=status.HTTP_204_NO_CONTENT)
     
+    # search_user method:
+    # This method is part of the user management, and this allow us to find an user by the username
+    # so we need to provide the username, if the username exist then we return the user and his information
+    # in other case we just said user not found
     @action(detail=False, methods=['get'], url_path='search')
     def search_user(self, request):
         username = request.query_params.get('username')
