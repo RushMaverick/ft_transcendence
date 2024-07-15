@@ -125,7 +125,7 @@ class UserViewSet(viewsets.ModelViewSet):
         self.perform_destroy(instance)
         return Response(status=status.HTTP_204_NO_CONTENT)
     
-    @action(detail=False, methods=['get'], permission_classes=[IsAuthenticatedOrCreateOnly, IsUser])
+    @action(detail=False, methods=['get'], url_path='search')
     def search_user(self, request):
         username = request.query_params.get('username')
         if not username:
@@ -134,7 +134,7 @@ class UserViewSet(viewsets.ModelViewSet):
         try:
             user = User.objects.get(username=username)
         except User.DoesNotExist:
-            return Response({"detail": "User not found.", "User Info": None}, status=status.HTTP_200_OK)
+            return Response({"detail": "User not found."}, status=status.HTTP_200_OK)
         
         serializer = UserSerializer(user)
         return Response({"detail": "User found.", "User Info": serializer.data}, status=status.HTTP_200_OK)
