@@ -15,14 +15,14 @@ django_asgi_app = get_asgi_application()
 from channels.routing import ProtocolTypeRouter, URLRouter
 from channels.security.websocket import AllowedHostsOriginValidator
 
-from pong.middlewares import JWTAuthenticationMiddleware
+from .middlewares import JWTAuthenticationMiddleware
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django_backend.settings')
 
 
 from django_backend.routing import websocket_urlpatterns
 
-# Remember for check the user online status the JWT should be uncomment 
+# Remember for check the user online status the JWT should be uncomment
 application = ProtocolTypeRouter({
     "http": django_asgi_app,
 	"websocket": AllowedHostsOriginValidator(
