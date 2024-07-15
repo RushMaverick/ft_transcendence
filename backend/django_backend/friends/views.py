@@ -125,12 +125,10 @@ class FriendsViewSet(viewsets.ModelViewSet):
             return Response({"Warning": "Anonimus User"}, status=status.HTTP_401_UNAUTHORIZED)
         try:
             friend_request = FriendRequest.objects.get(id=pk, to_user=request.user, accepted=False)
+            friend_request.delete()
         except FriendRequest.DoesNotExist:
             return Response({"Warning":"This Friend Request Does not Exist or has been accepted"}, status=status.HTTP_404_NOT_FOUND)
-        friend_request.accepted = True
-        friend_request.save()
-        serializer = FriendsSerializer(friend_request)
-        return Response({"detail": "Friend request accepted.","friend_request":serializer.data}, status=status.HTTP_200_OK)
+        return Response({"detail": "Friend request rejected."}, status=status.HTTP_200_OK)
     
 
             
