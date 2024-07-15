@@ -1,13 +1,12 @@
-from django.shortcuts import render
 from django.contrib.auth.models import  User
-from rest_framework import status, viewsets, permissions
+from rest_framework import status, viewsets
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.decorators import action
 from rest_framework.parsers import MultiPartParser, FormParser
-from .serializers import UserSerializer, PasswordUpdateSerializer, AvatarSerializer, MatchSerializer, OnlineStatusSerializer
+from .serializers import UserSerializer, PasswordUpdateSerializer, AvatarSerializer, OnlineStatusSerializer
 from .permissions import IsAuthenticatedOrCreateOnly, IsUser
-from .models import Avatar, Match, OnlineStatus
+from .models import Avatar, OnlineStatus
 
 
 #OnlineStatusView:
@@ -24,36 +23,10 @@ class OnlineStatusView(APIView):
             user_status = OnlineStatus.objects.get(user_id=userID)
         except OnlineStatus.DoesNotExist:
             return Response({"Warning": "User not found."}, status=status.HTTP_404_NOT_FOUND)
-        
+
         serializer = OnlineStatusSerializer(user_status)
         return Response({"User_status": serializer.data}, status=status.HTTP_200_OK)
 
-class MatchList(APIView):
-    permission_classes = [IsAuthenticatedOrCreateOnly]
-
-    def get(self, request, format=None):
-        matches = Match.objects.all()
-        serializer = MatchSerializer(matches, many=True)
-        return Response(serializer.data)
-
-    def post(self, request, format=None):
-        serializer = MatchSerializer(data=request.data)
-        if(serializer.is_valid()):
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-class PlayerMatchesView(APIView):
-    permissions_classes = [IsAuthenticatedOrCreateOnly]
-
-    def get(self, request, user_id, formant=None):
-        try:
-            player = User.objects.get(id=user_id)
-        except User.DoesNotExist:
-            return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
-        matches = Match.objects.filter(player1=player) | Match.objects.filter(player2=player)
-        serializer = MatchSerializer(matches, many=True)
-        return Response(serializer.data)
 
 class AvatarViewSet(APIView):
     serializer_class = AvatarSerializer

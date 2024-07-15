@@ -2,35 +2,8 @@ from django.contrib.auth.models import  User
 from rest_framework import serializers
 from django.contrib.auth.password_validation import validate_password
 from rest_framework.validators import UniqueValidator
-from .models import Avatar, Match, OnlineStatus
+from .models import Avatar, OnlineStatus
 
-class MatchSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Match
-        fields = '__all__'
-
-    def validate(self, data):
-        if 'player1' not in data:
-            raise serializers.ValidationError({
-                'player1': 'This field is required.',
-            })
-        if 'player2' not in data:
-             raise serializers.ValidationError({
-                'player2': 'This field is required.'
-            })
-        if 'winner' not in data:
-            raise serializers.ValidationError({
-                'winner': 'This field is required.'
-            })
-        if data['player1'] == data['player2']:
-            raise serializers.ValidationError({
-                'player1': 'Player 1 and Player 2 cannot be the same.'
-            })
-        if data['winner'] != data['player1'] and data['winner'] != data['player2']:
-            raise serializers.ValidationError({
-                'winner': 'Winner must be either Player 1 or Player 2.'
-            })
-        return data
 
 class AvatarSerializer(serializers.ModelSerializer):
 
@@ -55,16 +28,16 @@ class OnlineStatusSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     username = serializers.CharField(required=True, validators=[UniqueValidator(queryset=User.objects.all())])
     password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
-    password2 = serializers.CharField(write_only=True, required=True)
+    confirm_password = serializers.CharField(write_only=True, required=True)
 
     avatar = AvatarSerializer(read_only=True)
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'avatar','password', 'password2']
+        fields = ['id', 'username', 'avatar', 'password', 'confirm_password']
 
     def validate(self, attrs):
-        if attrs['password'] != attrs['password2']:
+        if attrs['password'] != attrs['confirm_password']:
             raise serializers.ValidationError({"password": "Password fields didn't match."})
         return attrs
 
