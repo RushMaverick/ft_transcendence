@@ -3,7 +3,6 @@ import WebGL from 'three/addons/capabilities/WebGL.js';
 import { TTFLoader } from 'three/examples/jsm/loaders/TTFLoader';
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
 import {Text} from 'troika-three-text'
-import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
 
 export default class PongGame {
 	static instance;
@@ -31,7 +30,7 @@ export default class PongGame {
 	enterView() {
 		this.container = document.querySelector('main');
 		this.scene = new THREE.Scene();
-		this.loadFonts();
+		this.setupUI();
         this.createCubes();
 		this.createBorders();
         this.setupLighting();
@@ -62,29 +61,30 @@ export default class PongGame {
 	}
 
 	updateUI() {
-		this.gameText.text = `Player 1: ${this.message['1'].score} Player 2: ${this.message['2'].score}`;
+		this.p1Score.text = `P1: ${this.message['1'].score}`;
+		this.p2Score.text = `P2: ${this.message['2'].score}`;
 	}
 
-	loadFonts() {
-		this.ttfLoader = new TTFLoader();
-		this.fontLoader = new FontLoader();
+	setupUI() {
 
-		this.ttfLoader.load('static/js/views/gameCanvas/fonts/Tiny5-Regular.ttf', (json) => {
-			PongGame.instance.gameFont = PongGame.instance.fontLoader.parse(json);
-			
-			PongGame.instance.gameText = new Text()
+		this.p1Score = new Text()
+		this.p2Score = new Text()
 		
-			// Set properties to configure:
-			PongGame.instance.gameText.text = 'Hello world!'
-			PongGame.instance.gameText.fontSize = 10.0
-			PongGame.instance.gameText.position.x = 10
+		// Set properties to configure:
+		// this.p1Score.text = ''
+		this.p1Score.font = 'static/js/views/gameCanvas/fonts/Tiny5-Regular.ttf'
+		this.p1Score.fontSize = 15.0
+		this.p1Score.position.x = 10
+		this.p1Score.color = 0x000000
+		
+		// this.p2Score.text = ''
+		this.p2Score.font = 'static/js/views/gameCanvas/fonts/Tiny5-Regular.ttf'
+		this.p2Score.fontSize = 15.0
+		this.p2Score.position.x = 160
+		this.p2Score.color = 0x000000
 
-			PongGame.instance.gameText.color = 0x000000
-			
-			// Update the rendering:
-			PongGame.instance.scene.add(PongGame.instance.gameText)
-
-		});
+		// Update the rendering:
+		this.scene.add(this.p1Score, this.p2Score)
 	}
 
     createCubes() {
