@@ -1,3 +1,6 @@
+//block if the search is empty
+//"accepted: is basically friends"
+
 import AView from "./AView.js";
 import {
     sendFriendRequest,
@@ -38,7 +41,7 @@ export default class extends AView {
 		status.style.backgroundColor = friend.profile.online ? 'green' : 'gray';
 		friendDiv.appendChild(status);
 	
-		if (!isFriend) {
+		if (!accepted) {
 			const requestButton = this.createButton('request-button', 'request-btn', 'Request');
 			requestButton.classList.add('btn-primary', 'request-btn');	
 			requestButton.addEventListener('click', () => this.sendFriendRequest(friend.id));
@@ -107,7 +110,11 @@ export default class extends AView {
 	navigateToFriendsProfile(friend) {
 	
 		history.pushState(null, null, `#friends/${friend.id}`);
-		this.clearView();
+        this.showFriendsProfile(friend);
+    }
+
+    showFriendsProfile(friend) {
+        this.clearView();
 	
 		const profileHeader = this.createHeader('Friends', 'Friends', 'h1');
 	
@@ -187,8 +194,8 @@ export default class extends AView {
 		const requestsList = document.createElement('div');
 		requestsList.className = 'list-group';
 	
-		if (requests && requests.length > 0) {
-			requests.forEach(request => {
+		if (requests && requests['Pending Friend request'].length > 0) {
+			requests['Pending Friend request'].forEach(request => {
 				const requestItem = this.createRequestItem(request);
 				if (!requestItem) {
                     console.error('Request item creation failed for:', request);
@@ -214,11 +221,11 @@ export default class extends AView {
 	
 		const avatar = document.createElement('img');
 		avatar.src = request.profile.avatar;
-		avatar.alt = `${request.username}'s avatar`;
+		avatar.alt = `${request.from_user}'s avatar`;
 		requestDiv.appendChild(avatar);
 	
 		const usernameLink = document.createElement('a');
-		usernameLink.textContent = request.username;
+		usernameLink.textContent = request.from_user;
 		usernameLink.href = `#friends/${request.id}`;
 		usernameLink.addEventListener('click', (event) => {
 			event.preventDefault();

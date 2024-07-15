@@ -1,24 +1,34 @@
 [
     {
-        "id": "2",
-        "username": "Chuchi",
-        "profile": {
-            "avatar": "https://picsum.photos/200",
-            "online": true
-        },
-        "isFriend": false,
-        "wins": "5",
-        "loses": "0"
+		"Pending Friend request": [
+			{
+				"id": "2",
+				"from_user": "Chuchi",
+				"to_user": "User",
+				"profile": {
+					"avatar": "https://picsum.photos/200",
+					"online": true
+				},
+				"accepted": false,
+				"wins": "5",
+				"loses": "0"
+			}
+			]
     },
     {
-        "id": "3",
-        "username": "Tique",
-        "profile": {
-            "avatar": "https://picsum.photos/200",
-            "online": false
-        },
-        "isFriend": false,
-        "wins": "5",
-        "loses": "0"
+		"Pending Friend request": [
+			{
+				"id": "3",
+				"from_user": "Tique",
+				"to_user": "User",
+				"profile": {
+					"avatar": "https://picsum.photos/200",
+					"online": true
+				},
+				"accepted": false,
+				"wins": "5",
+				"loses": "0"
+			}
+			]
     }
 ]
