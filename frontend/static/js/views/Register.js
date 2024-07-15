@@ -60,7 +60,14 @@ export default class extends AView {
         event.preventDefault(); // Prevent the default form submission behavior
 
 		// Create the JSON object to be sent
-		if (confirm("PRIVACY POLICY\n\n We are committed to protecting and respecting your privacy. By registering our website, you consent to the collection and use of your data such as username and information about the played games ans described in this privacy policy.\n We use your username to participate in games and personalize your gaming experience.\n We use your information about played games to track your progress and create statistics.\n ")) 
+		const policy = "PRIVACY POLICY\n\n We are committed to protecting and respecting your privacy. \
+		By registering our website, you consent to the collection and use of your data such as username \
+		and information about the played games ans described in this privacy policy.\n\n \
+		We use your username to participate in games and personalize your gaming experience.\n \
+		We use your information about played games to track your progress and create statistics.\n\n \
+		";
+		
+		if (confirm(policy))
 		{
 			const txt = "You pressed OK!";
 			console.log(txt);
