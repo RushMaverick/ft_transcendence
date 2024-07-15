@@ -61,7 +61,7 @@ export default class extends AView {
 
 		// Create the JSON object to be sent
 		const policy = "PRIVACY POLICY\n\n \
-		We are committed to protecting and respecting your privacy. \
+		 We are committed to protecting and respecting your privacy. \
 		By registering our website, you consent to the collection and use of your data such as username \
 		and information about the played games ans described in this privacy policy.\n\n \
 		We use your username to participate in games and personalize your gaming experience.\n \
