@@ -44,6 +44,13 @@ from user.models import OnlineStatus
 #   - Once it has identified these pending requests, we got the information from the serializer.
 #   - Finally, it returns the list of the pending the friends requests.
 
+# - reject_request: This method rejects a friend request, removing the friend request from the FriendRequest serializer. 
+#   Here's how it works:
+#   - The logged-in user who wants to accept the request must be authenticated.
+#   - The method takes the ID of the friend request and checks if it exists and has not yet been accepted (accepted=False).
+#   - The method remove the friend request from the FriendRequest Serializer
+#   - If the friend request does not exist or has already been accepted, an exception is thrown.
+
 class FriendsViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = FriendsSerializer
