@@ -2,23 +2,172 @@
 //"accepted: is basically friends"
 
 import AView from "./AView.js";
-import {
-    sendFriendRequest,
-    acceptFriendRequest,
-    ignoreFriendRequest
-} from "./FriendRequest.js";
+import FriendRequest from "./FriendRequest.js";
+// import {
+//     sendFriendRequest,
+//     acceptFriendRequest,
+//     ignoreFriendRequest
+// } from "./FriendRequest.js";
 
-export default class extends AView {
+export default class Friends extends AView{
 	constructor(params){
 		super(params);
 		this.setTitle("Friends");
 
-		window.addEventListener('popstate', (event) => {
-            this.handlePopState(event);
+		window.addEventListener('popstate', this.handlePopState.bind(this));
+		this.friendRequest = new FriendRequest();
+	}
+	
+	async getHtml(){
+		const friends = this.createHeader('Friends', 'Friends', 'h1');
+		const friendsList =  document.createElement('div');
+		friendsList.className = 'list-group';
+		
+		const searchBar = document.createElement('input');
+		searchBar.setAttribute('type', 'text');
+		searchBar.setAttribute('placeholder', 'Search for friends...');
+		searchBar.className = 'form-control';
+		
+		const searchButton = this.createButton('search', 'btn', 'Search');
+		searchButton.classList.add('btn-primary');		
+        searchButton.addEventListener('click', () => {
+			history.pushState({ view: 'search', query: searchBar.value }, 'Search Friends', '#search');
+            this.searchFriend(searchBar.value);
         });
+		
+        const inboxIcon = document.createElement('span');
+        inboxIcon.classList.add('inbox-icon');
+        inboxIcon.innerHTML = '<i class="fas fa-envelope"></i>'; 
+        inboxIcon.addEventListener('click', () => {
+			history.pushState({ view: 'friendRequests' }, 'Friend Requests', '#friend-requests');
+            this.showFriendRequests();
+        });
+		
+        const iconContainer = document.createElement('div');
+        iconContainer.classList.add('icon-container');
+        iconContainer.appendChild(inboxIcon);
+		
+		const data = await this.fetchJsonData('static/js/views/friends.json');
+		this.createFriendsList(data, friendsList);
+		this.updateView(friends, iconContainer, friendsList, searchBar, searchButton);
+		
+		this.checkIfRequests();
 	}
 
-	createFriendItem(friend, isFriend = true) {
+	createFriendsList(data, friendsList) {
+        if (data && data.length > 0) {
+            data.forEach(friend => {
+                friendsList.appendChild(this.createFriendItem(friend));
+            });
+        } else {
+            const noFriendsMessage = this.createParagraph('no-friends', 'You have no friends');
+            friendsList.appendChild(noFriendsMessage);
+        }
+    }
+
+	async checkIfRequests() {
+		const requests = await this.fetchJsonData('static/js/views/friendRequest.json');
+        const inboxIcon = document.querySelector('.inbox-icon');
+
+		if (!document.querySelector('.inbox-icon')) {
+            await this.getHtml();
+        }
+
+		if (!inboxIcon) {
+			console.error('inboxIcon element not found in the DOM.');
+			return;
+		}
+		
+        if (requests && requests['Pending Friend request'].length > 0) {
+			const redDot = document.createElement('span');
+            redDot.classList.add('red-dot');
+            inboxIcon.appendChild(redDot);
+        } else {
+            console.log('No pending requests found');
+        }
+		//this is for debugging. leaving it for when connected to backend
+
+		// try {
+		// 	const requests = await this.fetchJsonData('static/js/views/friendRequest.json');
+		// 	const inboxIcon = document.querySelector('.inbox-icon');
+	
+		// 	if (!inboxIcon) {
+		// 		console.error('inboxIcon element not found in the DOM.');
+		// 		return;
+		// 	}
+	
+		// 	console.log('Requests:', requests); // Debugging statement to check the fetched data
+	
+		// 	if (requests && requests.length > 0) {
+		// 		const redDot = document.createElement('span');
+		// 		redDot.classList.add('red-dot');
+		// 		inboxIcon.appendChild(redDot);
+		// 	}
+		// } catch (error) {
+		// 	console.error('Error fetching or processing friend requests:', error);
+		// }
+    }
+
+	async searchFriend(username) {
+		// const payload = { user: username };
+		// const response = await fetch('/api/search', {
+			// 	method: 'POST',
+			// 	headers: {
+				// 		'Content-Type': 'application/json'
+				// 	},
+				// 	body: JSON.stringify(payload)
+				// });
+		if (!document.querySelector('.list-group')) {
+			await this.getHtml();
+		}
+
+		const friendsList = document.querySelector('.list-group');
+		
+		if (!friendsList) {
+			console.error('friendsList element not found in the DOM.');
+			return;
+		}
+		friendsList.innerHTML = '';
+		
+		// const result = await response.json();
+		const result = await this.fetchJsonData('static/js/views/search.json');
+		if (result && result.length > 0) {
+			result.forEach(friend => {
+				friendsList.appendChild(this.createFriendItem(friend));
+			});
+		} else {
+			const noResultsMessage = this.createParagraph('no-user-found', `No Such User Found: ${username}`);
+			friendsList.appendChild(noResultsMessage);
+		}
+	}
+
+	async showFriendRequests() {
+		const requests = await this.fetchJsonData('static/js/views/friendRequest.json');
+		const requestsList = document.createElement('div');
+		requestsList.className = 'list-group';
+	
+		if (requests && requests['Pending Friend request'].length > 0) {
+			requests['Pending Friend request'].forEach(request => {
+				const requestItem = this.createRequestItem(request);
+				if (!requestItem) {
+					console.error('Request item creation failed for:', request);
+				}
+				requestsList.appendChild(requestItem);
+			});
+		} else {
+			const noRequestsMessage = this.createParagraph('no-request', 'You have no friend requests');
+			requestsList.appendChild(noRequestsMessage);
+		}
+
+		this.updateView(this.createHeader('Friend Requests', 'Friend Requests', 'h1'), requestsList);
+
+		// const inboxIcon = document.querySelector('.inbox-icon .red-dot');
+		// if (inboxIcon) {
+		//     inboxIcon.remove();
+		// }
+	}	
+			
+	createFriendItem(friend) {
 		const friendDiv = document.createElement('div');
 		friendDiv.classList.add('list-group-item', 'friend');
 	
@@ -41,179 +190,32 @@ export default class extends AView {
 		status.style.backgroundColor = friend.profile.online ? 'green' : 'gray';
 		friendDiv.appendChild(status);
 	
-		if (!accepted) {
-			const requestButton = this.createButton('request-button', 'request-btn', 'Request');
-			requestButton.classList.add('btn-primary', 'request-btn');	
-			requestButton.addEventListener('click', () => this.sendFriendRequest(friend.id));
-			friendDiv.appendChild(requestButton);
-		}
+		const actions = this.createActions(friend);
+		friendDiv.appendChild(actions);
 
 		return friendDiv;
 	}
+
+	createActions(friend) {
+        const actions = document.createElement('div');
+        actions.classList.add('actions');
+
+		if (friend.accepted === false) {
+			const acceptButton = this.createButton('accept-button', 'btn', 'Accept');
+			acceptButton.addEventListener('click', () => this.friendRequest.acceptFriendRequest(friend.username));
+			actions.appendChild(acceptButton);
 	
-	async getHtml(){
-		const friends = this.createHeader('Friends', 'Friends', 'h1');
-		const friendsList =  document.createElement('div');
-		friendsList.className = 'list-group';
-
-		const searchBar = document.createElement('input');
-		searchBar.setAttribute('type', 'text');
-		searchBar.setAttribute('placeholder', 'Search for friends...');
-		searchBar.className = 'form-control';
-	
-		const searchButton = this.createButton('search', 'btn', 'Search');
-		searchButton.classList.add('btn-primary');		
-        searchButton.addEventListener('click', () => {
-            history.pushState({ view: 'search', query: searchBar.value }, 'Search Friends', '#search');
-            this.searchFriend(searchBar.value);
-        });
-
-        const inboxIcon = document.createElement('span');
-        inboxIcon.classList.add('inbox-icon');
-        inboxIcon.innerHTML = '<i class="fas fa-envelope"></i>'; 
-        inboxIcon.addEventListener('click', () => {
-            history.pushState({ view: 'friendRequests' }, 'Friend Requests', '#friend-requests');
-            this.showFriendRequests();
-        });
-
-        const iconContainer = document.createElement('div');
-        iconContainer.classList.add('icon-container');
-        iconContainer.appendChild(inboxIcon);
-
-		const data = await this.fetchJsonData('static/js/views/friends.json');
-		if (data && data.length > 0) {
-			data.forEach(friend => {
-				const friendDiv = document.createElement('div');
-				friendsList.appendChild(this.createFriendItem(friend));
-			});
-
-			this.updateView(friends, iconContainer, friendsList, searchBar, searchButton);
-		} else {
-			const noFriendsMessage = this.createParagraph('You have no friends');
-			this.updateView(friends, iconContainer, noFriendsMessage, searchBar, searchButton);
+			const ignoreButton = this.createButton('ignore-button', 'btn', 'Ignore');
+			ignoreButton.addEventListener('click', () => this.friendRequest.ignoreFriendRequest(friend.username));
+			actions.appendChild(ignoreButton);
+		} else if (friend.accepted === undefined) {
+			const requestButton = this.createButton('request-button', 'request-btn', 'Request');  
+			requestButton.addEventListener('click', () => this.friendRequest.sendFriendRequest(friend.username));
+			actions.appendChild(requestButton);
 		}
 
-		this.checkIfRequests();
-	}
-
-	async checkIfRequests() {
-        const requests = await this.fetchJsonData('static/js/views/friendRequest.json');
-        const inboxIcon = document.querySelector('.inbox-icon');
-
-        if (requests && requests.length > 0) {
-            const redDot = document.createElement('span');
-            redDot.classList.add('red-dot');
-            inboxIcon.appendChild(redDot);
-        }
+        return actions;
     }
-
-	navigateToFriendsProfile(friend) {
-	
-		history.pushState(null, null, `#friends/${friend.id}`);
-        this.showFriendsProfile(friend);
-    }
-
-    showFriendsProfile(friend) {
-        this.clearView();
-	
-		const profileHeader = this.createHeader('Friends', 'Friends', 'h1');
-	
-		const profileView = document.createElement('div');
-		profileView.classList.add('friends-profile');
-	
-		const profileTitle = this.createHeader('Friends',`${friend.username}`, 'h3');
-		
-		const profileAvatar = document.createElement('img');
-		profileAvatar.src = friend.profile.avatar;
-		profileAvatar.alt = `${friend.username}'s avatar`;
-	
-		// const onlineStatus = this.createParagraph(`Online: ${friend.profile.online ? 'Yes' : 'No'}`);
-		const onlineStatus = document.createElement('div');
-        onlineStatus.classList.add('online-status');
-        const statusDot = document.createElement('div');
-        statusDot.classList.add('status');
-		statusDot.style.backgroundColor = friend.profile.online ? 'green' : 'gray';
-        const statusText = document.createElement('span');
-        statusText.textContent = `Online: ${friend.profile.online ? 'Yes' : 'No'}`;
-		onlineStatus.appendChild(statusText);
-		onlineStatus.appendChild(statusDot);
-
-		const winning = friend.wins;
-		const losing = friend.loses;
-
-		const gameHistory = this.createParagraph('game-history', `Win : ${friend.wins}🏆\t\tLoss : ${friend.loses}💀`)
-
-		
-		profileView.appendChild(profileTitle);
-		profileView.appendChild(profileAvatar);
-		profileView.appendChild(onlineStatus);
-		profileView.appendChild(gameHistory);
-		if (!friend.isFriend) {
-			const requestButton = this.createButton('request-button', 'btn', 'Request');
-			requestButton.classList.add('btn-primary');	
-			requestButton.addEventListener('click', () => this.sendFriendRequest(friend.username));
-			profileView.appendChild(requestButton);
-		}
-
-		this.updateView(profileHeader, profileView);
-	}
-
-	async searchFriend(username) {
-		// const payload = { user: username };
-		// const response = await fetch('/api/search', {
-		// 	method: 'POST',
-		// 	headers: {
-		// 		'Content-Type': 'application/json'
-		// 	},
-		// 	body: JSON.stringify(payload)
-		// });
-		
-		const friendsList = document.querySelector('.list-group');
-		
-		if (!friendsList) {
-            console.error('friendsList element not found in the DOM.');
-            return;
-        }
-		friendsList.innerHTML = '';
-
-		// const result = await response.json();
-		const result = await this.fetchJsonData('static/js/views/search.json');
-		if (result && result.length > 0) {
-			result.forEach(friend => {
-				const isFriend = friend.isFriend; 
-				friendsList.appendChild(this.createFriendItem(friend, isFriend));
-			});
-		} else {
-			const noResultsMessage = this.createParagraph(`No Such User Found: ${username}`);
-			friendsList.appendChild(noResultsMessage);
-		}
-	}
-
-	async showFriendRequests() {
-		const requests = await this.fetchJsonData('static/js/views/friendRequest.json');
-		const requestsList = document.createElement('div');
-		requestsList.className = 'list-group';
-	
-		if (requests && requests['Pending Friend request'].length > 0) {
-			requests['Pending Friend request'].forEach(request => {
-				const requestItem = this.createRequestItem(request);
-				if (!requestItem) {
-                    console.error('Request item creation failed for:', request);
-                }
-				requestsList.appendChild(requestItem);
-			});
-	
-			this.updateView(this.createHeader('Friend Requests', 'Friend Requests', 'h1'), requestsList);
-		} else {
-			const noRequestsMessage = this.createParagraph('You have no friend requests');
-			this.updateView(this.createHeader('Friend Requests', 'Friend Requests', 'h1'), noRequestsMessage);
-		}
-
-		const inboxIcon = document.querySelector('.inbox-icon .red-dot');
-        if (inboxIcon) {
-            inboxIcon.remove();
-        }
-	}
 
 	createRequestItem(request) {
 		const requestDiv = document.createElement('div');
@@ -238,17 +240,58 @@ export default class extends AView {
 		status.style.backgroundColor = request.profile.online ? 'green' : 'gray';
 		requestDiv.appendChild(status);
 	
-		const acceptButton = this.createButton('accept-button', 'btn', 'Accept');
-		acceptButton.classList.add('btn-success', 'request-button');
-		acceptButton.addEventListener('click', () => this.acceptFriendRequest(request.id));
-		requestDiv.appendChild(acceptButton);
-	
-		const ignoreButton = this.createButton('ignore-button', 'btn', 'Ignore');
-		ignoreButton.classList.add('btn-danger', 'request-button');
-		ignoreButton.addEventListener('click', () => this.ignoreFriendRequest(request.id));
-		requestDiv.appendChild(ignoreButton);
+        const actions = this.createActions(request);
+        requestDiv.appendChild(actions);
 	
 		return requestDiv;
+	}
+	
+	navigateToFriendsProfile(friend) {
+		
+		history.pushState(null, null, `#friends/${friend.id}`);
+        this.showFriendsProfile(friend);
+    }
+	
+    showFriendsProfile(friend) {
+		this.clearView();
+		
+		const profileHeader = this.createHeader('Friends', 'Friends', 'h1');
+		
+		const profileView = document.createElement('div');
+		profileView.classList.add('friends-profile');
+		
+		const profileTitle = this.createHeader('Friends',`${friend.username}`, 'h3');
+		
+		const profileAvatar = document.createElement('img');
+		profileAvatar.src = friend.profile.avatar;
+		profileAvatar.alt = `${friend.username}'s avatar`;
+		
+		// const onlineStatus = this.createParagraph(`Online: ${friend.profile.online ? 'Yes' : 'No'}`);
+		const onlineStatus = document.createElement('div');
+        onlineStatus.classList.add('online-status');
+        const statusDot = document.createElement('div');
+        statusDot.classList.add('status');
+		statusDot.style.backgroundColor = friend.profile.online ? 'green' : 'gray';
+        const statusText = document.createElement('span');
+        statusText.textContent = `Online: ${friend.profile.online ? 'Yes' : 'No'}`;
+		onlineStatus.appendChild(statusText);
+		onlineStatus.appendChild(statusDot);
+		
+		const winning = friend.wins;
+		const losing = friend.loses;
+		
+		const gameHistory = this.createParagraph('game-history', `Win : ${friend.wins}🏆\t\tLoss : ${friend.loses}💀`)
+		
+		
+		profileView.appendChild(profileTitle);
+		profileView.appendChild(profileAvatar);
+		profileView.appendChild(onlineStatus);
+		profileView.appendChild(gameHistory);
+		
+		const actions = this.createActions(friend);
+		profileView.appendChild(actions);
+		
+		this.updateView(profileHeader, profileView);
 	}
 
 	handlePopState(event) {
@@ -260,8 +303,8 @@ export default class extends AView {
 			} else if (state.view === 'friendRequests') {
 				this.showFriendRequests();
 			} else if (state.view === 'profile') {
-				const friendId = state.friendId;
-				const friend = this.getFriendById(friendId); // Implement this method to fetch the friend data by ID
+				const friendUsername = state.friendUsername;
+				const friend = this.getFriendByUsername(friendUsername); // Implement this method to fetch the friend data by ID
 				if (friend) {
 					this.navigateToFriendsProfile(friend);
 				}
@@ -272,9 +315,9 @@ export default class extends AView {
 		}
 	}
 
-	getFriendById(friendId) {
+	getFriendByUsername(friendUsername) {
         // Implement this method to fetch the friend data by ID from your data source
         // This is a placeholder implementation
-        return this.friends.find(friend => friend.id === friendId);
+        return this.friends.find(friend => friend.username === friendUsername);
     }
 }

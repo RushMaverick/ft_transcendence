@@ -130,7 +130,7 @@ export default class {
         }
     }
 
-	async fetchWithJson(url, method, body) {
+	static async fetchWithJson(url, method, body) {
 		try {
 			const response = await fetch(url, {
 				method: method,
