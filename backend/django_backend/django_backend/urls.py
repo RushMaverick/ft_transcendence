@@ -25,12 +25,12 @@ from rest_framework_simplejwt.views import (
 
 from rest_framework import routers
 from user.views import UserViewSet
-# from rest_demo import views as rest_views
+from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
 router = routers.DefaultRouter()
 # router.register(r'users', rest_views.UserViewSet, basename='users')
 # router.register(r'groups', rest_views.GroupViewSet)
-router.register(r'user', UserViewSet, basename='user')
+router.register(r'api/user', UserViewSet, basename='user')
 
 
 urlpatterns = [
@@ -38,9 +38,12 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('profile/', include('user.urls')),
-    path('friends/', include('friends.urls')),
-    path('matches/', include('match.urls'))
+    path('api/profile/', include('user.urls')),
+    path('api/friends/', include('friends.urls')),
+    path('api/matches/', include('match.urls')),
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+    path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
