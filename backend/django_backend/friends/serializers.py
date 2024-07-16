@@ -2,6 +2,7 @@ from django.contrib.auth.models import  User
 from rest_framework import serializers
 from .models import FriendRequest
 from user.models import OnlineStatus
+from user.serializers import UserSerializer, AvatarSerializer
 
 
 
@@ -25,6 +26,8 @@ from user.models import OnlineStatus
 class FriendsSerializer(serializers.ModelSerializer):
     from_user = serializers.SlugRelatedField(slug_field='username', queryset=User.objects.all())
     to_user = serializers.SlugRelatedField(slug_field='username', queryset=User.objects.all())
+    # from_user = UserSerializer(read_only=True)
+    # to_user = UserSerializer(read_only=True)
 
     class Meta:
         model = FriendRequest
@@ -38,9 +41,10 @@ class FriendsSerializer(serializers.ModelSerializer):
 # get_ which is gonna provided if a user is_online.
 class FriendsListSerializer(serializers.ModelSerializer):
     is_online = serializers.SerializerMethodField()
+    avatar = AvatarSerializer(read_only=True)
     class Meta:
         model = User
-        fields = ['id', 'username', 'is_online']
+        fields = ['id', 'username', 'is_online', 'avatar']
 
     def get_is_online(self, obj):
         user_status = OnlineStatus.objects.get(user=obj)
