@@ -7,7 +7,7 @@ export default class extends AView {
 	}
 
 	async getHtml(){
-		const header = this.createHeader('header', 'Profile', 'h2');
+		const header = this.createHeader('header', 'Profile', 'h1');
 
 		const data = await this.fetchJsonData('static/js/views/profile.json');
 

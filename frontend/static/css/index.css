@@ -86,7 +86,7 @@ main {
 h1 {
   font-size: 40px;
   letter-spacing: 1px;
-  margin-left: 5px;
+  margin-left: 7px;
 }
 
 body {
@@ -135,6 +135,8 @@ p {
 }
 
 a {
+  margin-left: 5px;
+  display: block;
   color: #009579;
 }
 
