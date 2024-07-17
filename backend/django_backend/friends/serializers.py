@@ -2,7 +2,7 @@ from django.contrib.auth.models import  User
 from rest_framework import serializers
 from .models import FriendRequest
 from user.models import OnlineStatus
-from user.serializers import UserSerializer, AvatarSerializer
+from user.serializers import FriendshipSerializer, AvatarSerializer
 
 
 
@@ -24,10 +24,8 @@ from user.serializers import UserSerializer, AvatarSerializer
 #   this field is updated to True. This field helps in distinguishing between pending and accepted friend requests.
 # 
 class FriendsSerializer(serializers.ModelSerializer):
-    from_user = serializers.SlugRelatedField(slug_field='username', queryset=User.objects.all())
-    to_user = serializers.SlugRelatedField(slug_field='username', queryset=User.objects.all())
-    # from_user = UserSerializer(read_only=True)
-    # to_user = UserSerializer(read_only=True)
+    from_user = FriendshipSerializer(read_only=True)
+    to_user = FriendshipSerializer(read_only=True)
 
     class Meta:
         model = FriendRequest
