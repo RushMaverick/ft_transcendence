@@ -37,20 +37,22 @@ export default class extends AView {
 		const usernameInput = textInputField('username', 'Username', 'username', 'text');
 		const passwordInput = textInputField('password', 'Password', 'password', 'password');
 		const confirmPasswordInput = textInputField('confirm-password','Confirm password', 'confirm-password', 'password');
+		const p = this.createParagraph('paragraph');
 		const registerButton = this.createButton('register-button', 'Register');
+		p.appendChild(registerButton);
 
 		const checkbox = document.createElement('input');
 		checkbox.setAttribute('type', 'checkbox');
 		const privacy = this.createAnchor('privacy', 'I have read and agree to the Pong sites ');
 		const privacyLink = this.createLink('privacy-link', 'PRIVACY POLICY', '/privacypolicy');
-		privacy.appendChild(privacyLink);
 
 		form.appendChild(usernameInput);
 		form.appendChild(passwordInput);
 		form.appendChild(confirmPasswordInput);
 		form.appendChild(checkbox);
 		form.appendChild(privacy);
-		form.appendChild(registerButton);
+		form.appendChild(privacyLink);
+		form.appendChild(p);
 		
 
 		const loginSuggestion = this.createParagraph('login', 'Already have an account?');
