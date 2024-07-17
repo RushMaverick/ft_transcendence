@@ -43,6 +43,9 @@ export default class extends AView {
 		form.appendChild(confirmPasswordInput);
 		form.appendChild(registerButton);
 		
+		const privacy = this.createParagraph('privacy', 'I have read and agree to the Pong sites ')
+		const privacyLink = this.createLink('privacy-link', 'PRIVACY POLICY', '/privacypolicy');
+		
 		const loginSuggestion = this.createParagraph('login', 'Already have an account?');
 		const loginLink = this.createAnchor('login-link', 'Log in here');
 		loginLink.href = '/login';
