@@ -130,6 +130,28 @@ export default class {
         }
     }
 
+	static async fetchWithJson(url, method, body) {
+		try {
+			const response = await fetch(url, {
+				method: method,
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(body)
+			});
+	
+			if (!response.ok) {
+				throw new Error(`HTTP error status: ${response.status}`);
+			}
+	
+			return await response.json();
+		} catch (error) {
+			console.error(`Error during fetch request to ${url}:`, error);
+			alert('An error occurred. Please try again.');
+			return null;
+		}
+	}
+
 	createGame(name){
 		// Create the game div
 		const gameDiv = document.createElement('div');
