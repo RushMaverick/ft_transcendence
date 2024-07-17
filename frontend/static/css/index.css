@@ -163,7 +163,7 @@ a {
   color: #060606;
 }
 
-.friends-profile {
+.profile {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -174,7 +174,7 @@ a {
   margin: 20px;
 }
 
-.friends-profile img {
+.profile img {
   width: 150px;
   height: 150px;
   border-radius: 50%;
@@ -188,7 +188,7 @@ a {
   margin: 5px ;
 }
 
-.friends-profile .status {
+.profile .status {
 	width: 10px;
 	height: 10px;
 	border-radius: 50%;
@@ -227,4 +227,11 @@ a {
   height: 10px;
   background-color: red;
   border-radius: 50%;
+}
+
+.msofd {
+  font-style: italic;
+  font-family: 'Courier New', Courier, monospace; /* Example of a different font */
+  color: #333; /* Optional: change the text color */
+  font-size: 0.8em; /* Optional: adjust the font size */
 }

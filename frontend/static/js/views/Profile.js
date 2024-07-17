@@ -6,33 +6,53 @@ export default class extends AView {
 		this.setTitle("Profile");
 	}
 
-	fetchName(userData){
-		const base = document.createElement('section');
-		const name = this.userData.name;
-		base.textContent = name;
-		
-		return base;
-	}
+	async getHtml(){
+		const header = this.createHeader('header', 'Profile', 'h2');
 
-	fetchPicture(userData){
-		const img = document.createElement('img');
-		img.src = this.userData.pictureUrl;
-		img.width = 300;
-		img.width = 200;
-		return img;
-	}
+		const data = await this.fetchJsonData('static/js/views/profile.json');
 
-	async getHtml(userData){
-		const header = this.createHeader('header', 'testheader', 'h2');
-		const userNameBase = this.createParagraph('usernamebase');
-		const userName= this.fetchName(userData);
-		const profilePicutre = this.fetchPicture(userData);
-        const message = this.createParagraph('message');
+		const createProfile = this.showProfile(data);
         const settings = this.createLink('link2', 'Change settings from here', '/settings');
         const stats = this.createLink('link1', 'Change settings from here', '/stats');
 
 		window.localStorage.setItem('page', 'Profile');
-		this.updateView(header, userNameBase, userName, profilePicutre, message, settings, stats);
+		this.updateView(header, createProfile, settings, stats);
 		return ;
+	}
+
+	showProfile(my) {
+		
+		const profileView = document.createElement('div');
+		profileView.classList.add('profile');
+		
+		const profileTitle = this.createHeader('myProfile',`${my.username}`, 'h3');
+		
+		const profileAvatar = document.createElement('img');
+		profileAvatar.src = my.profile.avatar;
+		profileAvatar.alt = `${my.username}'s avatar`;
+		
+		const wins = my.wins;
+		const loss = my.loses;
+		const gameHistoryText = `Win: ${wins}🏆\tLoss: ${loss}💀`;
+		const gameHistory = this.createParagraph('game-history', gameHistoryText);
+
+		let msg;
+
+		if (wins > loss)
+			msg = "Amazing! You are doing great";
+		else if (wins < loss)
+			msg = "Shall we play more to get some wins?";
+		else
+			msg = "We are even steven. Let's play some more!";
+
+		const msofd = this.createParagraph('msofd', msg);
+		msofd.classList.add('msofd');
+		
+		profileView.appendChild(profileTitle);
+		profileView.appendChild(profileAvatar);
+		profileView.appendChild(gameHistory);
+		profileView.appendChild(msofd);
+		
+		return profileView;
 	}
 }
