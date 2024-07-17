@@ -55,6 +55,13 @@ export default class extends AView {
 		
 		const checkbox = document.createElement('input');
 		checkbox.setAttribute('type', 'checkbox');
+		if (checkbox.checked == false){
+			console.log('is not checked');
+		}
+		else{
+			
+		}
+
 		const privacy = this.createAnchor(
 			'privacy', 
 			'I have read and agree to the Pong sites '
