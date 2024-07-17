@@ -14,6 +14,7 @@
   "dependencies": {
     "express": "^4.19.2",
     "three": "^0.165.0",
+    "troika-three-text": "^0.49.1",
     "uuid": "^10.0.0",
     "vite": "^5.3.1"
   }
