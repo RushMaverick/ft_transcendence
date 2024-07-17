@@ -1,13 +1,5 @@
-//block if the search is empty
-//"accepted: is basically friends"
-
 import AView from "./AView.js";
 import FriendRequest from "./FriendRequest.js";
-// import {
-//     sendFriendRequest,
-//     acceptFriendRequest,
-//     ignoreFriendRequest
-// } from "./FriendRequest.js";
 
 export default class Friends extends AView{
 	constructor(params){
