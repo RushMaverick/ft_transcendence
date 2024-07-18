@@ -250,7 +250,7 @@ export default class Friends extends AView{
 		const profileHeader = this.createHeader('Friends', 'Friends', 'h1');
 		
 		const profileView = document.createElement('div');
-		profileView.classList.add('friends-profile');
+		profileView.classList.add('profile');
 		
 		const profileTitle = this.createHeader('Friends',`${friend.username}`, 'h3');
 		
