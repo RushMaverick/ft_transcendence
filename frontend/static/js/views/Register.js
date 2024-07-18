@@ -66,6 +66,9 @@ export default class extends AView {
 			'PRIVACY POLICY', 
 			'/privacypolicy'
 		);
+		privacyLink.setAttribute('privacy-link', '');
+		privacyLink.setAttribute('id', 'privacy-link');
+		privacyLink.target = '_blank';
 		
 		const button = this.createParagraph('paragraph');
 		const registerButton = this.createButton("register-button", "Register");
@@ -101,7 +104,7 @@ export default class extends AView {
 		// Create the JSON object to be sent
 		const checkbox = document.getElementById('checkbox');
 		if (checkbox.checked == false){
-			window.alert('To register, please read and agree to our Privacy Policy');
+			alert('To register, please read and agree to our Privacy Policy');
 		}
 		else{
 

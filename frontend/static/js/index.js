@@ -127,6 +127,10 @@ document.addEventListener("DOMContentLoaded", () => {
 				}
 				})
 		}
+		if (e.target.matches("[privacy-link]")) {
+			e.preventDefault();
+			window.open(e.target.href);
+		}
 	});
 
 document.addEventListener('loginSuccess', (event) => {
