@@ -101,7 +101,7 @@ export default class extends AView {
 		// Create the JSON object to be sent
 		const checkbox = document.getElementById('checkbox');
 		if (checkbox.checked == false){
-			console.log('first check worked ok, SOUND THE ALARM');
+			window.alert('Registering to the Pong game requires you to agree to our Privacy Policy');
 		}
 		else{
 
