@@ -55,13 +55,8 @@ export default class extends AView {
 		
 		const checkbox = document.createElement('input');
 		checkbox.setAttribute('type', 'checkbox');
-		if (checkbox.checked == false){
-			console.log('is not checked');
-		}
-		else{
-			
-		}
-
+		checkbox.setAttribute('id', 'checkbox');
+		
 		const privacy = this.createAnchor(
 			'privacy', 
 			'I have read and agree to the Pong sites '
@@ -104,6 +99,12 @@ export default class extends AView {
 		event.preventDefault(); // Prevent the default form submission behavior
 
 		// Create the JSON object to be sent
+		const checkbox = document.getElementById('checkbox');
+		if (checkbox.checked == false){
+			console.log('first check worked ok, SOUND THE ALARM');
+		}
+		else{
+
 		const username = event.target.username.value;
 		const password = event.target.password.value;
 		const confirmPassword = event.target["confirm-password"].value;
@@ -146,4 +147,5 @@ export default class extends AView {
 			console.error("There was a problem with the fetch operation:", error);
 		}
 	}
+}
 }
