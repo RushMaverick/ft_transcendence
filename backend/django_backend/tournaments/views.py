@@ -12,8 +12,6 @@ from .models import Tournament, Participant, Round
 from .serializers import TournamentSerializer, ParticipantSerializer, RoundSerializer
 # from match.serializers import MatchSerializer
 
-
-
 class TournamentListView(APIView):
     permission_classes = [IsAuthenticatedOrCreateOnly]
 
@@ -63,6 +61,18 @@ class TournamentDetailView(APIView):
             return Response({"message": "You have been registered to the tournament"}, status=status.HTTP_200_OK)
         else:
             return Response({"message": "Tournament not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    # Leave a tournament
+    def delete(self, request, id, format=None):
+        user = request.user
+        if user.is_authenticated == False:
+            return Response({"Warning": "Anonimus User"}, status=status.HTTP_401_UNAUTHORIZED)
+        try:
+            participant = Participant.objects.get(tournament=id, player=user.id)
+        except Participant.DoesNotExist:
+            return Response({"message": "You are not registered to this tournament"}, status=status.HTTP_404_NOT_FOUND)
+        participant.delete()
+        return Response({"message": "You have been unregistered from the tournament"}, status=status.HTTP_200_OK)
 
 
 class RoundViewSet(viewsets.ModelViewSet):
