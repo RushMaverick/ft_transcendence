@@ -1,0 +1,23 @@
+{
+	"finnish":
+	{
+		"header": "TIETOSUOJASELOSTE",
+		"policy": "täältä löytäisit tietosuojaselosteen "
+
+	},
+
+	"english":
+	{
+		"header": "PRIVACY POLICY",
+		"policy": "here you would find the privacy policy "
+
+	},
+
+	"spanish":
+	{
+		"header": "POLICIOS",
+		"policy": "aquí encontrarías los policios "
+
+	}
+
+}

@@ -10,7 +10,7 @@ export default class extends AView {
 		const header = this.createHeader('header', 'Privacy Policy', 'h2');
 		const policy = this.createParagraph('policy', 'This is the privacy policy');
 		
-		window.localStorage.setItem('page', 'Tournaments');
+		window.localStorage.setItem('page', 'PrivacyPolicy');
 		this.updateView(header, policy);
 		return ;
 	}
