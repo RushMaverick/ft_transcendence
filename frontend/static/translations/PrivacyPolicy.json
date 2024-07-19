@@ -1,8 +1,19 @@
 {
 	"finnish":
 	{
-		"header": "TIETOSUOJASELOSTE",
-		"policy": "täältä löytäisit tietosuojaselosteen "
+		"header": "PRIVACY POLICY",
+		"policy": "Olemme sitoutuneet suojelemaan ja kunnioittamaan yksityisyyttäsi. Rekisteröitymällä verkkosivustollemme hyväksyt tietojesi, kuten käyttäjätunnuksen ja pelattujen pelien tietojen keräämisen ja käytön tässä tietosuojakäytännössä kuvatulla tavalla.",
+    	"policy2": "Käytämme käyttäjätunnustasi osallistuaksemme peleihin ja mukauttaaksemme pelikokemustasi.",
+		"policy3": "Käytämme pelattujen pelien tietoja seurataksemme edistymistäsi, luodaksemme tilastoja ja otteluhistoriaasi.",
+		"policy4": "Säilytämme henkilötietojasi vain niin kauan kuin on tarpeen tässä tietosuojakäytännössä kuvattujen tarkoitusten toteuttamiseksi, joita varten ne on kerätty. Kun tietojasi ei enää tarvita, poistamme tai anonymisoimme ne turvallisesti.",
+		"gdpr": "Yleisen tietosuoja-asetuksen (GDPR) mukaisesti sinulla on seuraavat oikeudet tässä tietosuojakäytännössä.",
+    	"request2": "Voit pyytää kopion hallussamme olevista henkilötiedoistasi.",
+        "request3": "Voit pyytää meitä korjaamaan kaikki epätarkat tai puutteelliset tiedot.",
+        "request4": "Voit pyytää meitä poistamaan henkilötietosi.",
+	    "request5": "Voit pyytää meitä rajoittamaan tietojesi käsittelyä tietyin edellytyksin.",
+        "request6": "Voit pyytää meitä siirtämään tietosi toiselle organisaatiolle tai suoraan sinulle tietyin ehdoin.",
+        "policy11": "Voit vastustaa henkilötietojesi käsittelyä.",
+        "policy12": "Jos teet pyynnön, meillä on kuukausi aikaa vastata sinulle. Jos haluat käyttää jotakin näistä oikeuksista, ota meihin yhteyttä sähköpostitse: thepongsite@gmail.com."
 
 	},
 
@@ -11,14 +22,14 @@
 		"header": "PRIVACY POLICY",
 		"policy": "We are committed to protecting and respecting your privacy. By registering our website, you consent to the collection and use of your data such as username and information about the played games ans described in this privacy policy.",
     	"policy2": "We use your username to participate in games and personalize your gaming experience.",
-		"policy3": "We use your information about played games to track your progress, create statistics and match history.",
+		"policy3": "We use the information about played games to track your progress, create statistics and match history.",
     	"policy4": "We retain your personal data only for as long as necessary to fulfill the purposes for which it was collected, as described in this Privacy Policy. Once your data is no longer needed, we will securely delete or anonymize it.",
-    	"policy5": "Under the General Data Protection Regulation (GDPR), you have the following rights",
-    	"policy6": "You can request a copy of the personal data we hold about you.",
-        "policy7": "You can request that we correct any inaccurate or incomplete data.",
-        "policy8": "You can request that we delete your personal data under certain conditions",
-	    "policy9": "You can request that we restrict the processing of your data under certain conditions.",
-        "policy10": "You can request that we transfer your data to another organization, or directly to you, under certain conditions.",
+    	"gdpr": "Under the General Data Protection Regulation (GDPR), you have the following rights",
+    	"request2": "You can request a copy of the personal data we hold about you.",
+        "request3": "You can request that we correct any inaccurate or incomplete data.",
+        "request4": "You can request that we delete your personal data.",
+	    "request5": "You can request that we restrict the processing of your data under certain conditions.",
+        "request6": "You can request that we transfer your data to another organization, or directly to you, under certain conditions.",
         "policy11": "You can object to our processing of your personal data under certain conditions.",
         "policy12": "If you make a request, we have one month to respond to you. If you would like to exercise any of these rights, please contact us at our email: thepongsite@gmail.com."
 	},
