@@ -68,7 +68,6 @@ export default class extends AView {
 		);
 		privacyLink.setAttribute('privacy-link', '');
 		privacyLink.setAttribute('id', 'privacy-link');
-		privacyLink.target = '_blank';
 		
 		const button = this.createParagraph('paragraph');
 		const registerButton = this.createButton("register-button", "Register");

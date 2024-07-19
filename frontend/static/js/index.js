@@ -113,11 +113,15 @@ document.addEventListener("viewUpdated", () => {
 
 document.addEventListener("DOMContentLoaded", () => {
 	document.body.addEventListener("click", e => {
-		if (e.target.matches("[data-link]")) {
+		if (e.target.matches("[privacy-link]")) {
+			e.preventDefault();
+			window.open(e.target.href);
+		}
+		else if (e.target.matches("[data-link]")) {
 			e.preventDefault();
 			navigateTo(e.target.href);
 		}
-		if (e.target.matches("[lang-toggle]")) {
+		else if (e.target.matches("[lang-toggle]")) {
 			document.body.addEventListener('change', (event) => {
 				if (event.target.matches("[lang-toggle]")) {
 					const selectedLanguage = event.target.value;
@@ -128,10 +132,6 @@ document.addEventListener("DOMContentLoaded", () => {
 					}
 				}
 				})
-		}
-		if (e.target.matches("[privacy-link]")) {
-			e.preventDefault();
-			window.open(e.target.href);
 		}
 	});
 
