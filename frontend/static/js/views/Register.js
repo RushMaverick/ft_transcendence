@@ -56,16 +56,19 @@ export default class extends AView {
 		const checkbox = document.createElement('input');
 		checkbox.setAttribute('type', 'checkbox');
 		checkbox.setAttribute('id', 'checkbox');
+		checkbox.classList.add('inline');
 		
 		const privacy = this.createAnchor(
 			'privacy', 
 			'I have read and agree to the Pong sites '
 		);
+		privacy.classList.add('inline');
 		const privacyLink = this.createLink(
 			'privacy-link', 
 			'PRIVACY POLICY', 
 			'/privacypolicy'
 		);
+		privacyLink.classList.add('inline-link');
 		privacyLink.setAttribute('privacy-link', '');
 		privacyLink.setAttribute('id', 'privacy-link');
 		
@@ -82,17 +85,18 @@ export default class extends AView {
 		form.appendChild(button);
 		
 		const loginSuggestion = this.createParagraph(
-			"login",
-			"Already have an account?"
+			'login',
+			'Already have an account?'
 		);
-		const loginLink = this.createAnchor("login-link", "Log in here");
-		loginLink.href = "/login";
-		loginLink.setAttribute("data-link", "");
-		loginLink.setAttribute("id", "log-in-link");
+		loginSuggestion.classList.add('inline');
+		const loginLink = this.createLink('login-link', 'Log in here', '/login');
+		loginLink.setAttribute('data-link', '');
+		loginLink.setAttribute('id', 'log-in-link');
+		loginLink.classList.add('inline-link-spaced');
 
-		form.addEventListener("submit", this.handleFormSubmit.bind(this));
+		form.addEventListener('submit', this.handleFormSubmit.bind(this));
 
-		window.localStorage.setItem("page", "Register");
+		window.localStorage.setItem('page', 'Register');
 		this.updateView(title, form, loginSuggestion, loginLink);
 		return;
 	}

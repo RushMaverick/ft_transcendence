@@ -237,3 +237,19 @@ a {
   color: #333; /* Optional: change the text color */
   font-size: 0.8em; /* Optional: adjust the font size */
 }
+
+.inline {
+  display: inline;
+  margin-left: 10px;
+}
+
+.inline-link {
+  display: inline;
+  margin: 1px;
+}
+
+.inline-link-spaced {
+  display: inline;
+  margin-left: 10px;
+}
+
