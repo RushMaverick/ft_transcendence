@@ -5,7 +5,6 @@ from rest_framework.decorators import action
 from .serializers import FriendsSerializer, FriendsListSerializer
 from user.permissions import IsAuthenticatedOrCreateOnly, IsUser
 from .models import FriendRequest
-from user.models import OnlineStatus
 
 #FriendViewSet:
 
