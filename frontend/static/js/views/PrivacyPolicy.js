@@ -8,12 +8,12 @@ export default class extends AView {
 
 	async getHtml(){
 		const header = this.createHeader('header', 'Privacy Policy', 'h2');
-		const policy = this.createParagraph('policy', 'This is the privacy policy');
+		const policy = this.createParagraph('policy');
 		const policy1 = this.createParagraph();
 		
-		const policy2 = this.createParagraph('policy2', 'This is the privacy policy');
-		const policy3 = this.createParagraph('policy3', 'This is the privacy policy');
-		const policy4 = this.createParagraph('policy4', 'This is the privacy policy');
+		const policy2 = this.createParagraph('policy2');
+		const policy3 = this.createParagraph('policy3');
+		const policy4 = this.createParagraph('policy4');
 		policy1.appendChild(policy2);
 		policy1.appendChild(policy3);
 		policy1.appendChild(policy4);
@@ -21,19 +21,20 @@ export default class extends AView {
 		const gdpr = this.createParagraph('gdpr', 'This is the privacy policy');
 		const gdprRequests = this.createParagraph('gdpr-requests');
 		gdprRequests.classList.add('gdpr-requests')
-		const request2 = this.createParagraph('request2', 'This is the privacy request');
-		const request3 = this.createParagraph('request3', 'This is the privacy request');
-		const request4 = this.createParagraph('request4', 'This is the privacy request');
-		const request5 = this.createParagraph('request5', 'This is the privacy request');
-		const request6 = this.createParagraph('request6', 'This is the privacy request');
+		const request2 = this.createParagraph('request2');
+		const request3 = this.createParagraph('request3');
+		const request4 = this.createParagraph('request4');
+		const request5 = this.createParagraph('request5');
+		const request6 = this.createParagraph('request6');
+		const request7 = this.createParagraph('policy7');
 		gdprRequests.appendChild(request2);
 		gdprRequests.appendChild(request3);
 		gdprRequests.appendChild(request4);
 		gdprRequests.appendChild(request5);
 		gdprRequests.appendChild(request6);
+		gdprRequests.appendChild(request7);
 
-		const policy11 = this.createParagraph('policy11', 'This is the privacy policy');
-		const policy12 = this.createParagraph('policy12', 'This is the privacy policy');
+		const policy5 = this.createParagraph('policy5', 'This is the privacy policy');
 		
 		window.localStorage.setItem('page', 'PrivacyPolicy');
 		this.updateView(header, 
@@ -41,8 +42,7 @@ export default class extends AView {
 			policy1,
 			gdpr,
 			gdprRequests,
-			policy11,
-			policy12,);
+			policy5);
 		return ;
 	}
 }

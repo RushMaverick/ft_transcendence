@@ -12,9 +12,8 @@
         "request4": "Voit pyytää meitä poistamaan henkilötietosi.",
 	    "request5": "Voit pyytää meitä rajoittamaan tietojesi käsittelyä tietyin edellytyksin.",
         "request6": "Voit pyytää meitä siirtämään tietosi toiselle organisaatiolle tai suoraan sinulle tietyin ehdoin.",
-        "policy11": "Voit vastustaa henkilötietojesi käsittelyä.",
-        "policy12": "Jos teet pyynnön, meillä on kuukausi aikaa vastata sinulle. Jos haluat käyttää jotakin näistä oikeuksista, ota meihin yhteyttä sähköpostitse: thepongsite@gmail.com."
-
+        "request7": "Voit vastustaa henkilötietojesi käsittelyä.",
+        "policy5": "Jos teet pyynnön, meillä on kuukausi aikaa vastata sinulle. Jos haluat käyttää jotakin näistä oikeuksista, ota meihin yhteyttä sähköpostitse: thepongsite@gmail.com."
 	},
 
 	"english":
@@ -30,8 +29,8 @@
         "request4": "You can request that we delete your personal data.",
 	    "request5": "You can request that we restrict the processing of your data under certain conditions.",
         "request6": "You can request that we transfer your data to another organization, or directly to you, under certain conditions.",
-        "policy11": "You can object to our processing of your personal data under certain conditions.",
-        "policy12": "If you make a request, we have one month to respond to you. If you would like to exercise any of these rights, please contact us at our email: thepongsite@gmail.com."
+        "request7": "You can object to our processing of your personal data under certain conditions.",
+        "policy5": "If you make a request, we have one month to respond to you. If you would like to exercise any of these rights, please contact us at our email: thepongsite@gmail.com."
 	},
 
 	"spanish":
@@ -40,5 +39,4 @@
 		"policy": "aquí encontrarías los policios "
 
 	}
-
 }
