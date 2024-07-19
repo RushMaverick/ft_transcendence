@@ -21,8 +21,10 @@ class OnlineConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.user = self.scope['user']
         if self.user.is_authenticated:
-          await self.set_user_online(self.user)
-        await self.accept()
+            await self.set_user_online(self.user)
+            await self.accept()
+        else:
+            await self.close()
 
     async def disconnect(self, close_code):
         if self.user.is_authenticated:
