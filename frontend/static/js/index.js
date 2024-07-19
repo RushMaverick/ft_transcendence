@@ -13,6 +13,7 @@ import Login from "./views/Login.js";
 import Register from "./views/Register.js";
 import Profile from "./views/Profile.js";
 import Settings from "./views/Settings.js";
+import PrivacyPolicy from "./views/PrivacyPolicy.js";
 
 //match the first character of the string or the start of the string -> "^"
 const pathToRegex = path => new RegExp("^" + path.replace(/\//g, "\\/").replace(/:\w+/g, "(.+)") + "$");
@@ -42,6 +43,7 @@ const router = async () => {
 	const routes = [
 		{ path: "/", view: Login},
 		{ path: "/login", view: Login },
+		{ path: "/privacypolicy", view: PrivacyPolicy},
 		{ path: "/register", view: Register },
 		{ path: "/dashboard", view: Dashboard, authRequired: true },
 		{ path: "/one-vs-one", view: OneVsOne, authRequired: true},
@@ -111,11 +113,15 @@ document.addEventListener("viewUpdated", () => {
 
 document.addEventListener("DOMContentLoaded", () => {
 	document.body.addEventListener("click", e => {
-		if (e.target.matches("[data-link]")) {
+		if (e.target.matches("[privacy-link]")) {
+			e.preventDefault();
+			window.open(e.target.href);
+		}
+		else if (e.target.matches("[data-link]")) {
 			e.preventDefault();
 			navigateTo(e.target.href);
 		}
-		if (e.target.matches("[lang-toggle]")) {
+		else if (e.target.matches("[lang-toggle]")) {
 			document.body.addEventListener('change', (event) => {
 				if (event.target.matches("[lang-toggle]")) {
 					const selectedLanguage = event.target.value;
