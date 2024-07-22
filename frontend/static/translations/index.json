@@ -1,6 +1,7 @@
 {
 	"finnish":
 	{
+		"language": "Kieli ",
 		"login-nav": "Kirjaudu sisään ",
 		"dashboard-nav": "Etusivu",
 		"profile-nav": "Profiili",
@@ -11,6 +12,7 @@
 
 	"english":
 	{
+		"language": "Language",
 		"login-nav": "Login",
 		"dashboard-nav": "Dashboard",
 		"profile-nav": "Profile",
@@ -20,6 +22,7 @@
 
 	"spanish":
 	{
+		"language": "Kieli in spanish",
 		"login-nav": "Acceso",
 		"dashboard-nav": "Página principal",
 		"profile-nav": "Perfil",
