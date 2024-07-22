@@ -42,7 +42,7 @@ export default class extends AView {
 		});
 
 		window.localStorage.setItem('page', 'Settings');
-		this.updateView(title, form, paragraph, buttonDel);
+		this.updateView(title, form, buttonDel);
 		return ;
 	}
 
