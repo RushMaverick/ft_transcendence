@@ -1,29 +1,29 @@
 {
 	"finnish":
 	{
-		"login": "Kirjaudu sisään ",
-		"dashboard": "Etusivu",
-		"profile": "Profiili",
-		"friends": "Kaverit",
-		"settings": "Asetukset"
+		"login-nav": "Kirjaudu sisään ",
+		"dashboard-nav": "Etusivu",
+		"profile-nav": "Profiili",
+		"friends-nav": "Kaverit",
+		"settings-nav": "Asetukset"
 
 	},
 
 	"english":
 	{
-		"login": "Login",
-		"dashboard": "Dashboard",
-		"profile": "Profile",
-		"friends": "Friends",
-		"settings": "Settings"
+		"login-nav": "Login",
+		"dashboard-nav": "Dashboard",
+		"profile-nav": "Profile",
+		"friends-nav": "Friends",
+		"settings-nav": "Settings"
 	},
 
 	"spanish":
 	{
-		"login": "Acceso",
-		"dashboard": "Página principal",
-		"profile": "Perfil",
-		"friends": "Amigas",
-		"settings": "Ajustes"
+		"login-nav": "Acceso",
+		"dashboard-nav": "Página principal",
+		"profile-nav": "Perfil",
+		"friends-nav": "Amigas",
+		"settings-nav": "Ajustes"
 	}
 }
