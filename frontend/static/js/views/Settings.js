@@ -16,7 +16,6 @@ export default class extends AView {
 		const usernameInput = textInputField('username', 'Username', 'username', 'text');
 		const passwordInput = textInputField('password', 'Password', 'password', 'password');
 		const confirmPasswordInput = textInputField('password-again', 'Confirm password', 'confirm-password', 'password');
-		const paragraph = this.createParagraph('language');
 		const signupButton = this.createButton('savebutton', 'save', 'save');
 		
 		form.appendChild(usernameInput);
