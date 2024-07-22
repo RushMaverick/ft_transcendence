@@ -1,7 +1,5 @@
 import * as THREE from 'three';
 import WebGL from 'three/addons/capabilities/WebGL.js';
-import { TTFLoader } from 'three/examples/jsm/loaders/TTFLoader';
-import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
 import {Text} from 'troika-three-text'
 
 export default class PongGame {
@@ -31,7 +29,8 @@ export default class PongGame {
 	enterView() {
 		this.container = document.querySelector('main');
 		this.scene = new THREE.Scene();
-		this.menuScene = new THREE.Scene();
+		this.waitingScene = new THREE.Scene();
+		this.waitingForPlayers = true;
 		this.menuSetup();
 		this.setupUI();
         this.createCubes();
@@ -45,19 +44,19 @@ export default class PongGame {
 	
 	menuSetup() {
 		this.menuCam = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-		this.menuCam.position.z = 5;
-		this.menuCam.position.y = 5;
-		this.menuCam.lookAt(0, 0, 0);
 		
 		this.startButton = new Text();
-		this.startButton.text = 'Start Game';
+		this.startButton.text = 'Awaiting Players...';
 		this.startButton.font = 'static/js/views/gameCanvas/fonts/Tiny5-Regular.ttf';
-		this.startButton.fontSize = 15.0;
+		this.startButton.fontSize = 50.0;
 		this.startButton.position.x = -1;
 		this.startButton.position.y = 0;
 		this.startButton.color = 0x000000;
 
-		this.menuScene.add(this.menuCam, this.startButton);
+		this.menuCam.position.z = 550;
+		this.menuCam.position.x = 180;
+
+		this.waitingScene.add(this.menuCam, this.startButton);
 	}
 
 	joinGame() {
@@ -72,6 +71,7 @@ export default class PongGame {
 		};
 		//This will be used instead of animate() to update the game state.
 		this.socket.onmessage = function(event) {
+			PongGame.instance.waitingForPlayers = false;
 			PongGame.instance.message = JSON.parse(event.data);
 			PongGame.instance.collisionChecking();
 			PongGame.instance.updateUI();
@@ -262,7 +262,7 @@ export default class PongGame {
 				case 'i':
 					this.camera.position.set(0, 0, 0);
 					this.camera.lookAt(0, 0, 0);
-					break;i
+					break;
             }
         });
     }
@@ -323,8 +323,8 @@ export default class PongGame {
 		if (!this.isAnimating)
 			return;
 		requestAnimationFrame(() => this.animate());
-		this.renderer.render(this.menuScene, this.menuCam);
-		console.log("Animating");
+		if (this.waitingForPlayers == true)
+			this.renderer.render(this.waitingScene, this.menuCam);
 		window.addEventListener('resize', () => {
 			if (window.innerWidth > window.innerHeight) 
 			{
