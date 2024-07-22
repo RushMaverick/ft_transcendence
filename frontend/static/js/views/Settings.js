@@ -28,12 +28,18 @@ export default class extends AView {
 		const select = document.createElement('select');
 		select.setAttribute('id', 'languageSelect');
 		select.classList.add('translations');
+
+		const option = document.createElement('option');
+		option.selected = 'Language';
+		option.setAttribute('lang-key', 'language');
+		select.appendChild(option);
 		['English', 'Finnish', 'Spanish'].forEach((lang) => {
 			const option = document.createElement('option');
             option.text = lang;
 			option.setAttribute('lang-key', lang);
             select.appendChild(option);
 		});
+
 		if(select){
 			  select.addEventListener('change', (event) => {
 				const selectedLanguage = event.target.value;
