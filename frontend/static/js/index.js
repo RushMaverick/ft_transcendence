@@ -107,8 +107,6 @@ function updateTranslations(page){
    .then(data => {
         translations = JSON.parse(data);
 		const language = window.localStorage.getItem('language');
-		console.log('language in local storage');
-		console.log(language);
 		const currentTranslations = translations[language];
 		updateTranslationElements(currentTranslations);
 	})
@@ -118,10 +116,6 @@ function updateTranslationElements(currentTranslations){
 		const elementsToTranslate = document.querySelectorAll('[lang-key]');
 			elementsToTranslate.forEach(element => {
 				const key = element.getAttribute('lang-key');
-				console.log('key');
-				console.log(key);
-				console.log('currentTranslations[key]');
-				console.log(currentTranslations[key]);
 				if (currentTranslations[key]) {
 					element.textContent = currentTranslations[key];
 				}
