@@ -9,6 +9,7 @@ export default class PongGame {
     constructor() {
 		if (!PongGame.instance){
 			PongGame.instance = this;
+			PongGame.instance.startAnimate();
 			PongGame.instance.enterView();
 		}
 		else{
@@ -30,6 +31,8 @@ export default class PongGame {
 	enterView() {
 		this.container = document.querySelector('main');
 		this.scene = new THREE.Scene();
+		this.menuScene = new THREE.Scene();
+		this.menuSetup();
 		this.setupUI();
         this.createCubes();
 		this.createBorders();
@@ -37,7 +40,24 @@ export default class PongGame {
         this.setupCamera();
         this.setupRenderer();
 		this.setupBall();
-		this.renderer.render(this.scene, this.camera);
+		this.animate();
+	}
+	
+	menuSetup() {
+		this.menuCam = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+		this.menuCam.position.z = 5;
+		this.menuCam.position.y = 5;
+		this.menuCam.lookAt(0, 0, 0);
+		
+		this.startButton = new Text();
+		this.startButton.text = 'Start Game';
+		this.startButton.font = 'static/js/views/gameCanvas/fonts/Tiny5-Regular.ttf';
+		this.startButton.fontSize = 15.0;
+		this.startButton.position.x = -1;
+		this.startButton.position.y = 0;
+		this.startButton.color = 0x000000;
+
+		this.menuScene.add(this.menuCam, this.startButton);
 	}
 
 	joinGame() {
@@ -199,6 +219,9 @@ export default class PongGame {
     }
 
     handleKeyPresses() {
+		document.addEventListener('click', (e) => {
+			console.log(e.clientX, e.clientY);
+		});
         document.addEventListener('keydown', (e) => {
             switch (e.key) {
                 case 'w':
@@ -300,6 +323,8 @@ export default class PongGame {
 		if (!this.isAnimating)
 			return;
 		requestAnimationFrame(() => this.animate());
+		this.renderer.render(this.menuScene, this.menuCam);
+		console.log("Animating");
 		window.addEventListener('resize', () => {
 			if (window.innerWidth > window.innerHeight) 
 			{
