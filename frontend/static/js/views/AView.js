@@ -22,7 +22,7 @@ export default class {
 		const container = document.querySelector('main');
 		const canvas = document.querySelector('canvas');
 		const pong = document.querySelector('pong');
-		if (canvas && window.location.pathname != '/pong' && PongGame.instance){
+		if (canvas && window.location.pathname != '/one-vs-one' && PongGame.instance){
 			canvas.remove();
 			PongGame.instance.stopAnimate();
 		}
