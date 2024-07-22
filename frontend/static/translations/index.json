@@ -1,7 +1,7 @@
 {
 	"finnish":
 	{
-		"login": "käyttäjätunnus: ",
+		"login": "Kirjaudu sisään ",
 		"dashboard": "Etusivu",
 		"profile": "Profiili",
 		"friends": "Kaverit",
@@ -20,11 +20,10 @@
 
 	"spanish":
 	{
-		"login": "käyttäjätunnus: ",
-		"dashboard": "KIRJAUDU SISÄÄN",
-		"profile": "rekisteröidy täältä",
-		"friends": "rekisteröidy täältä",
-		"settings": "Etkö ole rekisteröitynyt?"
+		"login": "Acceso",
+		"dashboard": "Página principal",
+		"profile": "Perfil",
+		"friends": "Amigas",
+		"settings": "Ajustes"
 	}
-
 }
