@@ -21,12 +21,12 @@
 
 	"spanish":
 	{
-		"testheader": "Hola y bienvenido a tu perfil",
-		"usernamebase": "nombre de usuario: ",
-		"emailbase": "correo electrónico: ",
-		"message": "aquí puedes: ",
-		"link1": "estadísticas ",
-		"link2": "ajustes "
+		"testheader": "Hallo och välkommen till din profil",
+		"usernamebase": "Användarnamn: ",
+		"emailbase": "Strömpost: ",
+		"message": "Här kan du: ",
+		"link1": "Statistik ",
+		"link2": "Inställingar "
 	}
 
 }

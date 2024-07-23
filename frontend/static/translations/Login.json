@@ -18,13 +18,13 @@
 		"register-link": "Register here"
 	},
 
-	"spanish":
+	"swedish":
 	{
-		"log-in": "LOG IN IN SPANSIH",
-		"username": "nombre de usuario: ",
-		"password": "contraseña: ",
-		"register": "¿No tienes una cuenta?",
-		"register-link": "Registrar aquí"
+		"log-in": "LOGGA IN",
+		"username": "Användarnamn: ",
+		"password": "Lösenord: ",
+		"register": "Har du inget konto?",
+		"register-link": "Registrera här"
 	}
 
 }

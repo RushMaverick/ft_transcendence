@@ -21,15 +21,15 @@
 		"deletebutton": "delete account "
 	},
 
-	"spanish":
+	"swedish":
 	{
-		"header": "Actualizar información del usuario",
-		"username": "nombre de usuario: ",
-		"password": "contraseña: ",
-		"password-again": "contraseña de nuevo: ",
-		"language": "idioma: ",
-		"savebutton": "ahorrar",
-		"deletebutton": "delete account in spanish "
+		"header": "Uppdatera användarinformation",
+		"username": "Användarnamn: ",
+		"password": "Lösenord: ",
+		"password-again": "Bekräfta lösenord: ",
+		"language": "Språk: ",
+		"savebutton": "Spara ändringar",
+		"deletebutton": "Radera användare "
 	}
 
 }
