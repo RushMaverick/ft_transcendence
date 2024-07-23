@@ -13,6 +13,7 @@ import Login from "./views/Login.js";
 import Register from "./views/Register.js";
 import Profile from "./views/Profile.js";
 import Settings from "./views/Settings.js";
+import { getTranslation } from "./views/TranslationUtils.js";
 
 //match the first character of the string or the start of the string -> "^"
 const pathToRegex = path => new RegExp("^" + path.replace(/\//g, "\\/").replace(/:\w+/g, "(.+)") + "$");
@@ -75,19 +76,43 @@ const router = async () => {
 	// 	navigateTo("/login");
 	// 	return;
 	// }
-	const view = new match.route.view(getParams(match));
 
-	view.getHtml();
+	// Load translations for the current page
+	const page = match.route.view.name.toLowerCase();
+	await loadTranslations(page);
+
+	const view = new match.route.view(getParams(match));
+	await view.getHtml();
+
+	// Update translations after the view is rendered
+	document.dispatchEvent(new Event("viewUpdated"));
+
 };
 
-window.onload = (event) => {
-	if (window.localStorage.getItem('language') == null){
-		window.localStorage.setItem('language', 'english');
+const loadTranslations = async (page) => {
+	const language = window.localStorage.getItem('language') || 'english';
+	try {
+		const response = await fetch(`./static/translations/${page}.json`);
+		const data = await response.json();
+		if (!window.translations) {
+            window.translations = {};
+        }
+		window.translations = data; // Store translations globally
+		console.log('Translations loaded for page:', page, window.translations);
+	} catch (error) {
+		console.error('Error loading translation file:', error);
 	}
 };
 
+// window.onload = async () => {
+// 	if (window.localStorage.getItem('language') == null){
+// 		window.localStorage.setItem('language', 'english');
+// 	}
+// 	await router(); // Initial route and translations load
+// };
+
 window.addEventListener("popstate", router);
-//this will listen for back and forward buttons in the browser
+// this will listen for back and forward buttons in the browser
 // Dynamically import the translation file
 document.addEventListener("viewUpdated", () => {
     let translations;
@@ -101,8 +126,9 @@ document.addEventListener("viewUpdated", () => {
         const elementsToTranslate = document.querySelectorAll('[lang-key]');
 		elementsToTranslate.forEach(element => {
             const key = element.getAttribute('lang-key');
-            if (currentTranslations[key]) {
-				element.textContent = currentTranslations[key];
+			const translation = getTranslation(currentTranslations[key]);
+            if (translation) {
+				element.textContent = translation;
             }
         });
     })
@@ -110,13 +136,13 @@ document.addEventListener("viewUpdated", () => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-	document.body.addEventListener("click", e => {
+	document.body.addEventListener("click", async e => {
 		if (e.target.matches("[data-link]")) {
 			e.preventDefault();
 			navigateTo(e.target.href);
 		}
 		if (e.target.matches("[lang-toggle]")) {
-			document.body.addEventListener('change', (event) => {
+			document.body.addEventListener('change', async event => {
 				if (event.target.matches("[lang-toggle]")) {
 					const selectedLanguage = event.target.value;
 					if (selectedLanguage){

@@ -1,5 +1,6 @@
 import AView from "./AView.js";
 import FriendRequest from "./FriendRequest.js";
+import { getTranslation } from "./TranslationUtils.js";
 
 export default class Friends extends AView{
 	constructor(params){
@@ -18,6 +19,7 @@ export default class Friends extends AView{
 		const searchBar = document.createElement('input');
 		searchBar.setAttribute('type', 'text');
 		searchBar.setAttribute('placeholder', 'Search for friends...');
+		searchBar.setAttribute('lang-key', 'searchForFriends')
 		searchBar.className = 'form-control';
 		
 		const searchButton = this.createButton('search', 'btn', 'Search');
@@ -41,6 +43,8 @@ export default class Friends extends AView{
 		
 		const data = await this.fetchJsonData('static/js/views/friends.json');
 		this.createFriendsList(data, friendsList);
+
+		window.localStorage.setItem('page', 'Friends');
 		this.updateView(friends, iconContainer, friendsList, searchBar, searchButton);
 		
 		this.checkIfRequests();
@@ -52,8 +56,9 @@ export default class Friends extends AView{
                 friendsList.appendChild(this.createFriendItem(friend));
             });
         } else {
-            const noFriendsMessage = this.createParagraph('no-friends', 'You have no friends');
-            friendsList.appendChild(noFriendsMessage);
+            const noResultsMessageText = getTranslation('no-user-found', { username });
+            const noResultsMessage = this.createParagraph('no-user-found', noResultsMessageText);
+            friendsList.appendChild(noResultsMessage);
         }
     }
 
@@ -151,7 +156,7 @@ export default class Friends extends AView{
 			requestsList.appendChild(noRequestsMessage);
 		}
 
-		this.updateView(this.createHeader('Friend Requests', 'Friend Requests', 'h1'), requestsList);
+		this.updateView(this.createHeader('Friend-Requests', 'Friend Requests', 'h1'), requestsList);
 
 		// const inboxIcon = document.querySelector('.inbox-icon .red-dot');
 		// if (inboxIcon) {
@@ -252,7 +257,7 @@ export default class Friends extends AView{
 		const profileView = document.createElement('div');
 		profileView.classList.add('profile');
 		
-		const profileTitle = this.createHeader('Friends',`${friend.username}`, 'h3');
+		const profileTitle = this.createHeader('Friends-name',`${friend.username}`, 'h3');
 		
 		const profileAvatar = document.createElement('img');
 		profileAvatar.src = friend.profile.avatar;
@@ -265,15 +270,17 @@ export default class Friends extends AView{
         statusDot.classList.add('status');
 		statusDot.style.backgroundColor = friend.profile.online ? 'green' : 'gray';
         const statusText = document.createElement('span');
-        statusText.textContent = `Online: ${friend.profile.online ? 'Yes' : 'No'}`;
+        const onlineStatusText = friend.profile.online ? getTranslation('yes') : getTranslation('no');
+        statusText.textContent = getTranslation('online-status', { status: onlineStatusText });
 		onlineStatus.appendChild(statusText);
 		onlineStatus.appendChild(statusDot);
 		
-		const winning = friend.wins;
-		const losing = friend.loses;
-		
-		const gameHistory = this.createParagraph('game-history', `Win : ${friend.wins}🏆\t\tLoss : ${friend.loses}💀`)
-		
+		const wins = friend.wins;
+		const loss = friend.loses;
+		const gameHistoryText = getTranslation('game-history', { wins, loss });
+		console.log(gameHistoryText);
+		const gameHistory = document.createElement('p');
+        gameHistory.textContent = gameHistoryText;
 		
 		profileView.appendChild(profileTitle);
 		profileView.appendChild(profileAvatar);
