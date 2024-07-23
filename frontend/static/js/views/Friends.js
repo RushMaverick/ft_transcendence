@@ -1,6 +1,7 @@
 import AView from "./AView.js";
 import FriendRequest from "./FriendRequest.js";
 import { getTranslation } from "./TranslationUtils.js";
+import { loadTranslations } from "../index.js";
 
 export default class Friends extends AView{
 	constructor(params){
@@ -13,6 +14,8 @@ export default class Friends extends AView{
 	
 	async getHtml(){
 		window.localStorage.setItem('page', 'Friends');
+		await loadTranslations('Profile');
+		
 		const friends = this.createHeader('Friends', 'Friends', 'h1');
 		const friendsList =  document.createElement('div');
 		friendsList.className = 'list-group';
