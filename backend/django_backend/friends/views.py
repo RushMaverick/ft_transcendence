@@ -44,6 +44,13 @@ from user.models import OnlineStatus
 #   - Once it has identified these pending requests, we got the information from the serializer.
 #   - Finally, it returns the list of the pending the friends requests.
 
+# - reject_request: This method rejects a friend request, removing the friend request from the FriendRequest serializer. 
+#   Here's how it works:
+#   - The logged-in user who wants to accept the request must be authenticated.
+#   - The method takes the ID of the friend request and checks if it exists and has not yet been accepted (accepted=False).
+#   - The method remove the friend request from the FriendRequest Serializer
+#   - If the friend request does not exist or has already been accepted, an exception is thrown.
+
 class FriendsViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = FriendsSerializer
@@ -117,4 +124,18 @@ class FriendsViewSet(viewsets.ModelViewSet):
         friend_request.save()
         serializer = FriendsSerializer(friend_request)
         return Response({"detail": "Friend request accepted.","friend_request":serializer.data}, status=status.HTTP_200_OK)
+    
+    """Reject friend request"""
+    @action(detail=True, methods=['post'], permission_classes=[IsAuthenticatedOrCreateOnly, IsUser])
+    def reject_request(self,request, pk=None):
+        if not request.user.is_authenticated:
+            return Response({"Warning": "Anonimus User"}, status=status.HTTP_401_UNAUTHORIZED)
+        try:
+            friend_request = FriendRequest.objects.get(id=pk, to_user=request.user, accepted=False)
+            friend_request.delete()
+        except FriendRequest.DoesNotExist:
+            return Response({"Warning":"This Friend Request Does not Exist or has been accepted"}, status=status.HTTP_404_NOT_FOUND)
+        return Response({"detail": "Friend request rejected."}, status=status.HTTP_200_OK)
+    
+
             

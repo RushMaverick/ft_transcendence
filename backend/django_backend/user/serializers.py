@@ -25,6 +25,14 @@ class OnlineStatusSerializer(serializers.ModelSerializer):
         model = OnlineStatus
         fields = ['user','username','is_online', 'last_connection']
 
+
+class FriendshipSerializer(serializers.ModelSerializer):
+    avatar = AvatarSerializer(read_only=True)
+
+    class Meta:
+        model = User
+        fields = ['username', 'avatar']
+
 class UserSerializer(serializers.ModelSerializer):
     username = serializers.CharField(required=True, validators=[UniqueValidator(queryset=User.objects.all())])
     password = serializers.CharField(write_only=True, required=True, validators=[validate_password])

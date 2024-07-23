@@ -2,10 +2,12 @@ from django.contrib.auth.models import  User
 from rest_framework import status, viewsets
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.decorators import action
 from rest_framework.parsers import MultiPartParser, FormParser
 from .serializers import UserSerializer, PasswordUpdateSerializer, AvatarSerializer, OnlineStatusSerializer
 from .permissions import IsAuthenticatedOrCreateOnly, IsUser
 from .models import Avatar, OnlineStatus
+
 
 #OnlineStatusView:
 
@@ -122,3 +124,21 @@ class UserViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_401_UNAUTHORIZED)
         self.perform_destroy(instance)
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+    # search_user method:
+    # This method is part of the user management, and this allow us to find an user by the username
+    # so we need to provide the username, if the username exist then we return the user and his information
+    # in other case we just said user not found
+    @action(detail=False, methods=['get'], url_path='search')
+    def search_user(self, request):
+        username = request.query_params.get('username')
+        if not username:
+            return Response({"detail": "Username parameter is required."}, status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            return Response({"detail": "User not found."}, status=status.HTTP_200_OK)
+        
+        serializer = UserSerializer(user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
