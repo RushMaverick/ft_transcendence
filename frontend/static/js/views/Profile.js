@@ -11,7 +11,7 @@ export default class extends AView {
 	async getHtml(){
 		window.localStorage.setItem('page', 'Profile');
 		await loadTranslations('Profile');
-		
+
 		const header = this.createHeader('header', 'Profile', 'h1');
 
 		const data = await this.fetchJsonData('static/js/views/profile.json');
@@ -40,7 +40,6 @@ export default class extends AView {
 		const loss = my.loses;
 
 		const gameHistoryText = getTranslation('game-history', { wins, loss });
-		console.log(gameHistoryText);
 		const gameHistory = document.createElement('p');
         gameHistory.textContent = gameHistoryText;
 

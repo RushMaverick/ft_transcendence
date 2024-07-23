@@ -15,7 +15,7 @@ export default class Friends extends AView{
 	async getHtml(){
 		window.localStorage.setItem('page', 'Friends');
 		await loadTranslations('Profile');
-		
+
 		const friends = this.createHeader('Friends', 'Friends', 'h1');
 		const friendsList =  document.createElement('div');
 		friendsList.className = 'list-group';
@@ -281,7 +281,6 @@ export default class Friends extends AView{
 		const wins = friend.wins;
 		const loss = friend.loses;
 		const gameHistoryText = getTranslation('game-history', { wins, loss });
-		console.log(gameHistoryText);
 		const gameHistory = document.createElement('p');
         gameHistory.textContent = gameHistoryText;
 		
