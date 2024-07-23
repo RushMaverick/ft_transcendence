@@ -6,6 +6,7 @@
 		"password": "salasana: ",
 		"password-again": "salasana uudelleen: ",
 		"savebutton": "tallenna muutokset",
+		"language": "kieli",
 		"deletebutton": "poista käyttäjä "
 	},
 
@@ -16,6 +17,7 @@
 		"password": "password: ",
 		"password-again": "password again: ",
 		"savebutton": "save changes",
+		"language": "language",
 		"deletebutton": "delete account "
 	},
 
@@ -26,6 +28,7 @@
 		"password": "contraseña: ",
 		"password-again": "contraseña de nuevo: ",
 		"savebutton": "ahorrar",
+		"language": "language in spanish",
 		"deletebutton": "delete account in spanish "
 	}
 
