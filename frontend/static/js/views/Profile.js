@@ -1,5 +1,6 @@
 import AView from "./AView.js";
 import { getTranslation } from "./TranslationUtils.js";
+import { loadTranslations } from "../index.js";
 
 export default class extends AView {
 	constructor(params){
@@ -8,6 +9,9 @@ export default class extends AView {
 	}
 
 	async getHtml(){
+		window.localStorage.setItem('page', 'Profile');
+		await loadTranslations('Profile');
+		
 		const header = this.createHeader('header', 'Profile', 'h1');
 
 		const data = await this.fetchJsonData('static/js/views/profile.json');
@@ -17,7 +21,6 @@ export default class extends AView {
         const settings = this.createLink('link2', 'Change settings from here', '/settings');
         const stats = this.createLink('link1', 'Change settings from here', '/stats');
 
-		window.localStorage.setItem('page', 'Profile');
 		this.updateView(header, createProfile, settings, stats);
 		return ;
 	}

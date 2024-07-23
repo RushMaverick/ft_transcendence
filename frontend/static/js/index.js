@@ -80,7 +80,7 @@ const router = async () => {
 	// }
 
 	// Load translations for the current page
-	const page = match.route.view.name.toLowerCase();
+	const page = localStorage.getItem('page');
 	await loadTranslations(page);
 
 	const view = new match.route.view(getParams(match));
@@ -91,10 +91,11 @@ const router = async () => {
 
 };
 
-const loadTranslations = async (page) => {
+export const loadTranslations = async (page) => {
 	const language = window.localStorage.getItem('language') || 'english';
 	try {
 		const response = await fetch(`./static/translations/${page}.json`);
+		console.log(response);
 		const data = await response.json();
 		if (!window.translations) {
             window.translations = {};
@@ -105,6 +106,7 @@ const loadTranslations = async (page) => {
 		console.error('Error loading translation file:', error);
 	}
 };
+
 
 window.onload = async () => {
 	if (window.localStorage.getItem('language') == null){

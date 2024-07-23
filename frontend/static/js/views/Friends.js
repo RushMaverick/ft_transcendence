@@ -12,6 +12,7 @@ export default class Friends extends AView{
 	}
 	
 	async getHtml(){
+		window.localStorage.setItem('page', 'Friends');
 		const friends = this.createHeader('Friends', 'Friends', 'h1');
 		const friendsList =  document.createElement('div');
 		friendsList.className = 'list-group';
@@ -44,7 +45,6 @@ export default class Friends extends AView{
 		const data = await this.fetchJsonData('static/js/views/friends.json');
 		this.createFriendsList(data, friendsList);
 
-		window.localStorage.setItem('page', 'Friends');
 		this.updateView(friends, iconContainer, friendsList, searchBar, searchButton);
 		
 		this.checkIfRequests();
