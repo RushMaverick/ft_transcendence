@@ -27,6 +27,24 @@ export default class extends AView {
 		const select = document.createElement('select');
 		select.setAttribute('id', 'languageSelect');
 		select.classList.add('translations');
+		const option = document.createElement('option');
+		option.selected = 'Language';
+		option.setAttribute('lang-key', 'language');
+		select.appendChild(option);
+		['English', 'Finnish', 'Spanish'].forEach((lang) => {
+			const option = document.createElement('option');
+            option.text = lang;
+			option.setAttribute('lang-key', lang);
+            select.appendChild(option);
+		});
+		if(select){
+			  select.addEventListener('change', (event) => {
+				const selectedLanguage = event.target.value;
+				const language = selectedLanguage.toLowerCase();
+				window.localStorage.setItem('language', language);
+				document.dispatchEvent(new CustomEvent('viewUpdated'));
+			})
+		}
 
 		const buttonDel = this.createButton('deletebutton', 'delete', 'delete account');
 		buttonDel.addEventListener('click', (event) => {
@@ -42,7 +60,7 @@ export default class extends AView {
 		});
 
 		window.localStorage.setItem('page', 'Settings');
-		this.updateView(title, form, buttonDel);
+		this.updateView(title, form, select, buttonDel);
 		return ;
 	}
 
