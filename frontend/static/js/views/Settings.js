@@ -16,7 +16,6 @@ export default class extends AView {
 		const usernameInput = textInputField('username', 'Username', 'username', 'text');
 		const passwordInput = textInputField('password', 'Password', 'password', 'password');
 		const confirmPasswordInput = textInputField('password-again', 'Confirm password', 'confirm-password', 'password');
-		const paragraph = this.createParagraph('language');
 		const signupButton = this.createButton('savebutton', 'save', 'save');
 		
 		form.appendChild(usernameInput);
@@ -28,6 +27,10 @@ export default class extends AView {
 		const select = document.createElement('select');
 		select.setAttribute('id', 'languageSelect');
 		select.classList.add('translations');
+		const option = document.createElement('option');
+		option.selected = 'Language';
+		option.setAttribute('lang-key', 'language');
+		select.appendChild(option);
 		['English', 'Finnish', 'Spanish'].forEach((lang) => {
 			const option = document.createElement('option');
             option.text = lang;
@@ -42,7 +45,7 @@ export default class extends AView {
 				document.dispatchEvent(new CustomEvent('viewUpdated'));
 			})
 		}
-		
+
 		const buttonDel = this.createButton('deletebutton', 'delete', 'delete account');
 		buttonDel.addEventListener('click', (event) => {
 			event.preventDefault();
@@ -57,7 +60,7 @@ export default class extends AView {
 		});
 
 		window.localStorage.setItem('page', 'Settings');
-		this.updateView(title, form, paragraph, select, buttonDel);
+		this.updateView(title, form, select, buttonDel);
 		return ;
 	}
 

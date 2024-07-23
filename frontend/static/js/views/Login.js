@@ -7,43 +7,45 @@ import textInputField from "./TextInputView.js";
 export default class extends AView {
 	constructor(params) {
 		super(params); //call the constructor of the parent class
-		this.setTitle("Login");
+		this.setTitle('Login');
 	}
 
 	async getHtml() {
-		const title = this.createHeader("log-in", "Log In", "h1");
-		title.classList.add("text-center");
+		const title = this.createHeader('log-in', 'Log In', 'h1');
+		title.classList.add('text-center');
 
-		const form = this.createForm("loginform");
+		const form = this.createForm('loginform');
 		const usernameInput = textInputField(
-			"username",
-			"Username",
-			"username",
-			"text"
+			'username',
+			'Username',
+			'username',
+			'text'
 		);
 		const passwordInput = textInputField(
-			"password",
-			"Password",
-			"password",
-			"password"
+			'password',
+			'Password',
+			'password',
+			'password'
 		);
-		const loginButton = this.createButton("log-in", "Login");
+		const loginButton = this.createButton('log-in', 'Login');
 		form.appendChild(usernameInput);
 		form.appendChild(passwordInput);
 		form.appendChild(loginButton);
 
 		const registerSuggestion = this.createParagraph(
-			"register",
+			'register',
 			"Don't have an account?"
 		);
-		const registerLink = this.createAnchor("register-link", "Register here");
-		registerLink.href = "/register";
-		registerLink.setAttribute("data-link", "");
-		registerLink.setAttribute("id", "register-link");
+		registerSuggestion.classList.add('inline');
+		const registerLink = this.createAnchor('register-link', 'Register here');
+		registerLink.href = '/register';
+		registerLink.setAttribute('data-link', '');
+		registerLink.setAttribute('id', 'register-link');
+		registerLink.classList.add('inline-link-spaced')
 
-		form.addEventListener("submit", this.handleFormSubmit.bind(this));
+		form.addEventListener('submit', this.handleFormSubmit.bind(this));
 
-		window.localStorage.setItem("page", "Login");
+		window.localStorage.setItem('page', 'Login');
 		this.updateView(title, form, registerSuggestion, registerLink);
 		return;
 	}

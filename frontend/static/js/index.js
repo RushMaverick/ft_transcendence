@@ -14,6 +14,7 @@ import Register from "./views/Register.js";
 import Profile from "./views/Profile.js";
 import Settings from "./views/Settings.js";
 import { getTranslation } from "./views/TranslationUtils.js";
+import PrivacyPolicy from "./views/PrivacyPolicy.js";
 
 //match the first character of the string or the start of the string -> "^"
 const pathToRegex = path => new RegExp("^" + path.replace(/\//g, "\\/").replace(/:\w+/g, "(.+)") + "$");
@@ -43,6 +44,7 @@ const router = async () => {
 	const routes = [
 		{ path: "/", view: Login},
 		{ path: "/login", view: Login },
+		{ path: "/privacypolicy", view: PrivacyPolicy},
 		{ path: "/register", view: Register },
 		{ path: "/dashboard", view: Dashboard, authRequired: true },
 		{ path: "/one-vs-one", view: OneVsOne, authRequired: true},
@@ -104,45 +106,58 @@ const loadTranslations = async (page) => {
 	}
 };
 
-// window.onload = async () => {
-// 	if (window.localStorage.getItem('language') == null){
-// 		window.localStorage.setItem('language', 'english');
-// 	}
-// 	await router(); // Initial route and translations load
-// };
+window.onload = async () => {
+	if (window.localStorage.getItem('language') == null){
+		window.localStorage.setItem('language', 'english');
+	}
+};
 
 window.addEventListener("popstate", router);
 // this will listen for back and forward buttons in the browser
 // Dynamically import the translation file
 document.addEventListener("viewUpdated", () => {
-    let translations;
+	if (localStorage.getItem('language') === 'language'){
+		return;
+	}
 	const page = window.localStorage.getItem('page');
+	updateTranslations('index');
+	updateTranslations(page);
+});
+
+function updateTranslations(page){
+	let translations;
     fetch('./static/translations/' + page + '.json')
    .then(response => response.text())
    .then(data => {
         translations = JSON.parse(data);
 		const language = window.localStorage.getItem('language');
-		const currentTranslations = translations[language]; // Store the imported translations
-        const elementsToTranslate = document.querySelectorAll('[lang-key]');
-		elementsToTranslate.forEach(element => {
-            const key = element.getAttribute('lang-key');
-			const translation = getTranslation(currentTranslations[key]);
-            if (translation) {
-				element.textContent = translation;
-            }
-        });
-    })
-   .catch(error => console.error('Error loading translation file:', error));
-});
+		const currentTranslations = translations[language];
+		updateTranslationElements(currentTranslations);
+	})
+}
+
+function updateTranslationElements(currentTranslations){
+		const elementsToTranslate = document.querySelectorAll('[lang-key]');
+			elementsToTranslate.forEach(element => {
+				const key = element.getAttribute('lang-key');
+				if (currentTranslations[key]) {
+					element.textContent = currentTranslations[key];
+				}
+			});
+}
 
 document.addEventListener("DOMContentLoaded", () => {
 	document.body.addEventListener("click", async e => {
-		if (e.target.matches("[data-link]")) {
+		if (e.target.matches("[privacy-link]")) {
+			e.preventDefault();
+			window.open(e.target.href);
+		}
+		else if (e.target.matches("[data-link]")) {
 			e.preventDefault();
 			navigateTo(e.target.href);
 		}
-		if (e.target.matches("[lang-toggle]")) {
-			document.body.addEventListener('change', async event => {
+		else if (e.target.matches("[lang-toggle]")) {
+			document.body.addEventListener('change', (event) => {
 				if (event.target.matches("[lang-toggle]")) {
 					const selectedLanguage = event.target.value;
 					if (selectedLanguage){
