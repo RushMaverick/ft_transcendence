@@ -5,18 +5,22 @@
 		"username": "käyttäjätunnus: ",
 		"password": "salasana: ",
 		"confirm-password": "salasana uudelleen: ",
+		"privacy": "Olen lukenut ja hyväksyn Pong -sivuston ",
+		"privacy-link": "tietosuojakäytännöt",
 		"register-button": "Rekisteröidy",
 		"login": "Oletko jo rekisteröitynyt?",
 		"login-link": "Kirjaudu sisään täältä"
-
+		
 	},
-
+	
 	"english":
 	{
 		"register": "REGISTER",
 		"username": "username: ",
 		"password": "password: ",
 		"confirm-password": "confirm password: ",
+		"privacy": "I have read and agree to The Pong sites ",
+		"privacy-link": "privacy policy",
 		"register-button": "Sign up",
 		"login": "Already have an account?",
 		"login-link": "Log in here"
@@ -28,6 +32,8 @@
 		"username": "nombre de usuario: ",
 		"password": "contraseña: ",
 		"confirm-password": "contraseña de nuevo: ",
+		"privacy": "He leído y acepto los sitios de The Pong ",
+		"privacy-link": "política de privacidad",
 		"register-button": "Sign up in spanish",
 		"login": "¿No tienes una cuenta?",
 		"login-link": "Login aquí"
