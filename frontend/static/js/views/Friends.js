@@ -10,20 +10,27 @@ export default class Friends extends AView{
 
 		window.addEventListener('popstate', this.handlePopState.bind(this));
 		this.friendRequest = new FriendRequest();
+		this.params = params;
+		this.friends = [];
 	}
 	
 	async getHtml(){
 		window.localStorage.setItem('page', 'Friends');
-		await loadTranslations('Profile');
+		await loadTranslations('Friends');
 
+		// const language = window.localStorage.getItem('language') || 'english';
+		// const translations = window.translations || {};
+		// const currentTranslations = translations[language] || {};
+		// let search = currentTranslations['searchForFriends'];
+		
 		const friends = this.createHeader('Friends', 'Friends', 'h1');
 		const friendsList =  document.createElement('div');
 		friendsList.className = 'list-group';
 		
 		const searchBar = document.createElement('input');
-		searchBar.setAttribute('type', 'text');
-		searchBar.setAttribute('placeholder', 'Search for friends...');
-		searchBar.setAttribute('lang-key', 'searchForFriends')
+		searchBar.setAttribute('lang-key', 'searchForFriends');
+		searchBar.textContent = this.searchTranslations('searchForFriends');
+		searchBar.setAttribute('placeholder', searchBar.textContent);
 		searchBar.className = 'form-control';
 		
 		const searchButton = this.createButton('search', 'btn', 'Search');
@@ -46,11 +53,25 @@ export default class Friends extends AView{
         iconContainer.appendChild(inboxIcon);
 		
 		const data = await this.fetchJsonData('static/js/views/friends.json');
+		this.friends = data;
 		this.createFriendsList(data, friendsList);
 
 		this.updateView(friends, iconContainer, friendsList, searchBar, searchButton);
 		
 		this.checkIfRequests();
+
+		if (this.params.view && this.params.view === 'friends' && this.params.username) {
+            this.navigateToFriendsProfileByusername(this.params.username);
+        }
+	}
+
+	searchTranslations(key){
+		const language = window.localStorage.getItem('language') || 'english';
+		const translations = window.translations || {};
+		const currentTranslations = translations[language] || {};
+		let search = currentTranslations[key];
+
+		return search;
 	}
 
 	createFriendsList(data, friendsList) {
@@ -161,10 +182,10 @@ export default class Friends extends AView{
 
 		this.updateView(this.createHeader('Friend-Requests', 'Friend Requests', 'h1'), requestsList);
 
-		// const inboxIcon = document.querySelector('.inbox-icon .red-dot');
-		// if (inboxIcon) {
-		//     inboxIcon.remove();
-		// }
+		const inboxIcon = document.querySelector('.inbox-icon .red-dot');
+		if (inboxIcon) {
+		    inboxIcon.remove();
+		}
 	}	
 			
 	createFriendItem(friend) {
@@ -178,10 +199,10 @@ export default class Friends extends AView{
 	
 		const usernameLink = document.createElement('a');
 		usernameLink.textContent = friend.username;
-		usernameLink.href = `#friends/${friend.id}`;
+		usernameLink.href = `#friends/${friend.username}`;
 		usernameLink.addEventListener('click', (event) => {
 			event.preventDefault();
-			this.navigateToFriendsProfile(friend);
+			this.navigateToFriendsProfile(friend.username);
 		});
 		friendDiv.appendChild(usernameLink);
 	
@@ -198,18 +219,22 @@ export default class Friends extends AView{
 
 	createActions(friend) {
         const actions = document.createElement('div');
+		actions.setAttribute('lang-key', '');
         actions.classList.add('actions');
 
 		if (friend.accepted === false) {
-			const acceptButton = this.createButton('accept-button', 'btn', 'Accept');
+			let accept = this.searchTranslations('accept-button');
+			const acceptButton = this.createButton('accept-button', 'btn', accept);
 			acceptButton.addEventListener('click', () => this.friendRequest.acceptFriendRequest(friend.username));
 			actions.appendChild(acceptButton);
-	
-			const ignoreButton = this.createButton('ignore-button', 'btn', 'Ignore');
+
+			let ignore = this.searchTranslations('ignore-button');
+			const ignoreButton = this.createButton('ignore-button', 'btn', ignore);
 			ignoreButton.addEventListener('click', () => this.friendRequest.ignoreFriendRequest(friend.username));
 			actions.appendChild(ignoreButton);
 		} else if (friend.accepted === undefined) {
-			const requestButton = this.createButton('request-button', 'request-btn', 'Request');  
+			let request = this.searchTranslations('request-button');
+			const requestButton = this.createButton('request-button', 'request-btn', request);  
 			requestButton.addEventListener('click', () => this.friendRequest.sendFriendRequest(friend.username));
 			actions.appendChild(requestButton);
 		}
@@ -228,10 +253,10 @@ export default class Friends extends AView{
 	
 		const usernameLink = document.createElement('a');
 		usernameLink.textContent = request.from_user;
-		usernameLink.href = `#friends/${request.id}`;
+		usernameLink.href = `#friends/${request.username}`;
 		usernameLink.addEventListener('click', (event) => {
 			event.preventDefault();
-			this.navigateToFriendsProfile(request);
+			this.navigateToFriendsProfile(request.username);
 		});
 		requestDiv.appendChild(usernameLink);
 	
@@ -246,10 +271,12 @@ export default class Friends extends AView{
 		return requestDiv;
 	}
 	
-	navigateToFriendsProfile(friend) {
-		
-		history.pushState(null, null, `#friends/${friend.id}`);
-        this.showFriendsProfile(friend);
+	navigateToFriendsProfile(username) {
+		history.pushState({ view: 'profile', friendusername: username }, 'Friend Profile', `#friends/${username}`);
+        const friend = this.getFriendByusername(username);
+        if (friend) {
+            this.showFriendsProfile(friend);
+        }
     }
 	
     showFriendsProfile(friend) {
@@ -305,9 +332,9 @@ export default class Friends extends AView{
 				this.showFriendRequests();
 			} else if (state.view === 'profile') {
 				const friendUsername = state.friendUsername;
-				const friend = this.getFriendByUsername(friendUsername); // Implement this method to fetch the friend data by ID
+				const friend = this.getFriendByUsername(friendUsername); // Implement this method to fetch the friend data by username
 				if (friend) {
-					this.navigateToFriendsProfile(friend);
+					this.navigateToFriendsProfile(friend.username);
 				}
 			}
 		} else {
@@ -316,9 +343,9 @@ export default class Friends extends AView{
 		}
 	}
 
-	getFriendByUsername(friendUsername) {
-        // Implement this method to fetch the friend data by ID from your data source
+	getFriendByusername(username) {
+        // Implement this method to fetch the friend data by username from your data source
         // This is a placeholder implementation
-        return this.friends.find(friend => friend.username === friendUsername);
+        return this.friends.find(friend => friend.username == username);
     }
 }

@@ -13,7 +13,6 @@ import Login from "./views/Login.js";
 import Register from "./views/Register.js";
 import Profile from "./views/Profile.js";
 import Settings from "./views/Settings.js";
-import { getTranslation } from "./views/TranslationUtils.js";
 import PrivacyPolicy from "./views/PrivacyPolicy.js";
 
 //match the first character of the string or the start of the string -> "^"
@@ -29,6 +28,17 @@ const getParams = match =>{
 		return [key, values[i]];
 	}))
 }
+
+const getHashParams = () => {
+    const hash = location.hash.slice(1);
+    const parts = hash.split('/');
+    const params = {};
+    if (parts.length > 1) {
+        params.view = parts[0];
+        params.id = parts[1];
+    }
+    return params;
+};
 
 //when trying to navigate to a different page, we don't want to reload the page. We want to use the client-side router to change the view of the page.
 const navigateTo = url => {
@@ -80,8 +90,13 @@ const router = async () => {
 	// }
 
 	// Load translations for the current page
-	const page = localStorage.getItem('page');
-	await loadTranslations(page);
+	// const page = localStorage.getItem('page');
+	// await loadTranslations(page);
+
+	const hashParams = getHashParams();
+    if (hashParams.view && match.route.path === "/friends") {
+        match.result.push(hashParams);
+    }
 
 	const view = new match.route.view(getParams(match));
 	await view.getHtml();
@@ -134,6 +149,8 @@ function updateTranslations(page){
         translations = JSON.parse(data);
 		const language = window.localStorage.getItem('language');
 		const currentTranslations = translations[language];
+		// console.log(translations);
+		// console.log(language);
 		updateTranslationElements(currentTranslations);
 	})
 }
@@ -142,8 +159,13 @@ function updateTranslationElements(currentTranslations){
 		const elementsToTranslate = document.querySelectorAll('[lang-key]');
 			elementsToTranslate.forEach(element => {
 				const key = element.getAttribute('lang-key');
+				// console.log(element);
+				// console.log(element.textContent);
 				if (currentTranslations[key]) {
+					// console.log("in if statement:");
+					// console.log(element);
 					element.textContent = currentTranslations[key];
+					// console.log(element.textContent);
 				}
 			});
 }
