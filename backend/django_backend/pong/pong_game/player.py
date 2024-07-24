@@ -22,22 +22,18 @@ class Player(Collider):
 		elif direction == "down":
 			self.move_down = True
 
-	# def intersects(self, other) -> None:
-	# 	# Check if two rectangles intersect
-    #     return (self.x < other.x + other.width and
-    #             self.x + self.width > other.x and
-    #             self.y < other.y + other.height and
-    #             self.y + self.height > other.y)
 
 	def update_position(self) -> None:
 		if self.move_up:
-			if (self.y >= consts.MAP_HEIGHT - 6):
+			if (self.y >= consts.MAP_HEIGHT - 11):
+				self.y -= 1
 				return
-			self.y += 5
+			self.y += 4
 			self.move_up = False
 
 		elif self.move_down:
-			if (self.y <= 0 + 6):
+			if (self.y <= 0 + 11):
+				self.y += 1
 				return
-			self.y -= 5
+			self.y -= 4
 			self.move_down = False
