@@ -149,8 +149,6 @@ function updateTranslations(page){
         translations = JSON.parse(data);
 		const language = window.localStorage.getItem('language');
 		const currentTranslations = translations[language];
-		// console.log(translations);
-		// console.log(language);
 		updateTranslationElements(currentTranslations);
 	})
 }
@@ -159,13 +157,8 @@ function updateTranslationElements(currentTranslations){
 		const elementsToTranslate = document.querySelectorAll('[lang-key]');
 			elementsToTranslate.forEach(element => {
 				const key = element.getAttribute('lang-key');
-				// console.log(element);
-				// console.log(element.textContent);
 				if (currentTranslations[key]) {
-					// console.log("in if statement:");
-					// console.log(element);
 					element.textContent = currentTranslations[key];
-					// console.log(element.textContent);
 				}
 			});
 }
