@@ -1,4 +1,11 @@
-from .TournamentConsumerHelpers import create_match, create_round, get_tournament, add_participant, get_participants, remove_participant
+from .TournamentConsumerHelpers import create_match, \
+    create_round, \
+    get_tournament, \
+    add_participant, \
+    get_participants, \
+    remove_participant, \
+    add_match_to_round
+
 from channels.layers import get_channel_layer
 
 class Tournament():
@@ -75,24 +82,31 @@ class Tournament():
         # return  self.round_id
 
     async def pair_players(self):
-        for i in range(0, len(self.participants), 2):
-            player1 = self.participants[i]
-            player2 = self.participants[i+1]
+        print(f"participants: {self.participants}", flush=True)
+        participant_keys = list(self.participants.keys())
+        # print(f": {participants_list[0]["participant"]}", flush=True)
+        for i in range(0, len(participant_keys), 2):
+            player1 = self.participants[participant_keys[i]]["participant"]
+            player1_channel_name = self.participants[participant_keys[i]]["channel_name"]
+            player2 = self.participants[participant_keys[i+1]]["participant"]
+            player2_channel_name = self.participants[participant_keys[i+1]]["channel_name"]
             print(f"player1: {player1}, player2: {player2}", flush=True)
 
-            match = await create_match(self.tournament_id, self.round_id, player1, player2)
-            if not match:
+            match_id = await create_match(self.id, self.round_id, player1.id, player2.id)
+            if not match_id:
                 print("Error creating match", flush=True)
                 raise Exception("Error creating match")
-            print(f"match: {match}", flush=True)
+            print(f"match: {match_id}", flush=True)
+            print(f"round: {self.round_id}", flush=True)
+            await add_match_to_round(self.round_id, match_id)
             # notify pong players that match has been created
             await self.channel_layer.send(
-                player1["channel_name"], {"type": "broadcast.message", "msg": {"match": match}}
+                 player1_channel_name, {"type": "broadcast.message", "msg": {"match_id": match_id}}
             )
             await self.channel_layer.send(
-                player2["channel_name"], {"type": "broadcast.message", "msg": {"match": match}}
+                player2_channel_name, {"type": "broadcast.message", "msg": {"match_id": match_id}}
             )
-            print(f"match: {match}", flush=True)
+            # print(f"match: {match_id}", flush=True)
 
     async def start(self):
         # Check that tournament has not started
@@ -119,9 +133,13 @@ class Tournament():
         )
         try:
             await self.create_round()
+        except Exception as e:
+            print(f"Error creating round: {e}", flush=True)
+            return
+        try:
             await self.pair_players()
         except Exception as e:
-            print(f"Error starting tournament: {e}", flush=True)
+            print(f"Error pairing players: {e}", flush=True)
             return
 
 

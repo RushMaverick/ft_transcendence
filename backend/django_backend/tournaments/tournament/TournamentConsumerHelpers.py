@@ -12,13 +12,17 @@ def create_match(tournament_id: int, round_id: int, player1_id: int, player2_id:
         "round": round_id,
         "player1": player1_id,
         "player2": player2_id,
+        "player1_score": 0,
+        "player2_score": 0,
     })
     if not match_serializer.is_valid():
         print(match_serializer.errors, flush=True)
         return None
-    match = match_serializer.save()
-    print(match_serializer.data, flush=True)
-    return match
+    match_serializer.save()
+    #return match id
+    return match_serializer.data["id"]
+
+
 
 @sync_to_async
 def create_round(tournament_id: int, round_number: int) -> int:
@@ -33,6 +37,12 @@ def create_round(tournament_id: int, round_number: int) -> int:
         print(round_serializer.errors, flush=True)
     print("round id", round.id, flush=True)
     return round.id
+
+@sync_to_async
+def add_match_to_round(round_id: int, match_id: int):
+    round = Round.objects.get(id=round_id)
+    round.matches.add(match_id)
+    print(f"Match {match_id} added to round {round_id}", flush=True)
 
 @sync_to_async
 def get_tournament(tournament_id: int):

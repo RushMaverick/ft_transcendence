@@ -28,7 +28,8 @@ class Match(models.Model):
         User,
         on_delete=models.SET_DEFAULT,
         related_name='winner_matches',
-        default=None
+        default=None,
+        null=True
     )
     date = models.DateTimeField(auto_now_add=True)
 

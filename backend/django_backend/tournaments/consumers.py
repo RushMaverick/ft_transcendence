@@ -37,7 +37,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
             print(f"Error getting tournament_id: {e}", flush=True)
             return await self.close()
 
-        # Create tournament if it does not exist
+        # Create tournament instance if it does not exist
         if not self.tournament_id in Tournaments.tournaments:
             if not await Tournaments.create_tournament(self.tournament_id):
                 print(f"Error creating tournament {self.tournament_id}", flush=True)

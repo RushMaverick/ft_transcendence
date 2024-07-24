@@ -17,15 +17,15 @@ class MatchSerializer(serializers.ModelSerializer):
              raise serializers.ValidationError({
                 'player2': 'This field is required.'
             })
-        if 'winner' not in data:
-            raise serializers.ValidationError({
-                'winner': 'This field is required.'
-            })
+        # if 'winner' not in data:
+        #     raise serializers.ValidationError({
+        #         'winner': 'This field is required.'
+        #     })
         if data['player1'] == data['player2']:
             raise serializers.ValidationError({
                 'player1': 'Player 1 and Player 2 cannot be the same.'
             })
-        if data['winner'] != data['player1'] and data['winner'] != data['player2']:
+        if 'winner' in data and data['winner'] != data['player1'] and data['winner'] != data['player2']:
             raise serializers.ValidationError({
                 'winner': 'Winner must be either Player 1 or Player 2.'
             })
@@ -44,5 +44,6 @@ class MatchSerializer(serializers.ModelSerializer):
         data = super().to_representation(instance)
         data['player1'] = UserSerializer(instance.player1).data
         data['player2'] = UserSerializer(instance.player2).data
-        data['winner'] = UserSerializer(instance.winner).data
+        if instance.winner:
+            data['winner'] = UserSerializer(instance.winner).data
         return data
