@@ -1,6 +1,4 @@
 import AView from "./AView.js";
-import { getTranslation } from "./TranslationUtils.js";
-import { loadTranslations } from "../index.js";
 
 export default class extends AView {
 	constructor(params){
@@ -9,18 +7,15 @@ export default class extends AView {
 	}
 
 	async getHtml(){
-		window.localStorage.setItem('page', 'Profile');
-		await loadTranslations('Profile');
-
 		const header = this.createHeader('header', 'Profile', 'h1');
 
 		const data = await this.fetchJsonData('static/js/views/profile.json');
-		console.log('Fetched Profile Data:', data);
-		
+
 		const createProfile = this.showProfile(data);
         const settings = this.createLink('link2', 'Change settings from here', '/settings');
         const stats = this.createLink('link1', 'Change settings from here', '/stats');
 
+		window.localStorage.setItem('page', 'Profile');
 		this.updateView(header, createProfile, settings, stats);
 		return ;
 	}
@@ -38,28 +33,21 @@ export default class extends AView {
 		
 		const wins = my.wins;
 		const loss = my.loses;
+		const gameHistoryText = `Win: ${wins}🏆\tLoss: ${loss}💀`;
+		const gameHistory = this.createParagraph('game-history', gameHistoryText);
 
-		const gameHistoryText = getTranslation('game-history', { wins, loss });
-		const gameHistory = document.createElement('p');
-        gameHistory.textContent = gameHistoryText;
+		let msg;
 
-		let msofd;
-		
-		if (wins > loss){
-			const winmsg = "Amazing! You are doing great";
-			msofd = this.createParagraph('winmsg', winmsg);
-		}
-		else if (wins < loss){
-			const lossmsg = "Shall we play more to get some wins?";
-			msofd = this.createParagraph('lossmsg', lossmsg);
-		}
-		else{
-			const tiemsg = "We are even steven. Let's play some more!";
-			msofd = this.createParagraph('tiemsg', tiemsg);
-			msofd.classList.add('msofd');
-		}
+		if (wins > loss)
+			msg = "Amazing! You are doing great";
+		else if (wins < loss)
+			msg = "Shall we play more to get some wins?";
+		else
+			msg = "We are even steven. Let's play some more!";
 
+		const msofd = this.createParagraph('msofd', msg);
 		msofd.classList.add('msofd');
+		
 		profileView.appendChild(profileTitle);
 		profileView.appendChild(profileAvatar);
 		profileView.appendChild(gameHistory);

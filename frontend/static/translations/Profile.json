@@ -1,35 +1,32 @@
 {
 	"finnish":
 	{
-		"header": "Heippuli ja tervetuloa profiiliin",
+		"testheader": "heippuli ja tervetuloa profiiliin",
+		"usernamebase": "käyttäjätunnus: ",
+		"emailbase": "sähköposti: ",
+		"message": "sää voisit: ",
 		"link1": "tilastot ",
-		"link2": "asetukset ",
-		"game-history": "Voitot: {wins}🏆\tTappiot: {loss}💀",
-		"winmsg": "Upeaa! Olet menossa hienosti",
-		"lossmsg": "Pelataanko lisää saadaksemme voittoja?",
-		"tiemsg": "Olemme tasoissa. Pelataan lisää!"
+		"link2": "asetukset "
 	},
 
 	"english":
 	{
-		"header": "Helloups and welcome to your profile",
+		"testheader": "helloups and welcome to your profile",
+		"usernamebase": "username: ",
+		"emailbase": "email: ",
+		"message": "here you can: ",
 		"link1": "stats ",
-		"link2": "settings ",
-		"game-history": "Win: {wins}🏆\t Loss: {loss}💀",
-		"winmsg": "Amazing! You are doing great",
-		"lossmsg": "Shall we play more to get some wins?",
-		"tiemsg": "We are even steven. Let's play some more!"
+		"link2": "settings "
 	},
-	
+
 	"spanish":
 	{
-		"header": "Hola y bienvenido a tu perfil",
+		"testheader": "Hola y bienvenido a tu perfil",
+		"usernamebase": "nombre de usuario: ",
+		"emailbase": "correo electrónico: ",
+		"message": "aquí puedes: ",
 		"link1": "estadísticas ",
-		"link2": "ajustes ",
-		"game-history": "Ganadas: {wins}🏆\t Perdidas: {loss}💀",
-		"winmsg": "¡Increíble! Lo estás haciendo genial",
-		"lossmsg": "¿Jugamos más para obtener algunas victorias?",
-		"tiemsg": "Estamos empatados. ¡Juguemos más!"
+		"link2": "ajustes "
 	}
 
 }
