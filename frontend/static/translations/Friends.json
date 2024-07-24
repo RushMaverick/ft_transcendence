@@ -1,0 +1,54 @@
+{
+	"finnish":
+	{
+		"Friends": "Ystävät",
+		"searchForFriends": "Etsi ystäviä...",
+		"search": "Etsi",
+		"Friend-Requests": "Kaveripyynnöt",
+		"accept-button": "Hyväksy",
+		"ignore-button": "Ohita",
+		"request-button": "Pyydä",
+		"game-history": "Voitot: {wins}🏆\tTappiot: {loss}💀",
+		"online-status": "Online: {status}",
+		"yes": "Kyllä",
+		"no": "Ei",
+		"no-friends": "Sinulla ei ole ystäviä",
+		"no-user-found": "Käyttäjää ei löytynyt: {username}",
+		"no-request": "Sinulla ei ole kaveripyyntöjä"
+	},
+	"english":
+	{
+		"Friends": "Friends",
+		"searchForFriends": "Search for friends...",
+		"search": "Search",
+		"Friend-Requests": "Friend Requests",
+		"accept-button": "Accept",
+		"ignore-button": "Ignore",
+		"request-button": "Request",
+		"game-history": "Win: {wins}🏆\t Loss: {loss}💀",
+		"online-status": "Online: {status}",
+		"yes": "Yes",
+		"no": "No",
+	    "no-friends": "You have no friends",
+    	"no-user-found": "No Such User Found: {username}",
+    	"no-request": "You have no friend requests"
+	},
+	"spanish":
+	{
+		"Friends": "Amigos",
+		"searchForFriends": "Buscar amigos...",
+		"search": "Buscar",
+		"Friend-Requests": "Solicitudes de amistad",
+		"accept-button": "Aceptar",
+		"ignore-button": "Ignorar",
+		"request-button": "Solicitar",
+		"game-history": "Ganadas: {wins}🏆\t Perdidas: {loss}💀",
+		"online-status": "En línea: {status}",
+		"yes": "Sí",
+		"no": "No",
+		"no-friends": "No tienes amigos",
+		"no-user-found": "No se encontró al usuario: {username}",
+		"no-request": "No tienes solicitudes de amistad"
+	}
+
+}
