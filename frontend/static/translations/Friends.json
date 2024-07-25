@@ -33,22 +33,22 @@
     	"no-user-found": "No Such User Found: {username}",
     	"no-request": "You have no friend requests"
 	},
-	"spanish":
+	"Swedish":
 	{
-		"Friends": "Amigos",
-		"searchForFriends": "Buscar amigos...",
-		"search": "Buscar",
-		"Friend-Requests": "Solicitudes de amistad",
-		"accept-button": "Aceptar",
-		"ignore-button": "Ignorar",
-		"request-button": "Solicitar",
-		"game-history": "Ganadas: {wins}🏆\t Perdidas: {loss}💀",
-		"online-status": "En línea: {status}",
-		"yes": "Sí",
-		"no": "No",
-		"no-friends": "No tienes amigos",
-		"no-user-found": "No se encontró al usuario: {username}",
-		"no-request": "No tienes solicitudes de amistad"
+		"Friends": "Vänner",
+		"searchForFriends": "Sök vänner...",
+		"search": "Sök",
+		"Friend-Requests": "Vänförfrågningar",
+		"accept-button": "Acceptera",
+		"ignore-button": "Ignorera",
+		"request-button": "Förfrågan",
+		"game-history": "Vinster: {wins}🏆\t Förluster: {loss}💀",
+		"online-status": "Online: {status}",
+		"yes": "Ja",
+		"no": "Nej",
+		"no-friends": "Inga vänner, hombre",
+		"no-user-found": "Ingen användare nämnd: {username}",
+		"no-request": "Inga vänförfrågningar"
 	}
 
 }
