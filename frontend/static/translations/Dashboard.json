@@ -19,14 +19,14 @@
 		"friends": "kurkkaa miten sun kamut voi"
 	},
 
-	"spanish":
+	"swedish":
 	{
-		"testheader": "hola bienvenido y a esta prueba",
-		"header": "bienvenido",
-		"welcome": "bienvenido",
-		"onevsone": "comenzar uno contra uno",
-		"tournament": "comenzar un torneo",
-		"friends": "mira cómo están tus amigos"
+		"testheader": "Hej på dig och välkommen till Pong",
+		"header": "Hej på dig",
+		"welcome": "Hej på dig",
+		"onevsone": "Påbörja en en mot en match",
+		"tournament": "Påbörja en turnering",
+		"friends": "Kolla hur det går för dina kompisar"
 	}
 }
 
