@@ -23,13 +23,12 @@
 	
 	"spanish":
 	{
-		"header": "Hola y bienvenido a tu perfil",
-		"link1": "estadísticas ",
-		"link2": "ajustes ",
-		"game-history": "Ganadas: {wins}🏆\t Perdidas: {loss}💀",
-		"winmsg": "¡Increíble! Lo estás haciendo genial",
-		"lossmsg": "¿Jugamos más para obtener algunas victorias?",
-		"tiemsg": "Estamos empatados. ¡Juguemos más!"
+		"testheader": "Hallo och välkommen till din profil",
+		"usernamebase": "Användarnamn: ",
+		"emailbase": "Strömpost: ",
+		"message": "Här kan du: ",
+		"link1": "Statistik ",
+		"link2": "Inställingar "
 	}
 
 }
