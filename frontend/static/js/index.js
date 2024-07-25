@@ -29,6 +29,17 @@ const getParams = match =>{
 	}))
 }
 
+const getHashParams = () => {
+    const hash = location.hash.slice(1);
+    const parts = hash.split('/');
+    const params = {};
+    if (parts.length > 1) {
+        params.view = parts[0];
+        params.id = parts[1];
+    }
+    return params;
+};
+
 //when trying to navigate to a different page, we don't want to reload the page. We want to use the client-side router to change the view of the page.
 const navigateTo = url => {
 	history.pushState(null, null, url);
@@ -77,42 +88,83 @@ const router = async () => {
 	// 	navigateTo("/login");
 	// 	return;
 	// }
-	const view = new match.route.view(getParams(match));
 
-	view.getHtml();
+	// Load translations for the current page
+	// const page = localStorage.getItem('page');
+	// await loadTranslations(page);
+
+	const hashParams = getHashParams();
+    if (hashParams.view && match.route.path === "/friends") {
+        match.result.push(hashParams);
+    }
+
+	const view = new match.route.view(getParams(match));
+	await view.getHtml();
+
+	// Update translations after the view is rendered
+	document.dispatchEvent(new Event("viewUpdated"));
+
 };
 
-window.onload = (event) => {
+export const loadTranslations = async (page) => {
+	const language = window.localStorage.getItem('language') || 'english';
+	try {
+		const response = await fetch(`./static/translations/${page}.json`);
+		console.log(response);
+		const data = await response.json();
+		if (!window.translations) {
+            window.translations = {};
+        }
+		window.translations = data; // Store translations globally
+		console.log('Translations loaded for page:', page, window.translations);
+	} catch (error) {
+		console.error('Error loading translation file:', error);
+	}
+};
+
+
+window.onload = async () => {
 	if (window.localStorage.getItem('language') == null){
 		window.localStorage.setItem('language', 'english');
 	}
 };
 
 window.addEventListener("popstate", router);
-//this will listen for back and forward buttons in the browser
+// this will listen for back and forward buttons in the browser
 // Dynamically import the translation file
 document.addEventListener("viewUpdated", () => {
-    let translations;
+	if (localStorage.getItem('language') === 'language'){
+		return;
+	}
 	const page = window.localStorage.getItem('page');
+	updateTranslations('index');
+	updateTranslations(page);
+});
+
+function updateTranslations(page){
+	let translations;
     fetch('./static/translations/' + page + '.json')
    .then(response => response.text())
    .then(data => {
         translations = JSON.parse(data);
 		const language = window.localStorage.getItem('language');
-		const currentTranslations = translations[language]; // Store the imported translations
-        const elementsToTranslate = document.querySelectorAll('[lang-key]');
-		elementsToTranslate.forEach(element => {
-            const key = element.getAttribute('lang-key');
-            if (currentTranslations[key]) {
-				element.textContent = currentTranslations[key];
-            }
-        });
-    })
-   .catch(error => console.error('Error loading translation file:', error));
-});
+		const currentTranslations = translations[language];
+		updateTranslationElements(currentTranslations);
+	})
+}
+
+function updateTranslationElements(currentTranslations){
+		const elementsToTranslate = document.querySelectorAll('[lang-key]');
+			elementsToTranslate.forEach(element => {
+				const key = element.getAttribute('lang-key');
+				if (currentTranslations[key]) {
+					element.textContent = currentTranslations[key];
+				}
+			});
+}
 
 document.addEventListener("DOMContentLoaded", () => {
-	document.body.addEventListener("click", e => {
+	document.body.addEventListener("click", async e => {
 		if (e.target.matches("[privacy-link]")) {
 			e.preventDefault();
 			window.open(e.target.href);

@@ -5,8 +5,8 @@
 		"username": "käyttäjätunnus: ",
 		"password": "salasana: ",
 		"password-again": "salasana uudelleen: ",
-		"language": "kieli: ",
 		"savebutton": "tallenna muutokset",
+		"language": "kieli",
 		"deletebutton": "poista käyttäjä "
 	},
 
@@ -16,8 +16,8 @@
 		"username": "username: ",
 		"password": "password: ",
 		"password-again": "password again: ",
-		"language": "language: ",
 		"savebutton": "save changes",
+		"language": "language",
 		"deletebutton": "delete account "
 	},
 
