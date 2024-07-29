@@ -27,13 +27,22 @@ body {
 	box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 	padding: 20px;
   }
+
+  form {
+	margin-top: 2rem;
+	margin-bottom: 2rem;
+  }
+
+  .form-control {
+	margin-right: 1rem;
+  }
   
   h1 {
 	font-size: 48px;
 	letter-spacing: 8px;
 	font-weight: normal;
 	color: #333;
-	margin-bottom: 20px;
+	margin-bottom: 2rem;
   }
   
   h2 {
@@ -42,6 +51,7 @@ body {
 	letter-spacing: 8px;
 	font-weight: normal;
 	color: #333;
+	margin-bottom: 2rem;
   }
   
   .nav {
@@ -79,9 +89,7 @@ body {
   .input-group {
 	margin-bottom: 1rem;
   }
-  form {
-	margin-bottom: 1rem;
-  }
+
   .nav a:hover {
 	background: #b3aea4;
   }
