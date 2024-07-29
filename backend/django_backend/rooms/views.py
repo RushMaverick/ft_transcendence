@@ -34,9 +34,6 @@ class RoomOneViewSet(viewsets.ModelViewSet):
         if(user.is_authenticated == False):
             return(Response({"Warning": "Anonimus User"}, status=status.HTTP_401_UNAUTHORIZED))
         
-        if(user.rooms.exists()):
-            return Response({"Warning": "User is already in a room."}, status=status.HTTP_400_BAD_REQUEST)
-        
         guest_username = request.data.get('guest')
         if not guest_username:
             return Response({"Warning": "Guest user is required."}, status=status.HTTP_400_BAD_REQUEST)
@@ -60,9 +57,9 @@ class RoomOneViewSet(viewsets.ModelViewSet):
         if room.is_full():
             return Response({"Warning": "Room is full."}, status=status.HTTP_400_BAD_REQUEST)
         
-        if InvitationRequest.objects.filter(from_user=user, to_user=guest, room=room, accepted=False).exists() or InvitationRequest.objects.filter(from_user=guest, to_user=user, room_name=room_name,  accepted=False).exists():
+        if InvitationRequest.objects.filter(from_user=user, to_user=guest, room=room, accepted=False).exists() or InvitationRequest.objects.filter(from_user=guest, to_user=user, room=room,  accepted=False).exists():
             return Response({"Warning": "This Invitation Request has already been sent or received."}, status=status.HTTP_200_OK)
-        elif InvitationRequest.objects.filter(from_user=user, to_user=guest, room=room, accepted=True).exists() or InvitationRequest.objects.filter(from_user=guest, to_user=user,  room_name=room_name, accepted=True).exists():
+        elif InvitationRequest.objects.filter(from_user=user, to_user=guest, room=room, accepted=True).exists() or InvitationRequest.objects.filter(from_user=guest, to_user=user,  room=room, accepted=True).exists():
             return Response({"Detail": "They are in the same room"}, status=status.HTTP_200_OK)
         
         invitation_request = InvitationRequest.objects.create(from_user=user, to_user=guest, room=room, accepted=False)

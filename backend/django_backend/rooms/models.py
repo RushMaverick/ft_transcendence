@@ -12,19 +12,19 @@ class Room(models.Model):
         return self.name
 
     def is_full(self):
-        return self.users.count() > 2
+        return self.users.count() >= 2
 
 class InvitationRequest(models.Model):
     from_user = models.ForeignKey(
     User,
     on_delete=models.SET_DEFAULT,
-    related_name='sent_request',
+    related_name='invitation_requests_sent',
     default=None
     )
     to_user = models.ForeignKey(
         User,
         on_delete=models.SET_DEFAULT,
-        related_name='receive_request',
+        related_name='invitation_requests_received',
         default=None
     )
     room = models.ForeignKey(Room, related_name='invitations', on_delete=models.CASCADE)

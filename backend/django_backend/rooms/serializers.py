@@ -5,7 +5,7 @@ from .models import InvitationRequest, Room
 from user.serializers import FriendshipSerializer 
 
 class RoomSerializer(serializers.ModelSerializer):
-    users = FriendshipSerializer(read_only = True)
+    users = FriendshipSerializer(many=True, read_only=True)
 
     class Meta:
         model = Room

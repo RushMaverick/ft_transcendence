@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'user',
     'friends',
     'match',
+    'rooms',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
