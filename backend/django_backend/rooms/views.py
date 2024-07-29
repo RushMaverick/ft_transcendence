@@ -49,9 +49,8 @@ class RoomOneViewSet(viewsets.ModelViewSet):
         if user == guest:
             return Response({"Warning": "You cannot send a invitation request to yourself."}, status=status.HTTP_400_BAD_REQUEST)
         
-        try:
-            room = user.rooms.first() 
-        except Room.DoesNotExist:
+        room = user.rooms.first()
+        if room is None:
             return Response({"Warning": "User is not in any room."}, status=status.HTTP_400_BAD_REQUEST)
         
         if room.is_full():
