@@ -9,10 +9,23 @@ from .models import InvitationRequest, Room
 
 # Create your views here.
 
-class InvitationViewSet(viewsets.ModelViewSet):
+class RoomOneViewSet(viewsets.ModelViewSet):
     queryset = Room.objects.all()
     serializer_class = RoomSerializer
     permission_classes = [IsAuthenticatedOrCreateOnly, IsUser]
+
+    """Create a room"""
+    @action(detail=False, methods=['post'], permission_classes=[IsAuthenticatedOrCreateOnly, IsUser])
+    def create_room(self, request):
+        user = request.user
+        if user.rooms.exists():
+            return Response({"Warning": "User is already in a room."}, status=status.HTTP_400_BAD_REQUEST)
+        room = Room.objects.create()
+        room.users.add(user)
+        room.save()
+
+        serializer = RoomSerializer(room)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     """Send invitation request for a room"""
     @action(detail=False, methods=['post'], permission_classes=[IsAuthenticatedOrCreateOnly, IsUser])
@@ -33,18 +46,17 @@ class InvitationViewSet(viewsets.ModelViewSet):
         except User.DoesNotExist:
             return Response({"Warning": "User not found."}, status=status.HTTP_404_NOT_FOUND)
         
-        if(guest.rooms.exits()):
+        if(guest.rooms.exists()):
             return Response({"Warning": "Guest is already in a room."}, status=status.HTTP_400_BAD_REQUEST)
         
         if user == guest:
             return Response({"Warning": "You cannot send a invitation request to yourself."}, status=status.HTTP_400_BAD_REQUEST)
         
-        room_name = request.data.get('room_name')
-        if not room_name:
-            return Response({"Warning": "Room name is required."}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            room = user.rooms.first() 
+        except Room.DoesNotExist:
+            return Response({"Warning": "User is not in any room."}, status=status.HTTP_400_BAD_REQUEST)
         
-        
-        room, created = Room.objects.get_or_create(name=room_name)
         if room.is_full():
             return Response({"Warning": "Room is full."}, status=status.HTTP_400_BAD_REQUEST)
         
@@ -56,3 +68,35 @@ class InvitationViewSet(viewsets.ModelViewSet):
         invitation_request = InvitationRequest.objects.create(from_user=user, to_user=guest, room=room, accepted=False)
         serializer = InvitationSerializer(invitation_request)
         return Response({"Detail": "Invitation request sent successfully.","Invitation_request":serializer.data}, status=status.HTTP_201_CREATED)
+    
+    """Accept Invitation request"""
+    @action(detail=True, methods=['post'], permission_classes=[IsAuthenticatedOrCreateOnly, IsUser])
+    def accept_request(self,request, pk=None):
+        if not request.user.is_authenticated:
+            return Response({"Warning": "Anonimus User"}, status=status.HTTP_401_UNAUTHORIZED)
+        try:
+            invitation_request = InvitationRequest.objects.get(id=pk, to_user=request.user, accepted=False)
+        except InvitationRequest.DoesNotExist:
+            return Response({"Warning":"This Invitation Request Does not Exist or has been accepted"}, status=status.HTTP_404_NOT_FOUND)
+        invitation_request.accepted = True
+        invitation_request.save()
+        room = invitation_request.room
+        room.users.add(request.user)
+        room.save()
+        serializer = RoomSerializer(room)
+        return Response({"detail": "Invitation request accepted.","Room":serializer.data}, status=status.HTTP_200_OK)
+    
+    """Reject invitation request"""
+    @action(detail=True, methods=['post'], permission_classes=[IsAuthenticatedOrCreateOnly, IsUser])
+    def reject_request(self,request, pk=None):
+        if not request.user.is_authenticated:
+            return Response({"Warning": "Anonimus User"}, status=status.HTTP_401_UNAUTHORIZED)
+        try:
+            invitation_request = InvitationRequest.objects.get(id=pk, to_user=request.user, accepted=False)
+            invitation_request.delete()
+        except InvitationRequest.DoesNotExist:
+            return Response({"Warning":"This Invitation Request Does not Exist or has been accepted"}, status=status.HTTP_404_NOT_FOUND)
+        
+
+        return Response({"detail": "Invitation request rejected."}, status=status.HTTP_200_OK)
+    

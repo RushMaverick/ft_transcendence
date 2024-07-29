@@ -9,7 +9,7 @@ class RoomSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Room
-        fields = ['id', 'room_name', 'users']
+        fields = ['id', 'users']
 
 class InvitationSerializer(serializers.ModelSerializer):
     from_user = FriendshipSerializer(read_only=True)

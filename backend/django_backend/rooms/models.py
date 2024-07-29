@@ -5,14 +5,14 @@ from user.models import User
 # Create your models here.
 
 class Room(models.Model):
-    room_name = models.CharField(max_length=100, unique=True)
+    # room_name = models.CharField(max_length=100, unique=True)
     users = models.ManyToManyField(User, related_name='rooms', blank=True)
 
     def __str__(self):
         return self.name
 
     def is_full(self):
-        return self.users.count() > 4
+        return self.users.count() > 2
 
 class InvitationRequest(models.Model):
     from_user = models.ForeignKey(
