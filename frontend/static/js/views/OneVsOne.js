@@ -9,8 +9,6 @@ export default class extends AView {
 
 	async getHtml(){
 
-		// const test = this.createHeader('header', 'FIGHT ME ONE ON ONE!', 'h2');
-
 		const gameDiv = this.createGame('pong');
 
 		window.localStorage.setItem('page', 'OneVsOne');
