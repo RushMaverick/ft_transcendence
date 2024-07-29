@@ -14,9 +14,8 @@ body {
 	display: flex;
   }  */
 
-  .main-pong {
-	padding: 1rem;
-
+  .pong {
+	margin-left: 10rem;
   }
   
   .container {
