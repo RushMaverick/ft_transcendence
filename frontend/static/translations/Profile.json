@@ -23,7 +23,7 @@
 	
 	"swedish":
 	{
-		"testheader": "Profil",
+		"header": "Profil",
 		"usernamebase": "Användarnamn: ",
 		"emailbase": "Strömpost: ",
 		"game-history": "Vinster: {wins}🏆\t Förluster: {loss}💀",

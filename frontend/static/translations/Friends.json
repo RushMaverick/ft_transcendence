@@ -33,7 +33,7 @@
     	"no-user-found": "No Such User Found: {username}",
     	"no-request": "You have no friend requests"
 	},
-	"Swedish":
+	"swedish":
 	{
 		"Friends": "Vänner",
 		"searchForFriends": "Sök vänner...",
