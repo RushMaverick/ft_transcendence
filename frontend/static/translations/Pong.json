@@ -15,11 +15,11 @@
 
 	},
 
-	"spanish":
+	"swedish":
 	{
-		"header": "UNO PONG POR FAVOR",
-		"onevs-button": "unocontrauno",
-		"welcome": "Aquí encontrarías los juegos pong "
+		"header": "PONGEN",
+		"onevs-button": "En mot en",
+		"welcome": "Här är Pongen "
 
 	}
 
