@@ -53,6 +53,10 @@ body {
 	color: #333;
 	margin-bottom: 2rem;
   }
+
+  .inbox-icon {
+	cursor: pointer;
+  }
   
   .nav {
 	background: #333;;
