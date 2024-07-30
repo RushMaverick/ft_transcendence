@@ -2,19 +2,19 @@
 	"finnish":
 	{
 		"log-in": "KIRJAUDU SISÄÄN",
-		"username": "käyttäjätunnus: ",
-		"password": "salasana: ",
+		"username": "Käyttäjätunnus: ",
+		"password": "Salasana: ",
 		"register": "Etkö ole rekisteröitynyt?",
-		"register-link": "rekisteröidy täältä"
+		"register-link": "Rekisteröidy täältä"
 
 	},
 
 	"english":
 	{
 		"log-in": "LOG IN",
-		"username": "username: ",
-		"password": "password: ",
-		"register": "Dont have an account?",
+		"username": "Username: ",
+		"password": "Password: ",
+		"register": "Don't have an account?",
 		"register-link": "Register here"
 	},
 
