@@ -253,3 +253,23 @@ a {
   margin-left: 10px;
 }
 
+.avatar-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: #ccc;
+  background-size: cover;
+  background-position: center;
+  margin-right: 20px; /* Space between avatar and upload button */
+}
+
+.avatar-input {
+  display: none;
+}
