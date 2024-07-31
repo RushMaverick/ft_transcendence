@@ -151,7 +151,12 @@ export default class extends AView {
 					errorMessage = errorData.password[0];
 				} else
 					errorMessage = 'Unknown error';
-            	alert(`Registeration failed: ${errorMessage}`);
+
+				if (errorMessage === "This field must be unique.") {
+					alert('Registration failed: Username already exists!');
+				} else {
+					alert(`Registration failed: ${errorMessage}`);
+				}
            		return;
 			}
 
