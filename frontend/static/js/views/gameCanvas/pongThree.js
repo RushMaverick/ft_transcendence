@@ -27,7 +27,7 @@ export default class PongGame {
     }
 
 	enterView() {
-		this.container = document.querySelector('main');
+		this.container = document.querySelector('pong');
 		this.scene = new THREE.Scene();
 		this.waitingScene = new THREE.Scene();
 		this.waitingForPlayers = true;
