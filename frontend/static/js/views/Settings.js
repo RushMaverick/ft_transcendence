@@ -80,33 +80,56 @@ export default class extends AView {
         // } catch (error) {
         //     console.error('Error fetching avatar:', error);
         // }
-		const data = await this.fetchJsonData('static/js/views/profile.json');
-		this.avatarUrl = data.profile.avatar;
-		this.updateAvatarDisplay();
+		try{
+			const data = await this.fetchJsonData('static/js/views/profile.json');
+			if (data && data.profile && data.profile.avatar) {
+				this.avatarUrl = data.profile.avatar;
+				console.log(this.avatarUrl);
+				this.updateAvatarDisplay();
+			} else {
+				console.error('Profile data or avatar URL is missing');
+			}
+		} catch(error){
+			console.error('Error in fetching avatar');
+		}
     }
 
 	updateAvatarDisplay() {
         const avatar = document.querySelector('.avatar');
-        avatar = `url(${this.avatarUrl})`;
+		if (avatar) {
+			avatar.style.backgroundImage = `url(${this.avatarUrl})`;
+		} else {
+			console.error('Avatar element not found');
+		}
     }
 	
 	fileInputField(labelText, name) {
 		const container = document.createElement('div');
 		container.classList.add('avatar-container');
 
+		const avatarDisplay = document.createElement('div');
+		avatarDisplay.classList.add('avatar');
+
 		const label = document.createElement('label');
 		label.classList.add('avatar-label');
+		container.appendChild(label);
 		
 		const input = document.createElement('input');
 		input.setAttribute('type', 'file');
 		input.setAttribute('id', name);
 		input.setAttribute('name', name);
 		input.classList.add('avatar-input');
-		input.classList.add('form-control');
+		input.style.display = 'none';
+		input.addEventListener('change', this.handleAvatarUpload.bind(this));
 
-		container.appendChild(label);
+		const uploadButton = this.createButton('uploadbutton', 'Upload', 'Upload Avatar');
+		uploadButton.addEventListener('click', () => input.click());
+		// uploadButton.classList.add('upload-button');
+	
+		container.appendChild(avatarDisplay);
+		container.appendChild(uploadButton);
 		container.appendChild(input);
-
+		
 		return container;
 	}
 
