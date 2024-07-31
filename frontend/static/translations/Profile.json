@@ -1,9 +1,9 @@
 {
 	"finnish":
 	{
-		"header": "Heippuli ja tervetuloa profiiliin",
-		"link1": "tilastot ",
-		"link2": "asetukset ",
+		"header": "Profiili",
+		"link1": "Tilastot: ",
+		"link2": "Asetukset: ",
 		"game-history": "Voitot: {wins}🏆\tTappiot: {loss}💀",
 		"winmsg": "Upeaa! Olet menossa hienosti",
 		"lossmsg": "Pelataanko lisää saadaksemme voittoja?",
@@ -12,9 +12,9 @@
 
 	"english":
 	{
-		"header": "Helloups and welcome to your profile",
-		"link1": "stats ",
-		"link2": "settings ",
+		"header": "Profile",
+		"link1": "Stats",
+		"link2": "Settings",
 		"game-history": "Win: {wins}🏆\t Loss: {loss}💀",
 		"winmsg": "Amazing! You are doing great",
 		"lossmsg": "Shall we play more to get some wins?",
@@ -23,12 +23,16 @@
 	
 	"swedish":
 	{
-		"testheader": "Hallo och välkommen till din profil",
+		"header": "Profil",
 		"usernamebase": "Användarnamn: ",
 		"emailbase": "Strömpost: ",
+		"game-history": "Vinster: {wins}🏆\t Förluster: {loss}💀",
 		"message": "Här kan du: ",
 		"link1": "Statistik ",
-		"link2": "Inställingar "
+		"link2": "Inställingar ",
+		"winmsg": "Super, de går jättebra!",
+		"lossmsg": "Ska vi spela mera för att få några vinster?",
+		"tiemsg": "Jämnställt! Vi spelar mera!"
 	}
 
 }

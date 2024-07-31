@@ -21,11 +21,11 @@ export default class {
 	updateView( ...elements){
 		const container = document.querySelector('main');
 		const canvas = document.querySelector('canvas');
-		const pong = document.querySelector('pong');
 		if (canvas && PongGame.instance && !(window.location.pathname === '/one-vs-one' || window.location.pathname === '/tournaments')) {
 			canvas.remove();
 			PongGame.instance.stopAnimate();
 		}
+
 		container.innerHTML = '';
 		elements.forEach((element) => {
 			if (element)
@@ -163,7 +163,7 @@ export default class {
 
 		// Append the game div to the body (or another element)
 		document.body.appendChild(gameDiv);
-		document.body.appendChild(pong.renderer.domElement);
+		gameDiv.appendChild(pong.renderer.domElement);
 		
 		// Return the game div for potential further manipulation
 		return gameDiv;
