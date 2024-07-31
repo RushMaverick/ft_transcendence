@@ -8,26 +8,6 @@ export default class extends AView {
 		this.setTitle("Register");
 	}
 
-	// fileInputField(labelText, name) {
-	// 	const container = document.createElement('div');
-	// 	container.classList.add('form-group');
-
-	// 	const label = document.createElement('label');
-	// 	label.setAttribute('for', name);
-	// 	label.textContent = labelText;
-
-	// 	const input = document.createElement('input');
-	// 	input.setAttribute('type', 'file');
-	// 	input.setAttribute('id', name);
-	// 	input.setAttribute('name', name);
-	// 	input.classList.add('form-control');
-
-	// 	container.appendChild(label);
-	// 	container.appendChild(input);
-
-	// 	return container;
-	// }
-
 	async getHtml() {
 		const title = this.createHeader("register", "Register", "h1");
 		title.classList.add("text-center");
