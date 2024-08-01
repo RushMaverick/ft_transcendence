@@ -78,9 +78,11 @@ export default class extends AView {
 			}
 			const responseData = await response.json();
 			if (responseData.access) {
-				localStorage.setItem("access", responseData.access);
-				localStorage.setItem("refresh", responseData.refresh);
-				window.location.href = "/dashboard";
+				sessionStorage.setItem("access", responseData.access);
+				sessionStorage.setItem("refresh", responseData.refresh);
+				sessionStorage.setItem('isLoggedIn', 'true');
+				window.isLoggedIn = true;
+				document.dispatchEvent(new CustomEvent('loginSuccess', { detail: { path: '/dashboard' } }));
 			} else {
 				console.error("Login failed:", responseData.message);
 			}

@@ -8,26 +8,6 @@ export default class extends AView {
 		this.setTitle("Register");
 	}
 
-	// fileInputField(labelText, name) {
-	// 	const container = document.createElement('div');
-	// 	container.classList.add('form-group');
-
-	// 	const label = document.createElement('label');
-	// 	label.setAttribute('for', name);
-	// 	label.textContent = labelText;
-
-	// 	const input = document.createElement('input');
-	// 	input.setAttribute('type', 'file');
-	// 	input.setAttribute('id', name);
-	// 	input.setAttribute('name', name);
-	// 	input.classList.add('form-control');
-
-	// 	container.appendChild(label);
-	// 	container.appendChild(input);
-
-	// 	return container;
-	// }
-
 	async getHtml() {
 		const title = this.createHeader("register", "Register", "h1");
 		title.classList.add("text-center");
@@ -52,6 +32,8 @@ export default class extends AView {
 			"password"
 		);
 
+		const passwordRequirements = this.createParagraph('password-requirements', 'Password needs to have at least 8 letters, one character, one number, and one special character.')
+		passwordRequirements.classList.add('password-requirements');
 		
 		const checkbox = document.createElement('input');
 		checkbox.setAttribute('type', 'checkbox');
@@ -78,6 +60,7 @@ export default class extends AView {
 
 		form.appendChild(usernameInput);
 		form.appendChild(passwordInput);
+		form.appendChild(passwordRequirements);
 		form.appendChild(confirmPasswordInput);
 		form.appendChild(checkbox);
 		form.appendChild(privacy);
@@ -125,6 +108,22 @@ export default class extends AView {
 			return;
 		}
 
+		if (/\s/.test(username)) {
+			alert("Username should not contain spaces.");
+			return;
+		}
+
+		if (/\s/.test(password)) {
+			alert("Password should not contain spaces.");
+			return;
+		}
+
+		const specialCharacterRegex = /[^a-zA-Z0-9]/;
+		if (!specialCharacterRegex.test(password)) {
+			alert("Password must contain at least one special character.");
+			return;
+		}
+
 		const data = {
 			username: username,
 			password: password,
@@ -144,11 +143,26 @@ export default class extends AView {
 			);
 
 			if (!response.ok) {
-				throw new Error("Network response was not ok");
+				const errorData = await response.json();
+				let errorMessage;
+				if (errorData.username && errorData.username.length > 0) {
+					errorMessage = errorData.username[0];
+				} else if (errorData.password && errorData.password.length > 0) {
+					errorMessage = errorData.password[0];
+				} else
+					errorMessage = 'Unknown error';
+
+				if (errorMessage === "This field must be unique.") {
+					alert('Registration failed: Username already exists!');
+				} else {
+					alert(`Registration failed: ${errorMessage}`);
+				}
+           		return;
 			}
 
 			const responseData = await response.json();
 			console.log(responseData);
+			document.dispatchEvent(new CustomEvent('registrationSuccess'));
 		} catch (error) {
 			console.error("There was a problem with the fetch operation:", error);
 		}
