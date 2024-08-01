@@ -81,13 +81,19 @@ const router = async () => {
 			result: [location.pathname]
 		};
 	}
+	const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
+
+	if (isLoggedIn && (match.route.path === "/login" || match.route.path === "/")) {
+        navigateTo('/dashboard');
+        return;
+    }
 
 	//comment out to remove login for testing
-	// if (match.route.authRequired && !window.isLoggedIn) {
-	// 	console.log(`Access to ${match.route.path} is restricted.`);
-	// 	navigateTo("/login");
-	// 	return;
-	// }
+	if (match.route.authRequired && !isLoggedIn) {
+		console.log(`Access to ${match.route.path} is restricted.`);
+		navigateTo('/login');
+		return;
+	}
 
 	// Load translations for the current page
 	// const page = localStorage.getItem('page');
@@ -185,12 +191,20 @@ document.addEventListener("DOMContentLoaded", () => {
 				}
 				})
 		}
+
+	});
+	
+	document.addEventListener('registrationSuccess', () => {
+		navigateTo('/login');
 	});
 
-document.addEventListener('loginSuccess', (event) => {
-	const { path } = event.detail;
-	navigateTo(path);
-});
+	document.addEventListener('loginSuccess', (event) => {
+		navigateTo(event.detail.path);
+	});
+// document.addEventListener('loginSuccess', (event) => {
+// 	const { path } = event.detail;
+// 	navigateTo(path);
+// });
 
 
 	router();
