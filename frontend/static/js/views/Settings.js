@@ -5,11 +5,12 @@ export default class extends AView {
 	constructor(params){
 		super(params);//call the constructor of the parent class
 		this.setTitle('Settings');
+		this.avatarUrl = '';
 	}
 
 	async getHtml(){
 
-		const title = this.createHeader('header', 'tervetuloo', 'h2');
+		const title = this.createHeader('header', 'Update user information', 'h2');
 		title.classList.add('text-center');
 
 		const form = this.createForm('settings');
@@ -23,7 +24,7 @@ export default class extends AView {
 		form.appendChild(confirmPasswordInput);
 		form.appendChild(signupButton);
 		form.addEventListener('submit', this.handleSettingsFormSubmit.bind(this));
-	
+		
 		const select = document.createElement('select');
 		select.setAttribute('id', 'languageSelect');
 		select.classList.add('translations');
@@ -38,14 +39,14 @@ export default class extends AView {
             select.appendChild(option);
 		});
 		if(select){
-			  select.addEventListener('change', (event) => {
+			select.addEventListener('change', (event) => {
 				const selectedLanguage = event.target.value;
 				const language = selectedLanguage.toLowerCase();
 				window.localStorage.setItem('language', language);
 				document.dispatchEvent(new CustomEvent('viewUpdated'));
 			})
 		}
-
+		
 		const buttonDel = this.createButton('deletebutton', 'delete', 'delete account');
 		buttonDel.addEventListener('click', (event) => {
 			event.preventDefault();
@@ -58,11 +59,106 @@ export default class extends AView {
 				console.log('deleting account'); //for monitoring
 			}
 		});
+		
+		const avatarContainer = this.fileInputField('update-avatar', 'avatar');
 
 		window.localStorage.setItem('page', 'Settings');
-		this.updateView(title, form, select, buttonDel);
+		this.updateView(title, avatarContainer, form, select, buttonDel);
+		await this.fetchAvatar();
 		return ;
 	}
+
+    async fetchAvatar() {
+        // try {
+        //     const response = await fetch(`${import.meta.env.VITE_API_ENDPOINT}/avatar`);
+        //     if (!response.ok) {
+        //         throw new Error('Network response was not ok');
+        //     }
+        //     const data = await response.json();
+        //     this.avatarUrl = data.profile.avatar; // Assuming the response contains the avatar URL
+        //     this.updateAvatarDisplay();
+        // } catch (error) {
+        //     console.error('Error fetching avatar:', error);
+        // }
+		try{
+			const data = await this.fetchJsonData('static/js/views/profile.json');
+			if (data && data.profile && data.profile.avatar) {
+				this.avatarUrl = data.profile.avatar;
+				console.log(this.avatarUrl);
+				this.updateAvatarDisplay();
+			} else {
+				console.error('Profile data or avatar URL is missing');
+			}
+		} catch(error){
+			console.error('Error in fetching avatar');
+		}
+    }
+
+	updateAvatarDisplay() {
+        const avatar = document.querySelector('.avatar');
+		if (avatar) {
+			avatar.style.backgroundImage = `url(${this.avatarUrl})`;
+		} else {
+			console.error('Avatar element not found');
+		}
+    }
+	
+	fileInputField(labelText, name) {
+		const container = document.createElement('div');
+		container.classList.add('avatar-container');
+
+		const avatarDisplay = document.createElement('div');
+		avatarDisplay.classList.add('avatar');
+
+		const label = document.createElement('label');
+		label.classList.add('avatar-label');
+		container.appendChild(label);
+		
+		const input = document.createElement('input');
+		input.setAttribute('type', 'file');
+		input.setAttribute('id', name);
+		input.setAttribute('name', name);
+		input.classList.add('avatar-input');
+		input.style.display = 'none';
+		input.addEventListener('change', this.handleAvatarUpload.bind(this));
+
+		const uploadButton = this.createButton('uploadbutton', 'Upload', 'Upload Avatar');
+		uploadButton.addEventListener('click', () => input.click());
+		// uploadButton.classList.add('upload-button');
+	
+		container.appendChild(avatarDisplay);
+		container.appendChild(uploadButton);
+		container.appendChild(input);
+		
+		return container;
+	}
+
+    async handleAvatarUpload(event) {
+        const file = event.target.files[0];
+        if (!file) {
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('file', file);
+
+        try {
+            const response = await fetch(`${import.meta.env.VITE_API_ENDPOINT}/upload`, {
+                method: 'POST',
+                body: formData
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const responseData = await response.json();
+            this.avatarUrl = responseData.profile.avatar; // Extract the updated avatar URL from the profile object
+            this.updateAvatarDisplay();
+        } catch (error) {
+            console.error('There was a problem with the file upload operation:', error);
+        }
+    }
 
 	async handleSettingsFormSubmit(event) {
         event.preventDefault(); // Prevent the default form submission behavior
