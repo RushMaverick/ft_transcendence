@@ -4,16 +4,18 @@ from .TournamentConsumerHelpers import create_match, \
     add_participant, \
     get_participants, \
     remove_participant, \
-    add_match_to_round
+    add_match_to_round, \
+    get_match
+
+from pong.signals import match_completed
 
 from channels.layers import get_channel_layer
+
+import asyncio
 
 class Tournament():
     def __init__(self, tournament):
         self.tournament = tournament
-        # if not self.tournament:
-        #     print(f"Error getting tournament {tournament_id}", flush=True)
-        #     return None
         self.participants = {}
         # self.max_participants = self.tournament["max_participants"]
         self.id = tournament.get("id")
@@ -22,12 +24,24 @@ class Tournament():
         self.channel_layer = get_channel_layer()
         self.round_nbr = 0
         self.round_id = None
-        # self.rounds = self.tournament["rounds"]
-        # self.matches = self.tournament["matches"]
-        # room_group_name = None
-        # # players_channel_layers = {} # id: channel_layer
-        # # matches = {} # id: match
-        # # status = None
+        # self.status = None
+        self.match_completed = {}
+        self.connect_match_completed_handler()
+        self.all_matches_completed_event = asyncio.Event()
+
+    def connect_match_completed_handler(self):
+        """
+        Connects the handler function to the match_completed signal.
+        """
+        def handle_match_completed(sender, **kwargs):
+            match_id = kwargs.get('match_id')
+            winner = kwargs.get('winner')
+            #print(f"Received match completed signal for match {match_id} with winner {winner}", flush=True)
+            # Add additional logic here to handle the match completion, e.g., updating tournament standings
+            self.match_completed[match_id] = True
+
+        # Connect the handler function to the signal
+        match_completed.connect(handle_match_completed)
 
     async def broadcast_participants(self):
         participants = await get_participants(self.id)
@@ -41,29 +55,31 @@ class Tournament():
         #todo: check that tournament is open and check max number of participants
         # Check max number of participants
         # if self.tournament.max_participants <= len(self.tournament.participants):
-        #     print(f"Tournament {self.tournament_id} is full", flush=True)
+        #     #print(f"Tournament {self.tournament_id} is full", flush=True)
         #     return await self.close()
 
         # Check that tournament is open
         # if self.tournament.status == "closed":
-        #     print(f"Tournament {self.tournament_id} is not open", flush=True)
+        #     #print(f"Tournament {self.tournament_id} is not open", flush=True)
         #     await self.close()
         #     return
 
         participant = await add_participant(self.id, player_id)
         if not participant:
-            return None
+            await remove_participant(self.id, player_id)
+            participant = await add_participant(self.id, player_id)
+            # return None
         self.participants[player_id] = {"participant": participant, "channel_name": channel_name, "channel_layer": channel_layer}
         # Broadcast that user has joined the tournament room
+        await channel_layer.group_add(self.room_group_name, channel_name)
         await channel_layer.group_send(
         	self.room_group_name, {"type": "broadcast.message", "msg": f"{participant} joined the tournament"}
         )
-        await channel_layer.group_add(self.room_group_name, channel_name)
         return participant
 
     async def remove_participant(self, player_id):
-        # print("remove_participant", flush=True)
-        # print(f"player_id: {player_id}", flush=True)
+        # #print("remove_participant", flush=True)
+        # #print(f"player_id: {player_id}", flush=True)
         if player_id not in self.participants:
             return
         await remove_participant(self.id, player_id)
@@ -76,71 +92,166 @@ class Tournament():
     async def create_round(self):
         self.round_id = await create_round(self.id, self.round_nbr + 1)
         if not self.round_id:
-            print("Error creating round", flush=True)
+            #print("Error creating round", flush=True)
             raise Exception("Error creating round")
         self.round_nbr += 1
         # return  self.round_id
 
-    async def pair_players(self):
-        print(f"participants: {self.participants}", flush=True)
+    async def first_round(self):
+        await self.create_round()
+        #print(f"pair_players participants: {self.participants}", flush=True)
         participant_keys = list(self.participants.keys())
-        # print(f": {participants_list[0]["participant"]}", flush=True)
+        # print(f": {participant_keys}", flush=True)
         for i in range(0, len(participant_keys), 2):
             player1 = self.participants[participant_keys[i]]["participant"]
+            # print(f"player1: {player1.__dict__}", flush=True)
             player1_channel_name = self.participants[participant_keys[i]]["channel_name"]
+            print(f"player1_channel_name: {player1_channel_name}", flush=True)
             player2 = self.participants[participant_keys[i+1]]["participant"]
+            # print(f"player2: {player2.__dict__}", flush=True)
             player2_channel_name = self.participants[participant_keys[i+1]]["channel_name"]
-            print(f"player1: {player1}, player2: {player2}", flush=True)
+            print(f"player2_channel_name: {player2_channel_name}", flush=True)
+            #print(f"player1: {player1}, player2: {player2}", flush=True)
+            # #print(f"pair1 player1_id: {player1.get("id")}, player2_id: {player2.get("id")}", flush=True)
+            #print(f"pair2 player1_id: {player1.id}, player2_id: {player2.id}", flush=True)
+            match_id = await create_match(self.id, self.round_id, player1.id, player2.id)
+            print("await create_match", flush=True)
+            if not match_id:
+                #print("Error creating match", flush=True)
+                raise Exception("Error creating match")
+            #print(f"match: {match_id}", flush=True)
+            #print(f"round: {self.round_id}", flush=True)
+            await add_match_to_round(self.round_id, match_id)
+            self.match_completed[match_id] = False
+            # notify pong players that match has been created
+            game_room_name = f"match_{match_id}"
+            await self.channel_layer.send(
+                 player1_channel_name, {"type": "broadcast.message", "msg": {"match_id": match_id, "room_name": game_room_name}}
+            )
+            await self.channel_layer.send(
+                player2_channel_name, {"type": "broadcast.message", "msg": {"match_id": match_id, "room_name": game_room_name}}
+            )
+        print(f"tadaaa", flush=True)
 
+    async def second_round(self):
+        await self.create_round()
+        # get winners from first round
+        #print("second round", flush=True)
+        winners = []
+        for match_id, completed in self.match_completed.items():
+                if completed:
+                    match = await get_match(match_id)
+                    winners.append(match.get("winner"))
+
+        #print(f"winners: {winners}", flush=True)
+        #print(f"participants: {self.participants}", flush=True)
+        # pair winners
+        for i in range(0, len(winners), 2):
+            player1 = self.participants[winners[i]]["participant"]
+            player1_channel_name = self.participants[winners[i]]["channel_name"]
+            player2 = self.participants[winners[i+1]]["participant"]
+            player2_channel_name = self.participants[winners[i+1]]["channel_name"]
             match_id = await create_match(self.id, self.round_id, player1.id, player2.id)
             if not match_id:
-                print("Error creating match", flush=True)
+                #print("Error creating match", flush=True)
                 raise Exception("Error creating match")
-            print(f"match: {match_id}", flush=True)
-            print(f"round: {self.round_id}", flush=True)
+            #print(f"match: {match_id}", flush=True)
+            #print(f"round: {self.round_id}", flush=True)
             await add_match_to_round(self.round_id, match_id)
+            self.match_completed = {}
+            self.match_completed[match_id] = False
             # notify pong players that match has been created
+            game_room_name = f"match_{match_id}"
             await self.channel_layer.send(
-                 player1_channel_name, {"type": "broadcast.message", "msg": {"match_id": match_id}}
+                 player1_channel_name, {"type": "broadcast.message", "msg": {"match_id": match_id, "room_name": game_room_name}}
             )
             await self.channel_layer.send(
-                player2_channel_name, {"type": "broadcast.message", "msg": {"match_id": match_id}}
+                player2_channel_name, {"type": "broadcast.message", "msg": {"match_id": match_id, "room_name": game_room_name}}
             )
-            # print(f"match: {match_id}", flush=True)
+
+    async def matches_done(self):
+            for match_id, completed in self.match_completed.items():
+                if not completed:
+                    False
+            return True
+
+    async def wait_for_all_matches_to_complete(self):
+        print("Waiting for all matches to complete", flush=True)
+        print(f"match_completed: {self.match_completed}", flush=True)
+        while True:
+            if not self.match_completed:
+                await asyncio.sleep(1)
+                continue
+            all_completed = all(value for value in self.match_completed.values())
+            # print("all_completed: ", all_completed, flush=True)
+            if all_completed:
+                # self.all_matches_completed_event.set()  # Signal that all matches are completed
+                break
+            await asyncio.sleep(1)  # Wait for a short period before checking again
+        print("All matches completed in this round.", flush=True)
+
+    async def get_winners(self):
+        winners = []
+        for match_id, completed in self.match_completed.items():
+            if completed:
+                match = await get_match(match_id)
+                winners.append(match.get("winner"))
+        return winners
 
     async def start(self):
         # Check that tournament has not started
         # if self.tournament.status == "open":
-        #     print("Tournament already started", flush=True)
+        #     #print("Tournament already started", flush=True)
         #     return
 
         # Check that tournament has enough participants
         # participants = await get_participants(self.tournament_id)
-        # print(f"participants: {participants}", flush=True)
+        # #print(f"participants: {participants}", flush=True)
         # if len(participants) != 4:
-        #     print("Not enough participants", flush=True)
+        #     #print("Not enough participants", flush=True)
         #     return
 
         # Close tournament
         # TournamentSerializer(tournament, data={"status": "closed"}, partial=True)
         # if not tournament_serializer.is_valid():
-        #     print(tournament_serializer.errors, flush=True)
+        #     #print(tournament_serializer.errors, flush=True)
         #     return
         # tournament_serializer.save()
-        # print(tournament_serializer.data, flush=True)
+        # #print(tournament_serializer.data, flush=True)
+        print("start:Participants: ", self.participants, flush=True)
+        try:
+            await self.channel_layer.group_send(
+                self.room_group_name, {"type": "broadcast.message", "msg": "Tournament started"}
+            )
+        except Exception as e:
+            print(f"Error sending tournament started message: {e}", flush=True)
+        try:
+            await self.first_round()
+        except Exception as e:
+            #print(f"Error pairing players: {e}", flush=True)
+            return
+        print("#1", flush=True)
+        # Create a task to wait for all matches to complete
+        await self.wait_for_all_matches_to_complete()
+        print("#2", flush=True)
+
+        # Optionally, gather results or perform other actions after all matches have completed
+        print("#3", flush=True)
+        # Wait for all matches to complete before proceeding
+        # asyncio.sleep(5)
+        # await self.wait_for_all_matches_to_complete()
+        # asyncio.create_task(self.wait_for_all_matches_to_complete())
+        # await self.all_matches_completed_event.wait()
+        # # try:
+        # #     await self.second_round()
+        # # except Exception as e:
+        # #     #print(f"Error pairing players: {e}", flush=True)
+        # #     return
+        # # await self.wait_for_all_matches_to_complete()
+
+        # #Broadcast that tournament is over and winner
+        winners = await self.get_winners()
         await self.channel_layer.group_send(
-            self.room_group_name, {"type": "broadcast.message", "msg": "Tournament started"}
+            self.room_group_name, {"type": "broadcast.message", "msg": f"Tournament over. Winner: {winners[0]}"}
         )
-        try:
-            await self.create_round()
-        except Exception as e:
-            print(f"Error creating round: {e}", flush=True)
-            return
-        try:
-            await self.pair_players()
-        except Exception as e:
-            print(f"Error pairing players: {e}", flush=True)
-            return
-
-
 

@@ -3,10 +3,12 @@ from asgiref.sync import sync_to_async
 from match.serializers import MatchSerializer
 from tournaments.serializers import TournamentSerializer, RoundSerializer, ParticipantSerializer
 from tournaments.models import Tournament, Round, Participant
+from match.models import Match
 
 @sync_to_async
 def create_match(tournament_id: int, round_id: int, player1_id: int, player2_id: int):
     print("create_match", flush=True)
+    print(f"tournament: {tournament_id}, round: {round_id}, player1: {player1_id}, player2: {player2_id}", flush=True)
     match_serializer = MatchSerializer(data={
         "tournament": tournament_id,
         "round": round_id,
@@ -22,7 +24,18 @@ def create_match(tournament_id: int, round_id: int, player1_id: int, player2_id:
     #return match id
     return match_serializer.data["id"]
 
-
+@sync_to_async
+def get_match(match_id: int):
+    print("get_match", flush=True)
+    try:
+        match = MatchSerializer(Match.objects.get(id=match_id)).data
+        return match
+    except Match.DoesNotExist:
+        print(f"Match with id {match_id} does not exist", flush=True)
+        return None
+    except Exception as e:
+        print(f"Unexpected error fetching match: {e}", flush=True)
+        return None
 
 @sync_to_async
 def create_round(tournament_id: int, round_number: int) -> int:
@@ -65,8 +78,9 @@ def add_participant(tournament_id: int, player_id: int):
         print(participant_serializer.errors, flush=True)
         return None
     participant = participant_serializer.save()
-    print(participant_serializer.data, flush=True)
-    return participant
+    print("add_participant data", participant_serializer.data, flush=True)
+    print("add_participant player", participant.player, flush=True)
+    return participant.player
 
 @sync_to_async
 def remove_participant(tournament_id: int, player_id: int) -> None:

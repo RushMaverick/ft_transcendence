@@ -24,9 +24,9 @@ class Tournaments:
     async def start_tournament(cls, tournament_id):
         if tournament_id in cls.tournaments:
             print(f"Starting tournament {tournament_id}", flush=True)
-            await cls.tournaments[tournament_id].start()
-            # loop = asyncio.get_event_loop()
-            # loop.create_task(cls.tournaments[tournament_id].start())
+            # await cls.tournaments[tournament_id].start()
+            loop = asyncio.get_event_loop()
+            loop.create_task(cls.tournaments[tournament_id].start())
 
     # @classmethod
     # def start_game(cls, game_name):

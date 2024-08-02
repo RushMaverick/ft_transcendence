@@ -32,6 +32,7 @@ class Match(models.Model):
         null=True
     )
     date = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=20, default="starting")
 
     def __str__(self):
         return "%s and %s" % (self.player1.username, self.player2.username)

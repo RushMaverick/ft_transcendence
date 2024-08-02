@@ -12,6 +12,9 @@ from .helpers.TournamentConsumerHelpers import create_match, create_round, get_t
 from .tournament.tournament import Tournament
 from .tournament.tournaments import Tournaments
 
+
+from pong.signals import match_completed
+import asyncio
 class TournamentConsumer(AsyncWebsocketConsumer):
     def __init__(self, *args, **kwargs):
         self.room_group_name = None
@@ -54,8 +57,11 @@ class TournamentConsumer(AsyncWebsocketConsumer):
         # Broadcast participants to all
         # await self.tournament.broadcast_participants()
 
-        print (f"{user.username} connected to {self.room_group_name}", flush=True)
+        # print (f"{user.username} connected to {self.participant.channel_name}", flush=True)
         await self.accept()
+
+        # if len(self.tournament.participants) == 4:
+        #     await Tournaments.start_tournament(tournament_id=self.tournament_id)
 
 
     async def disconnect(self, close_code):
@@ -78,7 +84,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
             return
         case = {
             "start": Tournaments.start_tournament,
-            # "stop": self.stop,
+            "test": self.testing,
         }
         await case[cmd](tournament_id=self.tournament_id)
 
@@ -86,3 +92,8 @@ class TournamentConsumer(AsyncWebsocketConsumer):
     async def broadcast_message(self, event):
         # Send message to WebSocket
         await self.send(text_data=json.dumps(event.get("msg")))
+
+
+    async def testing(self, tournament_id):
+        print("Testing", flush=True)
+        match_completed.send(sender=self.__class__, match_id=1, winner=1)

@@ -16,7 +16,7 @@ class Tournament(models.Model):
         null=True
     )
     participants = models.ManyToManyField(
-        User,  # Reference the related model
+        User,
         through='Participant'
     )
 
