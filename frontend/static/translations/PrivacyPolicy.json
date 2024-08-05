@@ -33,10 +33,21 @@
         "policy5": "If you make a request, we have one month to respond to you. If you would like to exercise any of these rights, please contact us at our email: thepongsite@gmail.com."
 	},
 
-	"spanish":
+	"swedish":
 	{
-		"header": "POLICIOS",
-		"policy": "aquí encontrarías los policios "
+		"header": "PRIVACY POLICY",
+		"policy": "Vi är dedikerade till att skydda och respektera din integritet. Genom att registrera vår webbplats samtycker du till insamlingen och användningen av dina data såsom användarnamn och information om de spelade spelen som beskrivs i denna sekretesspolicy.",
+    	"policy2": "Vi använder ditt användarnamn för att delta i spel och anpassa din spelupplevelse.",
+		"policy3": "Vi använder informationen om spelade spel för att spåra dina framsteg, skapa statistik och matchhistorik.",
+    	"policy4": "Vi behåller dina personuppgifter endast så länge det är nödvändigt för att uppfylla de syften för vilka de samlades in, enligt beskrivningen i denna integritetspolicy. När dina uppgifter inte längre behövs kommer vi att radera eller anonymisera dem på ett säkert sätt.",
+    	"gdpr": "Enligt den allmänna dataskyddsförordningen (GDPR) har du följande rättigheter:",
+    	"request2": "Du kan begära en kopia av de personuppgifter vi har om dig.",
+        "request3": "Du kan begära att vi korrigerar eventuella felaktiga eller ofullständiga uppgifter.",
+        "request4": "Du kan begära att vi raderar dina personuppgifter.",
+	    "request5": "Du kan begära att vi begränsar behandlingen av dina uppgifter under vissa förutsättningar.",
+        "request6": "Du kan begära att vi överför dina uppgifter till en annan organisation, eller direkt till dig, under vissa förutsättningar.",
+        "request7": "Du kan under vissa förutsättningar invända mot vår behandling av dina personuppgifter.",
+        "policy5": "Om du gör en förfrågan har vi en månad på oss att svara dig. Om du vill utöva någon av dessa rättigheter, vänligen kontakta oss på vår e-post: thepongsite@gmail.com."
 
 	}
 }

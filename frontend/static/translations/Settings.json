@@ -7,7 +7,8 @@
 		"password-again": "salasana uudelleen: ",
 		"savebutton": "tallenna muutokset",
 		"language": "kieli",
-		"deletebutton": "poista käyttäjä "
+		"deletebutton": "poista käyttäjä ",
+		"update-avatar": "Update Avatar in Finnish"
 	},
 
 	"english":
@@ -18,18 +19,20 @@
 		"password-again": "password again: ",
 		"savebutton": "save changes",
 		"language": "language",
-		"deletebutton": "delete account "
+		"deletebutton": "delete account ",
+		"update-avatar": "Update Avatar"
 	},
 
-	"spanish":
+	"swedish":
 	{
-		"header": "Actualizar información del usuario",
-		"username": "nombre de usuario: ",
-		"password": "contraseña: ",
-		"password-again": "contraseña de nuevo: ",
-		"savebutton": "ahorrar",
-		"language": "language in spanish",
-		"deletebutton": "delete account in spanish "
+		"header": "Uppdatera användarinformation",
+		"username": "Användarnamn: ",
+		"password": "Lösenord: ",
+		"password-again": "Bekräfta lösenord: ",
+		"language": "Språk: ",
+		"savebutton": "Spara ändringar",
+		"deletebutton": "Radera användare ",
+		"update-avatar": "Update Avatar in Swedish"
 	}
 
 }

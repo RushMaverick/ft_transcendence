@@ -20,13 +20,13 @@
 		"settings-nav": "Settings"
 	},
 
-	"spanish":
+	"swedish":
 	{
-		"language": "Kieli in spanish",
-		"login-nav": "Acceso",
-		"dashboard-nav": "Página principal",
-		"profile-nav": "Perfil",
-		"friends-nav": "Amigas",
-		"settings-nav": "Ajustes"
+		"language": "Språk",
+		"login-nav": "Logga in",
+		"dashboard-nav": "Huvudsida",
+		"profile-nav": "Profil",
+		"friends-nav": "Vänner",
+		"settings-nav": "Inställningar"
 	}
 }

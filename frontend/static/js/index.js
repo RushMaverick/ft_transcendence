@@ -29,6 +29,17 @@ const getParams = match =>{
 	}))
 }
 
+const getHashParams = () => {
+    const hash = location.hash.slice(1);
+    const parts = hash.split('/');
+    const params = {};
+    if (parts.length > 1) {
+        params.view = parts[0];
+        params.id = parts[1];
+    }
+    return params;
+};
+
 //when trying to navigate to a different page, we don't want to reload the page. We want to use the client-side router to change the view of the page.
 const navigateTo = url => {
 	history.pushState(null, null, url);
@@ -70,26 +81,62 @@ const router = async () => {
 			result: [location.pathname]
 		};
 	}
+	const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
+
+	if (isLoggedIn && (match.route.path === "/login" || match.route.path === "/")) {
+        navigateTo('/dashboard');
+        return;
+    }
 
 	//comment out to remove login for testing
-	// if (match.route.authRequired && !window.isLoggedIn) {
-	// 	console.log(`Access to ${match.route.path} is restricted.`);
-	// 	navigateTo("/login");
-	// 	return;
-	// }
-	const view = new match.route.view(getParams(match));
+	if (match.route.authRequired && !isLoggedIn) {
+		console.log(`Access to ${match.route.path} is restricted.`);
+		navigateTo('/login');
+		return;
+	}
 
-	view.getHtml();
+	// Load translations for the current page
+	// const page = localStorage.getItem('page');
+	// await loadTranslations(page);
+
+	const hashParams = getHashParams();
+    if (hashParams.view && match.route.path === "/friends") {
+        match.result.push(hashParams);
+    }
+
+	const view = new match.route.view(getParams(match));
+	await view.getHtml();
+
+	// Update translations after the view is rendered
+	document.dispatchEvent(new Event("viewUpdated"));
+
 };
 
-window.onload = (event) => {
-	if (window.localStorage.getItem('language') === null){
+export const loadTranslations = async (page) => {
+	const language = window.localStorage.getItem('language') || 'english';
+	try {
+		const response = await fetch(`./static/translations/${page}.json`);
+		console.log(response);
+		const data = await response.json();
+		if (!window.translations) {
+            window.translations = {};
+        }
+		window.translations = data; // Store translations globally
+		console.log('Translations loaded for page:', page, window.translations);
+	} catch (error) {
+		console.error('Error loading translation file:', error);
+	}
+};
+
+
+window.onload = async () => {
+	if (window.localStorage.getItem('language') == null){
 		window.localStorage.setItem('language', 'english');
 	}
 };
 
 window.addEventListener("popstate", router);
-//this will listen for back and forward buttons in the browser
+// this will listen for back and forward buttons in the browser
 // Dynamically import the translation file
 document.addEventListener("viewUpdated", () => {
 	if (localStorage.getItem('language') === 'language'){
@@ -123,7 +170,7 @@ function updateTranslationElements(currentTranslations){
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-	document.body.addEventListener("click", e => {
+	document.body.addEventListener("click", async e => {
 		if (e.target.matches("[privacy-link]")) {
 			e.preventDefault();
 			window.open(e.target.href);
@@ -144,12 +191,20 @@ document.addEventListener("DOMContentLoaded", () => {
 				}
 				})
 		}
+
+	});
+	
+	document.addEventListener('registrationSuccess', () => {
+		navigateTo('/login');
 	});
 
-document.addEventListener('loginSuccess', (event) => {
-	const { path } = event.detail;
-	navigateTo(path);
-});
+	document.addEventListener('loginSuccess', (event) => {
+		navigateTo(event.detail.path);
+	});
+// document.addEventListener('loginSuccess', (event) => {
+// 	const { path } = event.detail;
+// 	navigateTo(path);
+// });
 
 
 	router();

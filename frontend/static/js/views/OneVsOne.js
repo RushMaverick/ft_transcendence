@@ -1,4 +1,5 @@
 import AView from "./AView.js";
+import PongGame from "./gameCanvas/pongThree.js";
 
 export default class extends AView {
 	constructor(params){
@@ -8,10 +9,10 @@ export default class extends AView {
 
 	async getHtml(){
 
-		const test = this.createHeader('header', 'FIGHT ME ONE ON ONE!', 'h2');
+		const gameDiv = this.createGame('pong');
 
 		window.localStorage.setItem('page', 'OneVsOne');
-		this.updateView(test);
+		this.updateView(gameDiv);
 		return ;
 	}
 }

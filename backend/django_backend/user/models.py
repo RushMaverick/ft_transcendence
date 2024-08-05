@@ -32,7 +32,7 @@ class Avatar(models.Model):
         on_delete=models.CASCADE,
         primary_key=True,
     )
-    image = models.ImageField(upload_to=upload_to, blank=True, null=True)
+    image = models.ImageField(upload_to=upload_to, default='default/default.jpg')
     uploaded_on = models.DateTimeField(auto_now_add=True)
     # avatar = models.URLField(default='https://www.gravatar.com/avatar/')
     # avatar = models.URLField(default='https://picsum.photos/200')

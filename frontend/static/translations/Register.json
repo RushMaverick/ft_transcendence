@@ -5,6 +5,7 @@
 		"username": "käyttäjätunnus: ",
 		"password": "salasana: ",
 		"confirm-password": "salasana uudelleen: ",
+		"password-requirements": "",
 		"privacy": "Olen lukenut ja hyväksyn Pong -sivuston ",
 		"privacy-link": "tietosuojakäytännöt",
 		"register-button": "Rekisteröidy",
@@ -19,6 +20,7 @@
 		"username": "username: ",
 		"password": "password: ",
 		"confirm-password": "confirm password: ",
+		"password-requirements": "Password needs to have at least 8 letters, one character, one number, and one special character.",
 		"privacy": "I have read and agree to The Pong sites ",
 		"privacy-link": "privacy policy",
 		"register-button": "Sign up",
@@ -26,17 +28,18 @@
 		"login-link": "Log in here"
 	},
 
-	"spanish":
+	"swedish":
 	{
-		"register": "REGISTER IN SPANSIH",
-		"username": "nombre de usuario: ",
-		"password": "contraseña: ",
-		"confirm-password": "contraseña de nuevo: ",
-		"privacy": "He leído y acepto los sitios de The Pong ",
-		"privacy-link": "política de privacidad",
-		"register-button": "Sign up in spanish",
-		"login": "¿No tienes una cuenta?",
-		"login-link": "Login aquí"
+		"register": "REGISTRERA",
+		"username": "Användarnamn: ",
+		"password": "Lösenord: ",
+		"confirm-password": "Bekräfta lösenord: ",
+		"password-requirements": "",
+		"privacy": "Jag har läst och håller med Pong-webbsidan ",
+		"privacy-link": "Integritetspolicy",
+		"register-button": "Registrera",
+		"login": "Är du redan registrerad?",
+		"login-link": "Logga in här"
 	}
 
 }

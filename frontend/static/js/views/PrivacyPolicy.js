@@ -19,6 +19,7 @@ export default class extends AView {
 		policy1.appendChild(policy4);
 
 		const gdpr = this.createParagraph('gdpr', 'This is the privacy policy');
+		gdpr.classList.add('gdpr-intro');
 		const gdprRequests = this.createParagraph('gdpr-requests');
 		gdprRequests.classList.add('gdpr-requests')
 		const request2 = this.createParagraph('request2');

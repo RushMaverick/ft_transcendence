@@ -1,0 +1,54 @@
+{
+	"finnish":
+	{
+		"Friends": "Ystävät",
+		"searchForFriends": "Etsi ystäviä...",
+		"search": "Etsi",
+		"Friend-Requests": "Kaveripyynnöt",
+		"accept-button": "Hyväksy",
+		"ignore-button": "Ohita",
+		"request-button": "Pyydä",
+		"game-history": "Voitot: {wins}🏆\tTappiot: {loss}💀",
+		"online-status": "Online: {status}",
+		"yes": "Kyllä",
+		"no": "Ei",
+		"no-friends": "Sinulla ei ole ystäviä",
+		"no-user-found": "Käyttäjää ei löytynyt: {username}",
+		"no-request": "Sinulla ei ole kaveripyyntöjä"
+	},
+	"english":
+	{
+		"Friends": "Friends",
+		"searchForFriends": "Search for friends...",
+		"search": "Search",
+		"Friend-Requests": "Friend Requests",
+		"accept-button": "Accept",
+		"ignore-button": "Ignore",
+		"request-button": "Request",
+		"game-history": "Win: {wins}🏆\t Loss: {loss}💀",
+		"online-status": "Online: {status}",
+		"yes": "Yes",
+		"no": "No",
+	    "no-friends": "You have no friends",
+    	"no-user-found": "No Such User Found: {username}",
+    	"no-request": "You have no friend requests"
+	},
+	"swedish":
+	{
+		"Friends": "Vänner",
+		"searchForFriends": "Sök vänner...",
+		"search": "Sök",
+		"Friend-Requests": "Vänförfrågningar",
+		"accept-button": "Acceptera",
+		"ignore-button": "Ignorera",
+		"request-button": "Förfrågan",
+		"game-history": "Vinster: {wins}🏆\t Förluster: {loss}💀",
+		"online-status": "Online: {status}",
+		"yes": "Ja",
+		"no": "Nej",
+		"no-friends": "Inga vänner, hombre",
+		"no-user-found": "Ingen användare nämnd: {username}",
+		"no-request": "Inga vänförfrågningar"
+	}
+
+}

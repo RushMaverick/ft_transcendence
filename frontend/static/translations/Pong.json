@@ -1,7 +1,7 @@
 {
 	"finnish":
 	{
-		"header": "PONGI",
+		"header": "Super PongChamp",
 		"onevs-button": "yksvsyks",
 		"welcome": "täsä on pongi"
 
@@ -9,17 +9,17 @@
 
 	"english":
 	{
-		"header": "THE PONG",
+		"header": "Super PongChamp",
 		"onevs-button": "onevsone",
 		"welcome": "here you would find the pong "
 
 	},
 
-	"spanish":
+	"swedish":
 	{
-		"header": "UNO PONG POR FAVOR",
-		"onevs-button": "unocontrauno",
-		"welcome": "Aquí encontrarías los juegos pong "
+		"header": "Super PongChamp",
+		"onevs-button": "En mot en",
+		"welcome": "Här är Pongen "
 
 	}
 

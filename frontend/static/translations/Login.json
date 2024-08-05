@@ -2,29 +2,29 @@
 	"finnish":
 	{
 		"log-in": "KIRJAUDU SISÄÄN",
-		"username": "käyttäjätunnus: ",
-		"password": "salasana: ",
+		"username": "Käyttäjätunnus: ",
+		"password": "Salasana: ",
 		"register": "Etkö ole rekisteröitynyt?",
-		"register-link": "rekisteröidy täältä"
+		"register-link": "Rekisteröidy täältä"
 
 	},
 
 	"english":
 	{
 		"log-in": "LOG IN",
-		"username": "username: ",
-		"password": "password: ",
-		"register": "Dont have an account?",
+		"username": "Username: ",
+		"password": "Password: ",
+		"register": "Don't have an account?",
 		"register-link": "Register here"
 	},
 
-	"spanish":
+	"swedish":
 	{
-		"log-in": "LOG IN IN SPANSIH",
-		"username": "nombre de usuario: ",
-		"password": "contraseña: ",
-		"register": "¿No tienes una cuenta?",
-		"register-link": "Registrar aquí"
+		"log-in": "LOGGA IN",
+		"username": "Användarnamn: ",
+		"password": "Lösenord: ",
+		"register": "Har du inget konto?",
+		"register-link": "Registrera här"
 	}
 
 }
