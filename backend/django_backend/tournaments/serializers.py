@@ -19,7 +19,7 @@ class ParticipantSerializer(serializers.ModelSerializer):
         fields = ['id', 'tournament', 'player', 'position']
 
     def validate(self, data):
-        print("Data:", data, flush=True)
+        print("ParticipantSerializer:Data:", data, flush=True)
         try:
             tournament_id = data['tournament'].id
             player_id = data['player'].id

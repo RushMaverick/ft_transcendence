@@ -36,9 +36,12 @@ class Tournament():
         def handle_match_completed(sender, **kwargs):
             match_id = kwargs.get('match_id')
             winner = kwargs.get('winner')
-            #print(f"Received match completed signal for match {match_id} with winner {winner}", flush=True)
+            print(f"Received match completed signal for match {match_id} with winner {winner}", flush=True)
             # Add additional logic here to handle the match completion, e.g., updating tournament standings
-            self.match_completed[match_id] = True
+            self.match_completed[int(match_id)] = True
+                # Check if all matches are completed
+            if self.matches_done():
+                self.all_matches_completed_event.set()
 
         # Connect the handler function to the signal
         match_completed.connect(handle_match_completed)
@@ -134,6 +137,7 @@ class Tournament():
         print(f"tadaaa", flush=True)
 
     async def second_round(self):
+        print("tournament:second_round", flush=True)
         await self.create_round()
         # get winners from first round
         #print("second round", flush=True)
@@ -143,17 +147,21 @@ class Tournament():
                     match = await get_match(match_id)
                     winners.append(match.get("winner"))
 
-        #print(f"winners: {winners}", flush=True)
-        #print(f"participants: {self.participants}", flush=True)
+        print(f"tournament:second_round:winners: {winners}", flush=True)
+        print(f"tournament:second_round:winners[0].id: {winners[0].get("id")}", flush=True)
         # pair winners
         for i in range(0, len(winners), 2):
-            player1 = self.participants[winners[i]]["participant"]
-            player1_channel_name = self.participants[winners[i]]["channel_name"]
-            player2 = self.participants[winners[i+1]]["participant"]
-            player2_channel_name = self.participants[winners[i+1]]["channel_name"]
+            player1 = self.participants[winners[i].get("id")]["participant"]
+            print(f"tournament:second_round:player1: {player1}", flush=True)
+            player1_channel_name = self.participants[winners[i].get("id")]["channel_name"]
+            print(f"tournament:second_round:player1_channel_name: {player1_channel_name}", flush=True)
+            player2 = self.participants[winners[i+1].get("id")]["participant"]
+            print(f"tournament:second_round:player2: {player2}", flush=True)
+            player2_channel_name = self.participants[winners[i+1].get("id")]["channel_name"]
+            print(f"tournament:second_round:player2_channel_name: {player2_channel_name}", flush=True)
             match_id = await create_match(self.id, self.round_id, player1.id, player2.id)
             if not match_id:
-                #print("Error creating match", flush=True)
+                print("tournament:second_round:Error creating match", flush=True)
                 raise Exception("Error creating match")
             #print(f"match: {match_id}", flush=True)
             #print(f"round: {self.round_id}", flush=True)
@@ -168,12 +176,13 @@ class Tournament():
             await self.channel_layer.send(
                 player2_channel_name, {"type": "broadcast.message", "msg": {"match_id": match_id, "room_name": game_room_name}}
             )
+            print(f"tournament:second_round:match_id: {match_id}", flush=True)
 
-    async def matches_done(self):
-            for match_id, completed in self.match_completed.items():
-                if not completed:
-                    False
-            return True
+    def matches_done(self):
+            print ("tournament:matches_done: ", self.match_completed, flush=True)
+            all_completed = all(value for value in self.match_completed.values())
+            print("tournament:matches_done:all_completed: ", all_completed, flush=True)
+            return all_completed
 
     async def wait_for_all_matches_to_complete(self):
         print("Waiting for all matches to complete", flush=True)
@@ -218,36 +227,31 @@ class Tournament():
         #     return
         # tournament_serializer.save()
         # #print(tournament_serializer.data, flush=True)
-        print("start:Participants: ", self.participants, flush=True)
+        print("tournament:start:Participants: ", self.participants, flush=True)
         try:
             await self.channel_layer.group_send(
                 self.room_group_name, {"type": "broadcast.message", "msg": "Tournament started"}
             )
         except Exception as e:
-            print(f"Error sending tournament started message: {e}", flush=True)
+            print(f"tournament:start:Error sending tournament started message: {e}", flush=True)
         try:
             await self.first_round()
         except Exception as e:
             #print(f"Error pairing players: {e}", flush=True)
             return
-        print("#1", flush=True)
-        # Create a task to wait for all matches to complete
-        await self.wait_for_all_matches_to_complete()
-        print("#2", flush=True)
-
-        # Optionally, gather results or perform other actions after all matches have completed
-        print("#3", flush=True)
-        # Wait for all matches to complete before proceeding
-        # asyncio.sleep(5)
-        # await self.wait_for_all_matches_to_complete()
-        # asyncio.create_task(self.wait_for_all_matches_to_complete())
-        # await self.all_matches_completed_event.wait()
-        # # try:
-        # #     await self.second_round()
-        # # except Exception as e:
-        # #     #print(f"Error pairing players: {e}", flush=True)
-        # #     return
-        # # await self.wait_for_all_matches_to_complete()
+        print("tournament:start:#1", flush=True)
+        await self.all_matches_completed_event.wait()
+        self.all_matches_completed_event.clear()
+        print("tournament:start:#2", flush=True)
+        try:
+            await self.second_round()
+        except Exception as e:
+            #print(f"Error pairing players: {e}", flush=True)
+            return
+        print("tournament:start:#3", flush=True)
+        await self.all_matches_completed_event.wait()
+        self.all_matches_completed_event.clear()
+        print("tournament:start:#4", flush=True)
 
         # #Broadcast that tournament is over and winner
         winners = await self.get_winners()

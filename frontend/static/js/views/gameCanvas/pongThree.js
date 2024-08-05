@@ -63,6 +63,9 @@ export default class PongGame {
 			PongGame.instance.updatePositions();
 			PongGame.instance.renderer.render(PongGame.instance.scene, PongGame.instance.camera);
 		};
+		this.socket.onclose = function() {
+			console.log('POng WebSocket connection closed.');
+		};
 	}
 
 	updateUI() {

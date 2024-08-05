@@ -48,9 +48,9 @@ class GameConsumer(AsyncWebsocketConsumer):
 
     async def connect(self):
         user = self.scope['user']
-        print(f"User: {user}")
+        print(f"pong:connect:User: {user}", flush=True)
         if not user.is_authenticated:
-            print("User not authenticated")
+            print("pong:connect:User not authenticated", flush=True)
             return await self.close()
 
         self.game_room = self.scope["url_route"]["kwargs"]["room_name"]
@@ -64,16 +64,16 @@ class GameConsumer(AsyncWebsocketConsumer):
             self.match_id = query_params.get('match_id', [None])[0]
             # print(f"query_params: {query_params}", flush=True)
             if self.match_id != None:
-                print(f"match_id: {self.match_id}", flush=True)
+                print(f"pong:connect:match_id: {self.match_id}", flush=True)
                 self.match = await get_match(self.match_id)
-                print("#2", flush=True)
-                print(f"match: {self.match}", flush=True)
-                print(f"player_in_match: {player_in_match(self.match, user.id)}", flush=True)
+                # print("#2", flush=True)
+                print(f"pong:connect:match: {self.match}", flush=True)
+                print(f"pong:connect:player_in_match: {player_in_match(self.match, user.id)}", flush=True)
                 if not self.match or not player_in_match(self.match, user.id):
-                    print("Player not in match")
+                    print("pong:connect:Player not in match", flush=True)
                     return await self.close()
-                print("#3", flush=True)
-                print(f"match_id: {self.match_id}", flush=True)
+                # print("#3", flush=True)
+                print(f"pong:connect:match_id: {self.match_id}", flush=True)
                 self.tournament_match = True
         except Exception as e:
             pass
@@ -85,7 +85,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 
         # check if game is full
         if self.pong_game.player1 and self.pong_game.player2:
-            print("Game is full", flush=True)
+            print("pong:connect:Game is full", flush=True)
             return await self.close()
 
         # Add player to the game
@@ -111,6 +111,8 @@ class GameConsumer(AsyncWebsocketConsumer):
         if not self.pong_game.room_group_name:
             self.pong_game.add_room_group_name(self.room_group_name)
 
+        self.pong_game.disconnect = self.disconnect
+
         # Start game if both players are in
         if self.pong_game.player1 and self.pong_game.player2:
                 if not self.tournament_match:
@@ -121,18 +123,19 @@ class GameConsumer(AsyncWebsocketConsumer):
                 self.pong_game.match_instance = await get_match_instance(self.match_id)
                 Games.start_game(self.game_room)
 
-        print (f"Connected to {self.room_group_name}", flush=True)
+        print (f"pong:connect:Connected to {self.room_group_name}", flush=True)
         await self.accept()
 
 
 
     async def disconnect(self, close_code):
-        print("close_code: ", close_code, flush=True)
-        print(f"{self.player.id} disconnected from room {self.game_room}", flush=True)
+        print("pong:disconnect:close_code: ", close_code, flush=True)
+        print(f"pong:disconnect:{self.player.id} disconnected from room {self.game_room}", flush=True)
+        self.pong_game.remove_player(self.player)
         Games.stop_game(self.game_room)
         # Leave room group
         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
-
+        await self.close()
 
     async def receive(self, text_data):
         try:

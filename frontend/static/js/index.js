@@ -35,7 +35,7 @@ const navigateTo = url => {
 	router();
 };
 
-// const loggedIn = 
+// const loggedIn =
 
 //write client-side router
 const router = async () => {
@@ -154,3 +154,6 @@ document.addEventListener('loginSuccess', (event) => {
 
 	router();
 });
+
+
+export { navigateTo };

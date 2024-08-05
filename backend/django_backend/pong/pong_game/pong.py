@@ -22,6 +22,7 @@ class Pong:
 		self.match_id = None
 		self.match_instance = None
 		self.tournament_match = False
+		self.disconnect = None
 
 	def add_room_group_name(self, room_group_name: str) -> None:
 		self.room_group_name = room_group_name
@@ -45,11 +46,11 @@ class Pong:
 		print("stop", flush=True)
 		self.active = False
 
-	# def remove_player(self, player: Player) -> None:
-	# 	if player.id == 1:
-	# 		self.player1 = None
-	# 	elif player.id == 2:
-	# 		self.player2 = None
+	def remove_player(self, player: Player) -> None:
+		if player.id == 1:
+			self.player1 = None
+		elif player.id == 2:
+			self.player2 = None
 
 	async def update_state(self) -> None:
 		self.state = {
@@ -113,6 +114,7 @@ class Pong:
 		print("Game loop ended", flush=True)
 
 		await self.save_match() #not the correct place to call this
+		await self.disconnect(42)
 
 	@sync_to_async
 	def save_match(self, winner: int=None) -> None:

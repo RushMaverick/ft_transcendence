@@ -25,3 +25,4 @@ class Games:
 			print(f"Stopping {game_name}", flush=True)
 			cls.games[game_name].stop()
 			del cls.games[game_name]
+			print("games.py:stop_game:cls.games:", cls.games, flush=True)

@@ -1,5 +1,5 @@
 import AView from "./AView.js";
-
+import { navigateTo } from "../index.js";
 export default class extends AView {
 	constructor(params){
 		super(params);//call the constructor of the parent class
@@ -29,12 +29,16 @@ export default class extends AView {
 			console.log(JSON.parse(event.data));
 			// store the data in local storage
 			let tournament = JSON.parse(event.data);
+
+			if (tournament.match_id == null || tournament.room_name == null){
+				return;
+			}
 			localStorage.setItem('match_id', tournament.match_id);
 			localStorage.setItem('room_name', tournament.room_name);
 			console.log('getHtml()');
 			console.log(tournament.match_id);
 			console.log(tournament.room_name);
-
+			navigateTo('/pong');
 		};
 
 		const startButton = this.createButton('start', 'btn', 'Start');

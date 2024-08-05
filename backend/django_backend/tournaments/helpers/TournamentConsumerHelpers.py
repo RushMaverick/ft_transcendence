@@ -17,7 +17,7 @@ def create_match(tournament_id: int, round_id: int, player1_id: int, player2_id:
         print(match_serializer.errors, flush=True)
         return None
     match = match_serializer.save()
-    print(match_serializer.data, flush=True)
+    # print(match_serializer.data, flush=True)
     return match
 
 @sync_to_async
@@ -28,10 +28,10 @@ def create_round(tournament_id: int, round_number: int) -> int:
     })
     if round_serializer.is_valid():
         round = round_serializer.save()
-        print(round_serializer.data, flush=True)
+        # print(round_serializer.data, flush=True)
     else:
         print(round_serializer.errors, flush=True)
-    print("round id", round.id, flush=True)
+    # print("round id", round.id, flush=True)
     return round.id
 
 @sync_to_async
@@ -55,7 +55,7 @@ def add_participant(tournament_id: int, player_id: int):
         print(participant_serializer.errors, flush=True)
         return None
     participant = participant_serializer.save()
-    print(participant_serializer.data, flush=True)
+    # print(participant_serializer.data, flush=True)
     return participant
 
 @sync_to_async
