@@ -12,6 +12,11 @@ body {
   .pong {
 	margin-left: 10rem;
   }
+
+  .searchDiv {
+	margin-left: 38rem;
+	margin-bottom: 2rem;
+  }
   
   .container {
 	width: 80%;
