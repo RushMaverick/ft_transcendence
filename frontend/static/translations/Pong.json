@@ -3,7 +3,9 @@
 	{
 		"header": "Super PongChamp",
 		"onevs-button": "yksvsyks",
-		"welcome": "täsä on pongi"
+		"welcome": "täsä on pongi",
+		"searchForFriends": "Etsi ystäviä...",
+		"search": "Etsi"
 
 	},
 
@@ -11,7 +13,9 @@
 	{
 		"header": "Super PongChamp",
 		"onevs-button": "onevsone",
-		"welcome": "here you would find the pong "
+		"welcome": "here you would find the pong ",
+		"searchForFriends": "Search for friends...",
+		"search": "Search"
 
 	},
 
@@ -19,7 +23,10 @@
 	{
 		"header": "Super PongChamp",
 		"onevs-button": "En mot en",
-		"welcome": "Här är Pongen "
+		"welcome": "Här är Pongen ",
+		"searchForFriends": "Sök vänner...",
+		"search": "Sök"
+
 
 	}
 
