@@ -22,21 +22,9 @@ class Pong:
 		self.match_id = None
 		self.match_instance = None
 		self.tournament_match = False
-		self.disconnect = None
+		self.player_consumers = []
+		self.winner = None
 
-	def add_room_group_name(self, room_group_name: str) -> None:
-		self.room_group_name = room_group_name
-
-	def add_channel_layer(self, channel_layer) -> None:
-		self.channel_layer = channel_layer
-
-	def add_player(self, player: Player) -> Player:
-		if player.id == 1:
-			self.player1 = player
-			return self.player1
-		elif player.id == 2:
-			self.player2 = player
-			return self.player2
 
 	def start(self) -> None:
 		print("start", flush=True)
@@ -92,6 +80,16 @@ class Pong:
 			self.player1.score += 1
 			self.ball.reset_position()
 
+	async def kill_connections(self) -> None:
+		for consumer in self.player_consumers:
+			await consumer.close()
+
+	def surrender(self, player_id) -> None:
+		if player_id == 1:
+			self.winner = self.player2.user.id
+		elif player_id == 2:
+			self.winner = self.player1.user.id
+
 	async def game_loop(self) -> None:
 		print("Game loop", flush=True)
 		print(f"Tournament match: {self.tournament_match}", flush=True)
@@ -113,8 +111,12 @@ class Pong:
 				await asyncio.sleep(sleep_time)
 		print("Game loop ended", flush=True)
 
-		await self.save_match() #not the correct place to call this
-		await self.disconnect(42)
+		if self.winner:
+			await self.save_match(winner=self.winner)
+		else:
+			await self.save_match()
+		await self.kill_connections()
+
 
 	@sync_to_async
 	def save_match(self, winner: int=None) -> None:
@@ -122,6 +124,7 @@ class Pong:
 		p2 = self.player2.user.id
 		if not winner:
 			winner = p1 if self.player1.score > self.player2.score else p2
+		# print(f"Saving match with winner: {winner}", flush=True)
 		serializer = MatchSerializer(data={
 			"player1": p1,
 			"player2": p2,

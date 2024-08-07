@@ -18,6 +18,7 @@ import asyncio
 class TournamentConsumer(AsyncWebsocketConsumer):
     def __init__(self, *args, **kwargs):
         self.room_group_name = None
+        self.tournament = None
         super().__init__(*args, **kwargs)
 
 
@@ -27,9 +28,9 @@ class TournamentConsumer(AsyncWebsocketConsumer):
 
         # Check if user is authenticated
         user = self.scope['user']
-        #print(f"User: {user}")
+        print(f"tournaments:consumers.py:connect:User: {user}", flush=True)
         if not user.is_authenticated:
-            #print("User not authenticated")
+            print("tournaments:consumers.py:connect:User not authenticated", flush=True)
             return await self.close()
 
         # Get tournament id from the url
@@ -69,7 +70,8 @@ class TournamentConsumer(AsyncWebsocketConsumer):
         # Only remove participants if the tournamnet has not started
         # if self.tournament.status == "open":
         #     await remove_participant(self.tournament_id, self.participant.id)
-        await self.tournament.remove_participant(self.participant.id)
+        if self.tournament:
+            await self.tournament.remove_participant(self.participant.id)
         if self.room_group_name:
             await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
 

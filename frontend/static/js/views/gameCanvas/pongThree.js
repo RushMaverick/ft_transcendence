@@ -41,10 +41,10 @@ export default class PongGame {
 		this.setupBall();
 		this.animate();
 	}
-	
+
 	menuSetup() {
 		this.menuCam = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-		
+
 		this.startButton = new Text();
 		this.startButton.text = 'Awaiting Players...';
 		this.startButton.font = 'static/js/views/gameCanvas/fonts/Tiny5-Regular.ttf';
@@ -61,12 +61,12 @@ export default class PongGame {
 
 
 	joinGame() {
-		let match_id = localStorage.getItem('match_id');
-		let room_name = localStorage.getItem('room_name');
+		let match_id = sessionStorage.getItem('match_id');
+		let room_name = sessionStorage.getItem('room_name');
 		console.log('joinGame()');
 		console.log(match_id);
 		console.log(room_name);
-		this.socket = new WebSocket(`ws://localhost:8000/ws/game/${room_name}/?token=${localStorage.getItem('access')}&match_id=${match_id}`);
+		this.socket = new WebSocket(`ws://localhost:8000/ws/game/${room_name}/?token=${sessionStorage.getItem('access')}&match_id=${match_id}`);
 		this.socket.onerror = function(error) {
 			console.error("WebSocket Error:", error);
 		};

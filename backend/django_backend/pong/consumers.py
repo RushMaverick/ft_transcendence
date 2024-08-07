@@ -92,26 +92,27 @@ class GameConsumer(AsyncWebsocketConsumer):
         if not self.tournament_match:
             if not self.pong_game.player1:
                 self.player = Player(1, user)
-                self.pong_game.add_player(self.player)
+                self.pong_game.player1 = self.player
             elif not self.pong_game.player2:
                 self.player = Player(2, user)
-                self.pong_game.add_player(self.player)
+                self.pong_game.player2 = self.player
+
         else:
             if user.id == self.match.get("player1").get("id"):
                 self.player = Player(1, user)
-                self.pong_game.add_player(self.player)
+                self.pong_game.player1 = self.player
             elif user.id == self.match.get("player2").get("id"):
                 self.player = Player(2, user)
-                self.pong_game.add_player(self.player)
+                self.pong_game.player2 = self.player
+
+        self.pong_game.player_consumers.append(self)
 
         # Socket stuff
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
         if not self.pong_game.channel_layer:
-            self.pong_game.add_channel_layer(self.channel_layer)
+            self.pong_game.channel_layer = self.channel_layer
         if not self.pong_game.room_group_name:
-            self.pong_game.add_room_group_name(self.room_group_name)
-
-        self.pong_game.disconnect = self.disconnect
+            self.pong_game.room_group_name = self.room_group_name
 
         # Start game if both players are in
         if self.pong_game.player1 and self.pong_game.player2:
@@ -131,11 +132,14 @@ class GameConsumer(AsyncWebsocketConsumer):
     async def disconnect(self, close_code):
         print("pong:disconnect:close_code: ", close_code, flush=True)
         print(f"pong:disconnect:{self.player.id} disconnected from room {self.game_room}", flush=True)
-        self.pong_game.remove_player(self.player)
-        Games.stop_game(self.game_room)
+        # Check if game status is ongoing if it is then save_match(winner_id)
+        if self.pong_game.active:
+            self.pong_game.surrender(player_id=self.player.id)
+
+        Games.remove_game(self.game_room)
+
         # Leave room group
         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
-        await self.close()
 
     async def receive(self, text_data):
         try:
@@ -148,7 +152,7 @@ class GameConsumer(AsyncWebsocketConsumer):
         if (cmd == "move"):
             self.player.move(cmd_args)
         elif (cmd == "stop"):
-            Games.stop_game(self.game_room)
+            Games.remove_game(self.game_room)
         elif (cmd == "start"):
             Games.start_game(self.game_room)
 
