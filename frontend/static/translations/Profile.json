@@ -2,8 +2,8 @@
 	"finnish":
 	{
 		"header": "Profiili",
-		"link1": "Tilastot: ",
-		"link2": "Asetukset: ",
+		"link1": "> Tilastot",
+		"link2": "> Asetukset",
 		"game-history": "Voitot: {wins}🏆\tTappiot: {loss}💀",
 		"winmsg": "Upeaa! Olet menossa hienosti",
 		"lossmsg": "Pelataanko lisää saadaksemme voittoja?",
@@ -13,8 +13,8 @@
 	"english":
 	{
 		"header": "Profile",
-		"link1": "Stats",
-		"link2": "Settings",
+		"link1": "> Stats",
+		"link2": "> Settings",
 		"game-history": "Win: {wins}🏆\t Loss: {loss}💀",
 		"winmsg": "Amazing! You are doing great",
 		"lossmsg": "Shall we play more to get some wins?",
@@ -28,8 +28,8 @@
 		"emailbase": "Strömpost: ",
 		"game-history": "Vinster: {wins}🏆\t Förluster: {loss}💀",
 		"message": "Här kan du: ",
-		"link1": "Statistik ",
-		"link2": "Inställingar ",
+		"link1": "> Statistik",
+		"link2": "> Inställingar",
 		"winmsg": "Super, de går jättebra!",
 		"lossmsg": "Ska vi spela mera för att få några vinster?",
 		"tiemsg": "Jämnställt! Vi spelar mera!"

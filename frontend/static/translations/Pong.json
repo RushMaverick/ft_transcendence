@@ -2,7 +2,7 @@
 	"finnish":
 	{
 		"header": "Super PongChamp",
-		"onevs-button": "yksvsyks",
+		"onevs-button": "> yksvsyks",
 		"welcome": "täsä on pongi",
 		"searchForFriends": "Etsi ystäviä...",
 		"search": "Etsi"
@@ -12,7 +12,7 @@
 	"english":
 	{
 		"header": "Super PongChamp",
-		"onevs-button": "onevsone",
+		"onevs-button": "> onevsone",
 		"welcome": "here you would find the pong ",
 		"searchForFriends": "Search for friends...",
 		"search": "Search"
@@ -22,7 +22,7 @@
 	"swedish":
 	{
 		"header": "Super PongChamp",
-		"onevs-button": "En mot en",
+		"onevs-button": "> En mot en",
 		"welcome": "Här är Pongen ",
 		"searchForFriends": "Sök vänner...",
 		"search": "Sök"
