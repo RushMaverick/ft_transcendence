@@ -2,6 +2,11 @@ import time, asyncio
 from .player import Player
 from .ball import Ball
 from . import consts
+from ..signals import match_completed
+
+from match.serializers import MatchSerializer
+from match.models import Match
+from asgiref.sync import sync_to_async
 
 class Pong:
 	def __init__(self):
@@ -14,20 +19,12 @@ class Pong:
 		self.player2: Player = None
 		self.active: bool = False
 		self.state = {}
+		self.match_id = None
+		self.match_instance = None
+		self.tournament_match = False
+		self.player_consumers = []
+		self.winner = None
 
-	def add_room_group_name(self, room_group_name: str) -> None:
-		self.room_group_name = room_group_name
-
-	def add_channel_layer(self, channel_layer) -> None:
-		self.channel_layer = channel_layer
-
-	def add_player(self, player: Player) -> Player:
-		if player.id == 1:
-			self.player1 = player
-			return self.player1
-		elif player.id == 2:
-			self.player2 = player
-			return self.player2
 
 	def start(self) -> None:
 		print("start", flush=True)
@@ -37,11 +34,11 @@ class Pong:
 		print("stop", flush=True)
 		self.active = False
 
-	# def remove_player(self, player: Player) -> None:
-	# 	if player.id == 1:
-	# 		self.player1 = None
-	# 	elif player.id == 2:
-	# 		self.player2 = None
+	def remove_player(self, player: Player) -> None:
+		if player.id == 1:
+			self.player1 = None
+		elif player.id == 2:
+			self.player2 = None
 
 	async def update_state(self) -> None:
 		self.state = {
@@ -83,8 +80,20 @@ class Pong:
 			self.player1.score += 1
 			self.ball.reset_position()
 
+	async def kill_connections(self) -> None:
+		for consumer in self.player_consumers:
+			await consumer.close()
+
+	def surrender(self, player_id) -> None:
+		if player_id == 1:
+			self.winner = self.player2.user.id
+		elif player_id == 2:
+			self.winner = self.player1.user.id
+
 	async def game_loop(self) -> None:
 		print("Game loop", flush=True)
+		print(f"Tournament match: {self.tournament_match}", flush=True)
+		await self.set_match_status("in_progress")
 		while self.active:
 			if not self.player1 or not self.player2:
 				print("Players not connected", flush=True)
@@ -93,12 +102,59 @@ class Pong:
 			start_time = time.time()
 			self.update_game()
 			await self.update_state()
-			# if self.player1.score >= 5 or self.player2.score >= 5:
-			# 	self.stop()
-			# 	print("Game Over", flush=True)
+			if self.player1.score >= 1 or self.player2.score >= 1:
+				self.stop()
+				print("Game Over", flush=True)
 			delta_time = time.time() - start_time
 			sleep_time = 1./self.tick - delta_time
 			if (sleep_time > 0):
 				await asyncio.sleep(sleep_time)
 		print("Game loop ended", flush=True)
 
+		if self.winner:
+			await self.save_match(winner=self.winner)
+		else:
+			await self.save_match()
+		await self.kill_connections()
+
+
+	@sync_to_async
+	def save_match(self, winner: int=None) -> None:
+		p1 = self.player1.user.id
+		p2 = self.player2.user.id
+		if not winner:
+			winner = p1 if self.player1.score > self.player2.score else p2
+		# print(f"Saving match with winner: {winner}", flush=True)
+		serializer = MatchSerializer(data={
+			"player1": p1,
+			"player2": p2,
+			"winner": winner,
+			"player1_score": self.player1.score,
+			"player2_score": self.player2.score,
+			"status": "completed",
+			})
+		if not serializer.is_valid():
+			raise ValueError("Match data could not be serialized")
+
+		if self.match_instance:
+			serializer.update(self.match_instance, serializer.validated_data)
+			print("Match saved", flush=True)
+		print(f"Tournament match: {self.tournament_match}", flush=True)
+		if self.tournament_match:
+			match_completed.send(sender=self.__class__, match_id=self.match_id, winner=winner)
+
+	@sync_to_async
+	def set_match_status(self, status: str) -> None:
+		p1 = self.player1.user.id
+		p2 = self.player2.user.id
+		serializer = MatchSerializer(data={
+			"player1": p1,
+			"player2": p2,
+			"player1_score": self.player1.score,
+			"player2_score": self.player2.score,
+			"status": status,
+			})
+		if not serializer.is_valid():
+			raise ValueError("Match data could not be serialized")
+		serializer.update(self.match_instance, serializer.validated_data)
+		print("Match status updated", flush=True)
