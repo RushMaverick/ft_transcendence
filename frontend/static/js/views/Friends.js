@@ -130,14 +130,14 @@ export default class Friends extends AView{
     }
 
 	async searchFriend(username) {
-		// const payload = { user: username };
-		// const response = await fetch('/api/search', {
-			// 	method: 'POST',
-			// 	headers: {
-				// 		'Content-Type': 'application/json'
-				// 	},
-				// 	body: JSON.stringify(payload)
-				// });
+		const payload = { user: username };
+		const response = await fetch(`${import.meta.env.VITE_API_ENDPOINT}/user/`, {
+				method: 'POST',
+				headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify(payload)
+				});
 		if (!document.querySelector('.list-group')) {
 			await this.getHtml();
 		}
@@ -150,8 +150,8 @@ export default class Friends extends AView{
 		}
 		friendsList.innerHTML = '';
 		
-		// const result = await response.json();
-		const result = await this.fetchJsonData('static/js/views/search.json');
+		const result = await response.json();
+		// const result = await this.fetchJsonData('static/js/views/search.json');
 		if (result && result.length > 0) {
 			result.forEach(friend => {
 				friendsList.appendChild(this.createFriendItem(friend));
@@ -163,7 +163,7 @@ export default class Friends extends AView{
 	}
 
 	async showFriendRequests() {
-		const requests = await this.fetchJsonData('static/js/views/friendRequest.json');
+		const requests = await this.fetchJsonData(`${import.meta.env.VITE_API_ENDPOINT}/friends/`);
 		const requestsList = document.createElement('div');
 		requestsList.className = 'list-group';
 	

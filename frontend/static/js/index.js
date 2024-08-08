@@ -14,6 +14,7 @@ import Register from "./views/Register.js";
 import Profile from "./views/Profile.js";
 import Settings from "./views/Settings.js";
 import PrivacyPolicy from "./views/PrivacyPolicy.js";
+import MatchHistory from "./views/MatchHistory.js";
 
 //match the first character of the string or the start of the string -> "^"
 const pathToRegex = path => new RegExp("^" + path.replace(/\//g, "\\/").replace(/:\w+/g, "(.+)") + "$");
@@ -57,6 +58,7 @@ const router = async () => {
 		{ path: "/privacypolicy", view: PrivacyPolicy},
 		{ path: "/register", view: Register },
 		{ path: "/dashboard", view: Dashboard, authRequired: true },
+		{ path: "/profile/matchhistory", view: MatchHistory, authRequired: true },
 		{ path: "/one-vs-one", view: OneVsOne, authRequired: true},
 		{ path: "/tournaments", view: Tournaments, authRequired: true},
 		{ path: "/pong", view: Pong, authRequired: true},
@@ -89,11 +91,11 @@ const router = async () => {
     }
 
 	//comment out to remove login for testing
-	if (match.route.authRequired && !isLoggedIn) {
-		console.log(`Access to ${match.route.path} is restricted.`);
-		navigateTo('/login');
-		return;
-	}
+	// if (match.route.authRequired && !isLoggedIn) {
+	// 	console.log(`Access to ${match.route.path} is restricted.`);
+	// 	navigateTo('/login');
+	// 	return;
+	// }
 
 	// Load translations for the current page
 	// const page = localStorage.getItem('page');
