@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from tournaments.models import Tournament
 
 
 # OnlineStatus Model:
