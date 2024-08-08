@@ -27,6 +27,21 @@ class OnlineStatusView(APIView):
         serializer = OnlineStatusSerializer(user_status)
         return Response({"User_status": serializer.data}, status=status.HTTP_200_OK)
 
+class SettingsViewSet(viewsets.ModelViewSet):
+    serializer_class = AvatarSerializer
+    permission_classes = [IsAuthenticatedOrCreateOnly, IsUser]
+
+    """Return the avatar and his url in settings"""
+    @action(detail=False, methods=['get'], permission_classes=[IsAuthenticatedOrCreateOnly, IsUser])
+    def get_avatar(self,request):
+        user = request.user
+        avatar = Avatar.objects.filter(user=user).first()
+        
+        if not avatar:
+            return Response({"detail": "Avatar not found."}, status=404)
+        
+        serializer = self.serializer_class(instance=avatar)
+        return Response(serializer.data)
 
 class AvatarViewSet(APIView):
     serializer_class = AvatarSerializer
