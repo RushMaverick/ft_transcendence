@@ -26,6 +26,20 @@ class RoomOneViewSet(viewsets.ModelViewSet):
 
         serializer = RoomSerializer(room)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+    """Return the list of the pending invitation årequests"""
+    @action(detail=False, methods=['get'], permission_classes=[IsAuthenticatedOrCreateOnly, IsUser])
+    def list_invitation_request(self, request):
+        user = request.user
+        if(user.is_authenticated == False):
+            return(Response({"Warning": "Anonimus User"}, status=status.HTTP_401_UNAUTHORIZED))
+        
+        pending_request = InvitationRequest.objects.filter(to_user=user, accepted=False)
+        if not pending_request.exists():
+            return Response({"Detail": "No pending invitation requests."}, status=status.HTTP_200_OK)
+
+        serializer = InvitationSerializer(pending_request, many=True)
+        return Response({"Pending Friend request": serializer.data}, status=status.HTTP_200_OK)
 
     """Send invitation request for a room"""
     @action(detail=False, methods=['post'], permission_classes=[IsAuthenticatedOrCreateOnly, IsUser])
@@ -96,3 +110,6 @@ class RoomOneViewSet(viewsets.ModelViewSet):
 
         return Response({"detail": "Invitation request rejected."}, status=status.HTTP_200_OK)
     
+    # """Delete Rooom request"""
+    # # @action(detail=True, methods=['delete'], permission_classes=[IsAuthenticatedOrCreateOnly, IsUser])
+    # # def reject_request(self,request, pk=None):
