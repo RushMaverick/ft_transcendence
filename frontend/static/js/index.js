@@ -14,6 +14,8 @@ import Register from "./views/Register.js";
 import Profile from "./views/Profile.js";
 import Settings from "./views/Settings.js";
 import PrivacyPolicy from "./views/PrivacyPolicy.js";
+import CreateGame from "./views/CreateGame.js";
+import GameInvites from "./views/GameInvites.js";
 
 //match the first character of the string or the start of the string -> "^"
 const pathToRegex = path => new RegExp("^" + path.replace(/\//g, "\\/").replace(/:\w+/g, "(.+)") + "$");
@@ -48,6 +50,7 @@ const navigateTo = url => {
 
 // const loggedIn =
 
+let view = null;
 //write client-side router
 const router = async () => {
 	//inside friends, it will be  /friends/:id
@@ -58,6 +61,8 @@ const router = async () => {
 		{ path: "/register", view: Register },
 		{ path: "/dashboard", view: Dashboard, authRequired: true },
 		{ path: "/one-vs-one", view: OneVsOne, authRequired: true},
+		{ path: "/create-game", view: CreateGame, authRequired: true},
+		{ path: "/game-invites", view: GameInvites, authRequired: true},
 		{ path: "/tournaments", view: Tournaments, authRequired: true},
 		{ path: "/pong", view: Pong, authRequired: true},
 		{ path: "/friends", view: Friends, authRequired: true },
@@ -104,7 +109,12 @@ const router = async () => {
         match.result.push(hashParams);
     }
 
-	const view = new match.route.view(getParams(match));
+	if (view)
+	{
+		//before view change
+		await view.dismount();
+	}
+	view = new match.route.view(getParams(match));
 	await view.getHtml();
 
 	// Update translations after the view is rendered
@@ -116,7 +126,6 @@ export const loadTranslations = async (page) => {
 	const language = window.localStorage.getItem('language') || 'english';
 	try {
 		const response = await fetch(`./static/translations/${page}.json`);
-		console.log(response);
 		const data = await response.json();
 		if (!window.translations) {
             window.translations = {};
@@ -210,3 +219,4 @@ document.addEventListener("DOMContentLoaded", () => {
 	router();
 });
 
+export { navigateTo };

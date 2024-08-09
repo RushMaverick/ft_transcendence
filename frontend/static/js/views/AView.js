@@ -13,6 +13,10 @@ export default class {
 		return "";
 	}
 
+	async dismount(){
+		return "";
+	}
+
 	clearView() {
 		const container = document.querySelector('main');
 		container.innerHTML = '';
@@ -119,7 +123,14 @@ export default class {
 
 	async fetchJsonData(url) {
         try {
-            const response = await fetch(url);
+            const response = await fetch(`${import.meta.env.VITE_API_ENDPOINT}` + url,
+					{
+						method: 'GET',
+						headers: {
+							'Content-Type': 'application/json',
+							'Authorization': 'Bearer ' + sessionStorage.getItem('access')
+						}
+					});
             if (!response.ok) {
                 throw new Error(`HTTP error status: ${response.status}`);
             }
@@ -132,18 +143,29 @@ export default class {
 
 	static async fetchWithJson(url, method, body) {
 		try {
-			const response = await fetch(url, {
-				method: method,
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify(body)
-			});
-	
+			let response;
+			if (method === 'GET') {
+				response = await fetch(`${import.meta.env.VITE_API_ENDPOINT}` + url, {
+					method: method,
+					headers: {
+						'Content-Type': 'application/json',
+						'Authorization': 'Bearer ' + sessionStorage.getItem('access')
+					}
+				});
+			} else {
+				response = await fetch(`${import.meta.env.VITE_API_ENDPOINT}` + url, {
+					method: method,
+					headers: {
+						'Content-Type': 'application/json',
+						'Authorization': 'Bearer ' + sessionStorage.getItem('access')
+					},
+					body: JSON.stringify(body)
+				});
+			}
 			if (!response.ok) {
 				throw new Error(`HTTP error status: ${response.status}`);
 			}
-	
+
 			return await response.json();
 		} catch (error) {
 			console.error(`Error during fetch request to ${url}:`, error);
@@ -157,14 +179,14 @@ export default class {
 		const gameDiv = document.createElement('div');
 		gameDiv.id = name; // Assign an ID to easily select the game later
 		gameDiv.classList.add(name);
-	
+
 		// Create a new PongGame instance
 		const pong = new PongGame();
 
 		// Append the game div to the body (or another element)
 		document.body.appendChild(gameDiv);
 		gameDiv.appendChild(pong.renderer.domElement);
-		
+
 		// Return the game div for potential further manipulation
 		return gameDiv;
 	}

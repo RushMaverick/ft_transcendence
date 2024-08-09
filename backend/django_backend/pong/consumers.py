@@ -64,15 +64,15 @@ class GameConsumer(AsyncWebsocketConsumer):
         if not user.is_authenticated:
             print("pong:connect:User not authenticated", flush=True)
             return await self.close()
-        
+
         self.game_room = self.scope["url_route"]["kwargs"]["room_name"]
         self.room_group_name = f"game_{self.game_room}"
 
-        # try:
-        #     self.room = await self.get_room(self.game_room)
-        # except Room.DoesNotExist:
-        #     await self.close()
-        #     return
+        try:
+            self.room = await get_room(self.game_room)
+        except Room.DoesNotExist:
+            await self.close()
+            return
 
         # # Check if the user is part of the room
         # if not await is_user_in_room(user, self.room):
@@ -157,7 +157,7 @@ class GameConsumer(AsyncWebsocketConsumer):
         if self.pong_game.active:
             self.pong_game.surrender(player_id=self.player.id)
 
-        Games.remove_game()
+        Games.remove_game(self.game_room)
 
         # Leave room group
         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)

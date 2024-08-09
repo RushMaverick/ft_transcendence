@@ -2,22 +2,24 @@
 	"finnish":
 	{
 		"header": "YKS VEEÄS YKS",
-		"welcome": "täältä pelailisit yks vs yks"
-
+		"welcome": "täältä pelailisit yks vs yks",
+		"invites": "Peli kutsut",
+		"createGame": "Luo peli"
 	},
 
 	"english":
 	{
 		"header": "ONE VS ONE",
-		"welcome": "here you would find the one vs one games "
-
+		"welcome": "here you would find the one vs one games ",
+		"invites": "Game invites",
+		"createGame": "Create game"
 	},
 
 	"swedish":
 	{
 		"header": "EN MOT EN",
-		"welcome": "Här hittar du en mot en matcherna "
-
+		"welcome": "Här hittar du en mot en matcherna ",
+		"invites": "Match inbjudningar",
+		"createGame": "Skapa match"
 	}
-
 }

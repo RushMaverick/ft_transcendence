@@ -3,12 +3,10 @@ import textInputField from "./TextInputView.js";
 import PongGame from "./gameCanvas/pongThree.js";
 import { loadTranslations } from "../index.js";
 
-import { navigateTo } from "../index.js";
-
 export default class extends AView {
 	constructor(params){
 		super(params);//call the constructor of the parent class
-		this.setTitle("One-vs-one");
+		this.setTitle("Create game");
 	}
 
 	searchTranslations(key){
@@ -20,13 +18,10 @@ export default class extends AView {
 		return search;
 	}
 
-	async handleInvite(playerId) {
-		console.log('Invite player:', playerId);
 
-	}
 
 	createPlayerItem(player) {
-		console.log('Friend:', player);
+		console.log('Player:', player);
 		const playerDiv = document.createElement('div');
 		playerDiv.classList.add('list-group-item', 'friend');
 
@@ -35,14 +30,14 @@ export default class extends AView {
 		avatar.alt = `${player.username}'s avatar`;
 		playerDiv.appendChild(avatar);
 
-		// const usernameLink = document.createElement('a');
-		// usernameLink.textContent = player.username;
+		const usernameLink = document.createElement('a');
+		usernameLink.textContent = player.username;
 		// usernameLink.href = `#friends/${player.username}`;
 		// usernameLink.addEventListener('click', (event) => {
 		// 	event.preventDefault();
 		// 	this.navigateToFriendsProfile(player.username);
 		// });
-		// playerDiv.appendChild(usernameLink);
+		playerDiv.appendChild(usernameLink);
 
 		const status = document.createElement('div');
 		status.classList.add('status');
@@ -58,7 +53,7 @@ export default class extends AView {
 		actions.setAttribute('lang-key', '');
 		actions.classList.add('actions');
 		const inviteButton = this.createButton('invite-button', 'btn', this.searchTranslations('invite-button'));
-		inviteButton.addEventListener('click', () => this.handleInvite(player.id));
+		inviteButton.addEventListener('click', () => this.handleInvite(player.username));
 		actions.appendChild(inviteButton);
 
 		playerDiv.appendChild(actions);
@@ -76,45 +71,44 @@ export default class extends AView {
 		this.updateView(playerDiv);
 	}
 
-	async handleCreateGame() {
-		console.log('Create Game');
-		navigateTo('/create-game');
+	async createRoom(){
+		const result = await AView.fetchWithJson('/rooms/create_room/', 'POST', {});
+		console.log(result);
 	}
 
-	async handleInvites() {
-		console.log('Invites');
-		navigateTo('/game-invites');
+	async handleInvite(username) {
+		console.log('Invite player:', username);
+		const result = await AView.fetchWithJson('/rooms/one_vs_one_invitation/', 'POST', { "guest": username});
+		console.log(result);
 	}
 
 	async getHtml(){
-		window.localStorage.setItem('page', 'OneVsOne');
-		await loadTranslations('OneVsOne');
+		window.localStorage.setItem('page', 'CreateGame');
+		await loadTranslations('CreateGame');
 
-		const createGameButton = this.createButton('create', 'btn', this.searchTranslations('createGame'));
-		createGameButton.addEventListener('click', () => {
-			this.handleCreateGame();
-		});
+		await this.createRoom();
 
-		const invitesButton = this.createButton('invites', 'btn', this.searchTranslations('invites'));
-		invitesButton.addEventListener('click', () => {
-			this.handleInvites();
-		});
-
-		// const findPlayerFrom = this.createForm('tournamentform');
-		// const findPlayerInput = textInputField(
-		// 	'name',
-		// 	'Name',
-		// 	'name',
-		// 	'text'
-		// );
-		// const findButton = this.createButton('find', 'find', this.searchTranslations('findPlayers'));
-		// findPlayerFrom.appendChild(findPlayerInput);
-		// findPlayerFrom.appendChild(findButton);
-		// findPlayerFrom.addEventListener('submit', this.handleFind.bind(this));
+		const findPlayerFrom = this.createForm('tournamentform');
+		const findPlayerInput = textInputField(
+			'name',
+			'Name',
+			'name',
+			'text'
+		);
+		const findButton = this.createButton('find', 'find', this.searchTranslations('findPlayers'));
+		findPlayerFrom.appendChild(findPlayerInput);
+		findPlayerFrom.appendChild(findButton);
+		findPlayerFrom.addEventListener('submit', this.handleFind.bind(this));
 
 		// const gameDiv = this.createGame('pong');
 
-		this.updateView(createGameButton, invitesButton);
+		this.updateView(findPlayerFrom);
 		return ;
+	}
+
+	async dismount(){
+		console.log('Dismounting CreateGame');
+		// const result = await AView.fetchWithJson(`/rooms/delete/`, 'POST', {});
+		// console.log(result);
 	}
 }

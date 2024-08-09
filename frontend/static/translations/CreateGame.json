@@ -1,0 +1,22 @@
+{
+	"finnish":
+	{
+		"header": "...",
+		"findPlayers": "Etsi pelaajia",
+		"invite-button": "Kutsu"
+	},
+
+	"english":
+	{
+		"header": "...",
+		"findPlayers": "Find players",
+		"invite-button": "Invite"
+	},
+
+	"swedish":
+	{
+		"header": "...",
+		"findPlayers": "Hitta spelare",
+		"invite-button": "Bjud in"
+	}
+}
