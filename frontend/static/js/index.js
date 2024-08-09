@@ -47,7 +47,7 @@ const navigateTo = url => {
 	router();
 };
 
-// const loggedIn = 
+// const loggedIn =
 
 //write client-side router
 const router = async () => {
@@ -110,7 +110,7 @@ const router = async () => {
 	await view.getHtml();
 
 	// Update translations after the view is rendered
-	document.dispatchEvent(new Event("viewUpdated"));
+	// document.dispatchEvent(new Event("viewUpdated"));
 
 };
 
@@ -195,7 +195,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		}
 
 	});
-	
+
 	document.addEventListener('registrationSuccess', () => {
 		navigateTo('/login');
 	});
@@ -211,3 +211,4 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	router();
 });
+

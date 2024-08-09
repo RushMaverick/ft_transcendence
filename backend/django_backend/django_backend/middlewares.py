@@ -5,7 +5,7 @@ from django.contrib.auth.models import AnonymousUser
 from django.contrib.auth import get_user_model
 from jwt import decode as jwt_decode
 from django.conf import settings
-from urllib.parse import parse_qs
+from urllib.parse import parse_qs, urlparse
 
 User = get_user_model()
 
@@ -25,7 +25,8 @@ class JWTAuthenticationMiddleware(BaseMiddleware):
 	async def __call__(self, scope, receive, send):
 		# Extract the token from the query string or headers
 		try:
-			token = parse_qs(scope["query_string"].decode("utf8")).get('token', None)[0]
+			query_string = scope['query_string'].decode("utf-8")
+			token = parse_qs(urlparse(query_string).path).get("token")[0]
 			if (not token):
 				scope['user'] = AnonymousUser()
 				return await self.inner(scope, receive, send)
