@@ -2,8 +2,9 @@
 	"finnish":
 	{
 		"header": "Super PongChamp",
-		"onevs-button": "> yksvsyks",
-		"welcome": "täsä on pongi",
+		"onevs-button": "> 1v1",
+		"tournaments-button": "> Turnajaiset",
+		"welcome": "Tässä on Pong",
 		"searchForFriends": "Etsi ystäviä...",
 		"search": "Etsi"
 
@@ -12,7 +13,8 @@
 	"english":
 	{
 		"header": "Super PongChamp",
-		"onevs-button": "> onevsone",
+		"onevs-button": "> 1v1",
+		"tournaments-button": "> Tournament",
 		"welcome": "here you would find the pong ",
 		"searchForFriends": "Search for friends...",
 		"search": "Search"
@@ -23,6 +25,7 @@
 	{
 		"header": "Super PongChamp",
 		"onevs-button": "> En mot en",
+		"tournaments-button": "> Turnering",
 		"welcome": "Här är Pongen ",
 		"searchForFriends": "Sök vänner...",
 		"search": "Sök"
