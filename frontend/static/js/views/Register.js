@@ -161,10 +161,11 @@ export default class extends AView {
 			}
 
 			const responseData = await response.json();
-			console.log(responseData);
+			alert('Successfully registered!'); 
 			document.dispatchEvent(new CustomEvent('registrationSuccess'));
 		} catch (error) {
 			console.error("There was a problem with the fetch operation:", error);
+			alert("There was a problem with the registration process. Please try again.");
 		}
 	}
 }

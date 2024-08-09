@@ -148,9 +148,19 @@ export default class extends AView {
                 body: formData
             });
 
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
+			if (!response.ok) {
+				let errorMessage = "Unknown error occurred. Please try again.";
+
+				try {
+					const errorData = await response.json();
+					errorMessage = errorData.detail || errorData.message || errorMessage;
+				} catch {
+					errorMessage = "Unable to parse error response.";
+				}
+	
+				alert(`Uploading avatar failed: ${errorMessage}`);
+				return;
+			}
 
             const responseData = await response.json();
             this.avatarUrl = responseData.profile.avatar; // Extract the updated avatar URL from the profile object
