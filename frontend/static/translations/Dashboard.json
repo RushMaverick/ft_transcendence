@@ -4,9 +4,9 @@
 		"testheader": "Super PongChamp",
 		"header": "Super PongChamp",
 		"welcome": "You are successfully running a pong game.",
-		"onevsone": "Start a 1vs1 game",
-		"tournament": "Start a tounament",
-		"friends": "Check out how your friends are doing"
+		"onevsone": "> Start a 1vs1 game",
+		"tournament": "> Start a tournament",
+		"friends": "> Check out how your friends are doing"
 	},
 
 	"finnish":
@@ -14,9 +14,9 @@
 		"testheader": "Super PongChamp",
 		"header": "Super PongChamp",
 		"welcome": "Moi",
-		"onevsone": "Aloita 1vs1 peli",
-		"tournament": "Aloita turnaus",
-		"friends": "Kurkkaa miten sun kamut voi"
+		"onevsone": "> Aloita 1vs1 peli",
+		"tournament": "> Aloita turnaus",
+		"friends": "> Kurkkaa miten sun kamut voi"
 	},
 
 	"swedish":
@@ -24,9 +24,9 @@
 		"testheader": "Super PongChamp",
 		"header": "Super PongChamp",
 		"welcome": "Hej på dig",
-		"onevsone": "Påbörja en 1vs1 match",
-		"tournament": "Påbörja en turnering",
-		"friends": "Kolla hur det går för dina kompisar"
+		"onevsone": "> Påbörja en 1vs1 match",
+		"tournament": "> Påbörja en turnering",
+		"friends": "> Kolla hur det går för dina kompisar"
 	}
 }
 

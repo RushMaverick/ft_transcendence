@@ -5,7 +5,7 @@
 		"username": "Käyttäjätunnus: ",
 		"password": "Salasana: ",
 		"register": "Etkö ole rekisteröitynyt?",
-		"register-link": "Rekisteröidy täältä"
+		"register-link": "> Rekisteröidy täältä"
 
 	},
 
@@ -15,7 +15,7 @@
 		"username": "Username: ",
 		"password": "Password: ",
 		"register": "Don't have an account?",
-		"register-link": "Register here"
+		"register-link": "> Register here"
 	},
 
 	"swedish":
@@ -24,7 +24,7 @@
 		"username": "Användarnamn: ",
 		"password": "Lösenord: ",
 		"register": "Har du inget konto?",
-		"register-link": "Registrera här"
+		"register-link": "> Registrera här"
 	}
 
 }
