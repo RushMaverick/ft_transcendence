@@ -78,16 +78,6 @@ body {
 	font-size: 14px;
 	margin-left: 13rem;
   }
-  
-  .nav a {
-	color: #b3aea4;
-	text-decoration: none;
-	font-size: 18px;
-	display: block;
-	padding: 10px;
-	margin-bottom: 10px;
-	transition: background-color 0.3s ease;
-  }
 
   a {
 	color: #333;
@@ -95,7 +85,17 @@ body {
 	font-size: 18px;
 	font-weight: bold;
 	display: block;
-	/* padding: 10px; */
+	margin-bottom: 10px;
+	transition: background-color 0.3s ease;
+  }
+
+  .nav a {
+	color: #b3aea4;
+	text-decoration: none;
+	font-size: 18px;
+	font-weight: lighter;
+	display: block;
+	padding: 10px;
 	margin-bottom: 10px;
 	transition: background-color 0.3s ease;
   }
