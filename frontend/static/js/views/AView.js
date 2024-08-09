@@ -119,15 +119,16 @@ export default class {
 
 	async fetchJsonData(url) {
         try {
-            const response = await fetch(`${import.meta.env.VITE_API_ENDPOINT}` + url,
-				{
-					method: 'GET',
-					headers: {
-						'Content-Type': 'application/json',
-						'Authorization': 'Bearer ' + sessionStorage.getItem('access')
-					}
-				}
-			);
+            // const response = await fetch(`${import.meta.env.VITE_API_ENDPOINT}` + url,
+			// 	{
+			// 		method: 'GET',
+			// 		headers: {
+			// 			'Content-Type': 'application/json',
+			// 			'Authorization': 'Bearer ' + sessionStorage.getItem('access')
+			// 		}
+			// 	}
+			// );
+			const response = await fetch(url);
             if (!response.ok) {
                 throw new Error(`HTTP error status: ${response.status}`);
             }

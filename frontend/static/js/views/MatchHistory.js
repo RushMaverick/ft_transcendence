@@ -8,19 +8,33 @@ export default class extends AView {
 
     async getHtml() {
         const header = this.createHeader('header', 'Match History', 'h1');
-        const matchHistoryTable = await this.createMatchHistory('static/js/views/matches.json');
+
+        let matchHistoryTable;
+        try {
+            matchHistoryTable = await this.createMatchHistory('/static/js/views/matches.json');
+        } catch (error) {
+            console.error('Failed to create match history table:', error);
+            matchHistoryTable = this.createParagraph('error', "Failed to load match history.");
+        }
 
         this.updateView(header, matchHistoryTable);
         return;
     }
 
     async createMatchHistory(url) {
-        const matchHistoryData = await this.fetchJsonData(url);
+        let matchHistoryData;
+        try {
+            matchHistoryData = await this.fetchJsonData(url);
+        } catch (error){
+            console.error('Error fetching or parsing JSON data:', error);
+            return;
+        }
+        if (!Array.isArray(matchHistoryData) || matchHistoryData.length === 0) {
+            return this.createParagraph('no-match', "No match history to be found");
+        }
+
         const table = document.createElement('table');
         table.classList.add('match-history-table');
-
-		if (matchHistoryData === null)
-			return(this.createParagraph('no-match', "No match history to be found"));
 
         // Create table header
         const thead = document.createElement('thead');
@@ -58,7 +72,8 @@ export default class extends AView {
             row.appendChild(scoreCell);
 
             const dateCell = document.createElement('td');
-            dateCell.textContent = new Date(match.date).toLocaleDateString();
+            const date = new Date(match.date);
+            dateCell.textContent = isNaN(date.getTime()) ? "Invalid Date" : date.toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
             row.appendChild(dateCell);
 
             tbody.appendChild(row);

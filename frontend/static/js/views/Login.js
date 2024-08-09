@@ -74,7 +74,9 @@ export default class extends AView {
 				}
 			);
 			if (!response.ok) {
-				throw new Error("Network response was not ok");
+				const errorData = await response.json();
+				alert(`Registration failed: ${errorData}`);
+				return;
 			}
 			const responseData = await response.json();
 			if (responseData.access) {
