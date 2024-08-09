@@ -20,8 +20,9 @@ class Games:
 				loop.create_task(cls.games[game_name].game_loop())
 
 	@classmethod
-	def stop_game(cls, game_name):
+	def remove_game(cls, game_name):
 		if game_name in cls.games:
-			print(f"Stopping {game_name}", flush=True)
+			print(f"Removed {game_name}", flush=True)
 			cls.games[game_name].stop()
 			del cls.games[game_name]
+			print("games.py:remove_game:cls.games:", cls.games, flush=True)

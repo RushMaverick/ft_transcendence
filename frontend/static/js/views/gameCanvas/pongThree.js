@@ -18,7 +18,7 @@ export default class PongGame {
 		if ( WebGL.isWebGL2Available() ) {
 			console.log('WebGL2 is available')
 		} else {
-		
+
 			const warning = WebGL.getWebGL2ErrorMessage();
 			document.getElementById( 'container' ).appendChild( warning );
 		}
@@ -41,10 +41,10 @@ export default class PongGame {
 		this.setupBall();
 		this.animate();
 	}
-	
+
 	menuSetup() {
 		this.menuCam = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-		
+
 		this.startButton = new Text();
 		this.startButton.text = 'Awaiting Players...';
 		this.startButton.font = 'static/js/views/gameCanvas/fonts/Tiny5-Regular.ttf';
@@ -59,9 +59,14 @@ export default class PongGame {
 		this.waitingScene.add(this.menuCam, this.startButton);
 	}
 
+
 	joinGame() {
-		let roomname = 'testroom';
-		this.socket = new WebSocket(`ws://localhost:8000/ws/game/${roomname}/`);
+		let match_id = sessionStorage.getItem('match_id');
+		let room_name = sessionStorage.getItem('room_name');
+		console.log('joinGame()');
+		console.log(match_id);
+		console.log(room_name);
+		this.socket = new WebSocket(`ws://localhost:8000/ws/game/${room_name}/?token=${sessionStorage.getItem('access')}&match_id=${match_id}`);
 		this.socket.onerror = function(error) {
 			console.error("WebSocket Error:", error);
 		};
@@ -78,6 +83,9 @@ export default class PongGame {
 			PongGame.instance.updatePositions();
 			PongGame.instance.renderer.render(PongGame.instance.scene, PongGame.instance.camera);
 		};
+		this.socket.onclose = function() {
+			console.log('POng WebSocket connection closed.');
+		};
 	}
 
 	updateUI() {
@@ -89,14 +97,14 @@ export default class PongGame {
 
 		this.p1Score = new Text()
 		this.p2Score = new Text()
-		
+
 		// Set properties to configure:
 		// this.p1Score.text = ''
 		this.p1Score.font = 'static/js/views/gameCanvas/fonts/Tiny5-Regular.ttf'
 		this.p1Score.fontSize = 15.0
 		this.p1Score.position.x = 10
 		this.p1Score.color = 0x000000
-		
+
 		// this.p2Score.text = ''
 		this.p2Score.font = 'static/js/views/gameCanvas/fonts/Tiny5-Regular.ttf'
 		this.p2Score.fontSize = 15.0
@@ -120,7 +128,7 @@ export default class PongGame {
 		//Setup cube1 bounding box
 		this.cube1Bounds = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());
 		this.cube1Bounds.setFromObject(this.cube);
-		
+
         this.geometry2 = new THREE.BoxGeometry(5, 15, 2);
 		this.cube2 = new THREE.Mesh(this.geometry2, this.material);
 		this.cube2.position.x = 190;
@@ -136,18 +144,18 @@ export default class PongGame {
 
     createBorders() {
         this.borderGeo = new THREE.BoxGeometry(200, 2, 2);
-        
+
         this.borderMaterial = new THREE.MeshLambertMaterial({
             color: 0xaeaa97
         });
 
         this.border = new THREE.Mesh(this.borderGeo, this.borderMaterial);
         this.border2 = new THREE.Mesh(this.borderGeo, this.borderMaterial);
-        
+
         this.border.position.x = 100;
         this.border.position.y = 0;
         this.border.position.z = 0;
-        
+
         this.border2.position.x = 100;
         this.border2.position.y = 150;
         this.border2.position.z = 0;
@@ -266,7 +274,7 @@ export default class PongGame {
             }
         });
     }
-	
+
 	cubeFlash() {
 		this.cube.material.transparent = true;
 		this.cube.material.opacity = 0.5;
@@ -289,7 +297,7 @@ export default class PongGame {
 		if (this.cube1Bounds.intersectsBox(this.borderBounds) || this.cube1Bounds.intersectsBox(this.border2Bounds)
 			|| this.cube2Bounds.intersectsBox(this.borderBounds) || this.cube2Bounds.intersectsBox(this.border2Bounds)
 			|| this.ballBounds.intersectsBox(this.cube1Bounds) || this.ballBounds.intersectsBox(this.cube2Bounds)){
-			
+
 				//Debug feature
 			this.cubeFlash();
 		}
@@ -326,13 +334,13 @@ export default class PongGame {
 		if (this.waitingForPlayers == true)
 			this.renderer.render(this.waitingScene, this.menuCam);
 		window.addEventListener('resize', () => {
-			if (window.innerWidth > window.innerHeight) 
+			if (window.innerWidth > window.innerHeight)
 			{
 				this.camera.aspectRatio = window.innerWidth / window.innerHeight; // static aspect ratio for the canvas?
 				this.camera.updateProjectionMatrix();
 				this.renderer.setSize(window.innerWidth/ 1.3, window.innerHeight / 1.3); // static aspect ratio for the canvas would be implemented here?
 			}
-					
+
 		},false)
     }
 
