@@ -110,6 +110,13 @@ class RoomOneViewSet(viewsets.ModelViewSet):
 
         return Response({"detail": "Invitation request rejected."}, status=status.HTTP_200_OK)
     
-    # """Delete Rooom request"""
-    # # @action(detail=True, methods=['delete'], permission_classes=[IsAuthenticatedOrCreateOnly, IsUser])
-    # # def reject_request(self,request, pk=None):
+    """Delete Rooom request"""
+    @action(detail=True, methods=['delete'], permission_classes=[IsAuthenticatedOrCreateOnly, IsUser])
+    def delete_room(self,request, pk=None):
+        try:
+            room = Room.objects.get(pk=pk)
+            room.delete()
+            return Response({"message": "Room deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
+        except Room.DoesNotExist:
+            return Response({"Warning": "Room not found."}, status=status.HTTP_404_NOT_FOUND)
+

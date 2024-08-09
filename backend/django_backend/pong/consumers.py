@@ -9,7 +9,6 @@ from rooms.models import Room
 from user.models import User
 from channels.db import database_sync_to_async
 
-
 @database_sync_to_async
 def get_room(room_id):
     return Room.objects.get(id=room_id)
@@ -69,16 +68,16 @@ class GameConsumer(AsyncWebsocketConsumer):
         self.game_room = self.scope["url_route"]["kwargs"]["room_name"]
         self.room_group_name = f"game_{self.game_room}"
 
-        try:
-            self.room = await self.get_room(self.game_room)
-        except Room.DoesNotExist:
-            await self.close()
-            return
+        # try:
+        #     self.room = await self.get_room(self.game_room)
+        # except Room.DoesNotExist:
+        #     await self.close()
+        #     return
 
-        # Check if the user is part of the room
-        if not await is_user_in_room(user, self.room):
-            await self.close()
-            return
+        # # Check if the user is part of the room
+        # if not await is_user_in_room(user, self.room):
+        #     await self.close()
+        #     return
 
         # Check if match_id is in query string
         try:
@@ -134,6 +133,7 @@ class GameConsumer(AsyncWebsocketConsumer):
             self.pong_game.channel_layer = self.channel_layer
         if not self.pong_game.room_group_name:
             self.pong_game.room_group_name = self.room_group_name
+
 
         # Start game if both players are in
         if self.pong_game.player1 and self.pong_game.player2:

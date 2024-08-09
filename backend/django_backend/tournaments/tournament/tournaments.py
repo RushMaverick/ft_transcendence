@@ -22,6 +22,8 @@ class Tournaments:
 
     @classmethod
     async def start_tournament(cls, tournament_id):
+        print("id in tournament ", flush=True)
+        print(tournament_id, flush=True)
         if tournament_id in cls.tournaments:
             print(f"Starting tournament {tournament_id}", flush=True)
             # await cls.tournaments[tournament_id].start()

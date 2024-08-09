@@ -6,6 +6,7 @@ from ..signals import match_completed
 
 from match.serializers import MatchSerializer
 from match.models import Match
+from rooms.views import RoomOneViewSet
 from asgiref.sync import sync_to_async
 
 class Pong:
@@ -89,6 +90,7 @@ class Pong:
 			self.winner = self.player2.user.id
 		elif player_id == 2:
 			self.winner = self.player1.user.id
+	
 
 	async def game_loop(self) -> None:
 		print("Game loop", flush=True)
@@ -115,7 +117,16 @@ class Pong:
 			await self.save_match(winner=self.winner)
 		else:
 			await self.save_match()
+
+		await self.delete_room(self.room_group_name)
+		
 		await self.kill_connections()
+
+	@sync_to_async
+	def delete_room(room_id):
+		viewset = RoomOneViewSet()
+		response = viewset.delete_room(None, pk=room_id)
+		return response
 
 
 	@sync_to_async

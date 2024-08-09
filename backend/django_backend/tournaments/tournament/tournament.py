@@ -58,7 +58,7 @@ class Tournament():
         #todo: check that tournament is open and check max number of participants
         # Check max number of participants
         # if self.tournament.max_participants <= len(self.tournament.participants):
-        #     #print(f"Tournament {self.tournament_id} is full", flush=True)
+        #     print(f"Tournament {self.tournament_id} is full", flush=True)
         #     return await self.close()
 
         # Check that tournament is open
@@ -148,7 +148,7 @@ class Tournament():
                     winners.append(match.get("winner"))
 
         print(f"tournament:second_round:winners: {winners}", flush=True)
-        print(f"tournament:second_round:winners[0].id: {winners[0].get("id")}", flush=True)
+        # print(f"tournament:second_round:winners[0].id: {winners[0].get("id")}", flush=True)
         # pair winners
         for i in range(0, len(winners), 2):
             player1 = self.participants[winners[i].get("id")]["participant"]
