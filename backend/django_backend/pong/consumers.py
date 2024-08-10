@@ -68,11 +68,12 @@ class GameConsumer(AsyncWebsocketConsumer):
         self.game_room = self.scope["url_route"]["kwargs"]["room_name"]
         self.room_group_name = f"game_{self.game_room}"
 
-        try:
-            self.room = await get_room(self.game_room)
-        except Room.DoesNotExist:
-            await self.close()
-            return
+        # try:
+        #     room_id = int(self.game_room.split('_')[-1])
+        #     self.room = await get_room(room_id)
+        # except Room.DoesNotExist:
+        #     await self.close()
+        #     return
 
         # # Check if the user is part of the room
         # if not await is_user_in_room(user, self.room):

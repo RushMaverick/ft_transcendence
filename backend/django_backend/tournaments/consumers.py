@@ -75,12 +75,6 @@ class TournamentConsumer(AsyncWebsocketConsumer):
         if self.room_group_name:
             await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
 
-    def start():
-        if len(self.tournament.participants) == 4:
-             Tournaments.start_tournament(tournament_id=self.tournament_id)
-
-
-
     async def receive(self, text_data):
         try:
             json_data = json.loads(text_data)
