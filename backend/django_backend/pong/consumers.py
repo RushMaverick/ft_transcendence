@@ -68,17 +68,6 @@ class GameConsumer(AsyncWebsocketConsumer):
         self.game_room = self.scope["url_route"]["kwargs"]["room_name"]
         self.room_group_name = f"game_{self.game_room}"
 
-        # try:
-        #     room_id = int(self.game_room.split('_')[-1])
-        #     self.room = await get_room(room_id)
-        # except Room.DoesNotExist:
-        #     await self.close()
-        #     return
-
-        # # Check if the user is part of the room
-        # if not await is_user_in_room(user, self.room):
-        #     await self.close()
-        #     return
 
         # Check if match_id is in query string
         try:
@@ -99,6 +88,23 @@ class GameConsumer(AsyncWebsocketConsumer):
         except Exception as e:
             pass
 
+        #Room api stuff
+        if not self.tournament_match:
+            try:
+                room_id = int(self.game_room.split('_')[-1])
+                self.room = await get_room(room_id)
+            except Room.DoesNotExist:
+                print(f"pong:connect:Invalid room ID or room does not exist: {self.game_room}", flush=True)
+                await self.close()
+                return
+
+            # Check if the user is part of the room
+            if not await is_user_in_room(user, self.room):
+                print(f"pong:connect:User {user} is not part of the room {self.room.id}", flush=True)
+                await self.close()
+                return
+            
+    
         # Create game if it doesn't exist
         if self.game_room not in Games.games:
             Games.create_game(self.game_room)
