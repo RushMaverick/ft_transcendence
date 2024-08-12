@@ -20,10 +20,6 @@ export default class extends AView {
 		return search;
 	}
 
-	async handleJoin(gameRoom) {
-
-	}
-
 	async handleAccept(roomId, fromUser) {
 		console.log('Accept player:', fromUser);
 		try {
@@ -41,6 +37,7 @@ export default class extends AView {
 		console.log('Decline player:', fromUser);
 		const data = await AView.fetchWithJson(`/rooms/${roomId}/reject_request/`, 'POST', {"from_user": fromUser});
 		console.log(data);
+		location.reload();
 	}
 
 	createInviteItem(invite) {

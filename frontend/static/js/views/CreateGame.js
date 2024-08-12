@@ -115,7 +115,26 @@ export default class extends AView {
 		findPlayerFrom.appendChild(findButton);
 		findPlayerFrom.addEventListener('submit', this.handleFind.bind(this));
 
-		// const gameDiv = this.createGame('pong');
+		const room = await AView.fetchWithJson('/rooms/', 'GET', {});
+		if (room && room.id){
+			const exitButton = this.createButton('exit-room', 'exit-room', this.searchTranslations('exit-room'));
+			exitButton.addEventListener('click', async () => {
+				const response = await fetch(`${import.meta.env.VITE_API_ENDPOINT}/rooms/${room.id}/delete/`, {
+					method: 'DELETE',
+					headers: {
+						'Content-Type': 'application/json',
+						'Authorization': 'Bearer ' + sessionStorage.getItem('access')
+					}
+				});
+				console.log(response);
+				if (response.status !== 204){
+					alert('Failed to exit room');
+				}
+				location.reload();
+			});
+			this.updateView(exitButton);
+			return;
+		}
 
 		this.updateView(findPlayerFrom);
 		return ;
