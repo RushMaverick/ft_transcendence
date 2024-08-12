@@ -74,12 +74,19 @@ export default class extends AView {
 	async createRoom(){
 		const result = await AView.fetchWithJson('/rooms/create_room/', 'POST', {});
 		console.log(result);
+		if (result && result.id){
+			sessionStorage.setItem('room_name', result.id);
+		}
 	}
 
 	async handleInvite(username) {
 		console.log('Invite player:', username);
 		const result = await AView.fetchWithJson('/rooms/one_vs_one_invitation/', 'POST', { "guest": username});
 		console.log(result);
+		if (result ){
+			let gameDiv = this.createGame('pong');
+			this.updateView(gameDiv);
+		}
 	}
 
 	async getHtml(){

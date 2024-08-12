@@ -25,10 +25,10 @@ export default class {
 	updateView( ...elements){
 		const container = document.querySelector('main');
 		const canvas = document.querySelector('canvas');
-		if (canvas && PongGame.instance && !(window.location.pathname === '/one-vs-one' || window.location.pathname === '/tournaments')) {
-			canvas.remove();
-			PongGame.instance.stopAnimate();
-		}
+		// if (canvas && PongGame.instance && !(window.location.pathname === '/one-vs-one' || window.location.pathname === '/tournaments')) {
+		// 	canvas.remove();
+		// 	PongGame.instance.stopAnimate();
+		// }
 
 		container.innerHTML = '';
 		elements.forEach((element) => {
