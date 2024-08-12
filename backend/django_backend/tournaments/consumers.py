@@ -75,7 +75,6 @@ class TournamentConsumer(AsyncWebsocketConsumer):
         if self.room_group_name:
             await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
 
-
     async def receive(self, text_data):
         try:
             json_data = json.loads(text_data)
@@ -85,10 +84,15 @@ class TournamentConsumer(AsyncWebsocketConsumer):
             #print("Invalid command", flush=True)
             return
         case = {
-            "start": Tournaments.start_tournament,
+            "start": self.start,
             "test": self.testing,
         }
         await case[cmd](tournament_id=self.tournament_id)
+
+    async def start(self, tournament_id):
+        if len(self.tournament.participants) == 4:
+            print("Coño", flush=True)
+            await Tournaments.start_tournament(tournament_id=tournament_id)
 
 
     async def broadcast_message(self, event):

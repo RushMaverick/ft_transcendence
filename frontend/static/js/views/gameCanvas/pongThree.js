@@ -66,7 +66,11 @@ export default class PongGame {
 		console.log('joinGame()');
 		console.log(match_id);
 		console.log(room_name);
-		this.socket = new WebSocket(`ws://localhost:8000/ws/game/${room_name}/?token=${sessionStorage.getItem('access')}&match_id=${match_id}`);
+		if (match_id){
+			this.socket = new WebSocket(`ws://localhost:8000/ws/game/${room_name}/?token=${sessionStorage.getItem('access')}&match_id=${match_id}`);
+		} else {
+			this.socket = new WebSocket(`ws://localhost:8000/ws/game/${room_name}/?token=${sessionStorage.getItem('access')}`);
+		}
 		this.socket.onerror = function(error) {
 			console.error("WebSocket Error:", error);
 		};
@@ -78,6 +82,13 @@ export default class PongGame {
 		this.socket.onmessage = function(event) {
 			PongGame.instance.waitingForPlayers = false;
 			PongGame.instance.message = JSON.parse(event.data);
+			if (PongGame.instance.message.winner) {
+				PongGame.instance.stopAnimate();
+				const myId = sessionStorage.getItem('userId');
+				console.log('My ID:', myId, 'Winner ID:', PongGame.instance.message.winner);
+				// render winner/loser screen
+				return;
+			}
 			PongGame.instance.collisionChecking();
 			PongGame.instance.updateUI();
 			PongGame.instance.updatePositions();

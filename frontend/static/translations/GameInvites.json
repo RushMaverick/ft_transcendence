@@ -1,0 +1,22 @@
+{
+	"finnish":
+	{
+		"header": "...",
+		"accept-button": "Hyväksy",
+		"decline-button": "Hylkää"
+	},
+
+	"english":
+	{
+		"header": "...",
+		"accept-button": "Accept",
+		"decline-button": "Decline"
+	},
+
+	"swedish":
+	{
+		"header": "...",
+		"accept-button": "Acceptera",
+		"decline-button": "Avvisa"
+	}
+}

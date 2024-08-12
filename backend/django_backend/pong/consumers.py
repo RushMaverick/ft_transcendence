@@ -5,6 +5,17 @@ from urllib.parse import urlparse, parse_qs
 from match.models import Match
 from match.serializers import MatchSerializer
 from asgiref.sync import sync_to_async
+from rooms.models import Room
+from user.models import User
+from channels.db import database_sync_to_async
+
+@database_sync_to_async
+def get_room(room_id):
+    return Room.objects.get(id=room_id)
+
+@database_sync_to_async
+def is_user_in_room(user, room):
+    return room.users.filter(id=user.id).exists()
 
 @sync_to_async
 def get_match(match_id):
@@ -43,6 +54,7 @@ class GameConsumer(AsyncWebsocketConsumer):
         self.player = None
         self.pong_game: Pong = None
         self.match_id = None
+        self.room = None
         self.tournament_match = False
         super().__init__(*args, **kwargs)
 
@@ -56,27 +68,42 @@ class GameConsumer(AsyncWebsocketConsumer):
         self.game_room = self.scope["url_route"]["kwargs"]["room_name"]
         self.room_group_name = f"game_{self.game_room}"
 
+
         # Check if match_id is in query string
         try:
             query_string = self.scope['query_string'].decode("utf-8")
-            # print(f"query_string: {query_string}", flush=True)
+
             query_params = parse_qs(urlparse(query_string).path)
             self.match_id = query_params.get('match_id', [None])[0]
-            # print(f"query_params: {query_params}", flush=True)
             if self.match_id != None:
                 print(f"pong:connect:match_id: {self.match_id}", flush=True)
                 self.match = await get_match(self.match_id)
-                # print("#2", flush=True)
                 print(f"pong:connect:match: {self.match}", flush=True)
                 print(f"pong:connect:player_in_match: {player_in_match(self.match, user.id)}", flush=True)
                 if not self.match or not player_in_match(self.match, user.id):
                     print("pong:connect:Player not in match", flush=True)
                     return await self.close()
-                # print("#3", flush=True)
                 print(f"pong:connect:match_id: {self.match_id}", flush=True)
                 self.tournament_match = True
         except Exception as e:
             pass
+
+        #Room api stuff
+        if not self.tournament_match:
+            try:
+                room_id = int(self.game_room.split('_')[-1])
+                self.room = await get_room(room_id)
+            except Room.DoesNotExist:
+                print(f"pong:connect:Invalid room ID or room does not exist: {self.game_room}", flush=True)
+                await self.close()
+                return
+
+            # Check if the user is part of the room
+            if not await is_user_in_room(user, self.room):
+                print(f"pong:connect:User {user} is not part of the room {self.room.id}", flush=True)
+                await self.close()
+                return
+
 
         # Create game if it doesn't exist
         if self.game_room not in Games.games:
@@ -113,6 +140,8 @@ class GameConsumer(AsyncWebsocketConsumer):
             self.pong_game.channel_layer = self.channel_layer
         if not self.pong_game.room_group_name:
             self.pong_game.room_group_name = self.room_group_name
+        self.pong_game.room_id = self.game_room
+
 
         # Start game if both players are in
         if self.pong_game.player1 and self.pong_game.player2:

@@ -82,7 +82,7 @@ export default class extends AView {
 				} catch {
 					errorMessage = "Unable to parse error response.";
 				}
-	
+
 				alert(`Login failed: ${errorMessage}`);
 				return;
 			}
@@ -91,6 +91,10 @@ export default class extends AView {
 				sessionStorage.setItem("access", responseData.access);
 				sessionStorage.setItem("refresh", responseData.refresh);
 				sessionStorage.setItem('isLoggedIn', 'true');
+				const user = await AView.fetchWithJson('/user/', 'GET', null);
+				if (user && user.id) {
+					sessionStorage.setItem('userId', user.id);
+				}
 				window.isLoggedIn = true;
 
 				alert('Login successful!');
