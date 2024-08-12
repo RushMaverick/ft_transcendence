@@ -225,8 +225,8 @@ export default class Friends extends AView{
 
 		const status = document.createElement('div');
 		status.classList.add('status');
-		if (friend.online && typeof friend.online.is_online !== 'undefined') {
-			status.style.backgroundColor = friend.online.is_online ? 'green' : 'gray';
+		if (friend.is_online && typeof friend.is_online !== 'undefined') {
+			status.style.backgroundColor = friend.is_online ? 'green' : 'gray';
 		} else {
 			// Fallback color if online status is unknown
 			status.style.backgroundColor = 'gray'; // Or any other default color you prefer
