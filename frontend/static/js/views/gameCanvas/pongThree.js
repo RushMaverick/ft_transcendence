@@ -82,6 +82,13 @@ export default class PongGame {
 		this.socket.onmessage = function(event) {
 			PongGame.instance.waitingForPlayers = false;
 			PongGame.instance.message = JSON.parse(event.data);
+			if (PongGame.instance.message.winner) {
+				PongGame.instance.stopAnimate();
+				const myId = sessionStorage.getItem('userId');
+				console.log('My ID:', myId, 'Winner ID:', PongGame.instance.message.winner);
+				// render winner/loser screen
+				return;
+			}
 			PongGame.instance.collisionChecking();
 			PongGame.instance.updateUI();
 			PongGame.instance.updatePositions();
