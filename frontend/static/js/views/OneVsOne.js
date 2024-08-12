@@ -1,5 +1,4 @@
 import AView from "./AView.js";
-import PongGame from "./gameCanvas/pongThree.js";
 
 export default class extends AView {
 	constructor(params){

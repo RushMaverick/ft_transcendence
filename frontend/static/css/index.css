@@ -12,6 +12,11 @@ body {
   .pong {
 	margin-left: 10rem;
   }
+
+  .searchDiv {
+	margin-left: 38rem;
+	margin-bottom: 2rem;
+  }
   
   .container {
 	width: 80%;
@@ -68,23 +73,29 @@ body {
 	padding: 20px;
 	box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
   }
-  
-  .nav a {
-	color: #b3aea4;
-	text-decoration: none;
-	font-size: 18px;
-	display: block;
-	padding: 10px;
-	margin-bottom: 10px;
-	transition: background-color 0.3s ease;
+
+  .container {
+	font-size: 14px;
+	margin-left: 13rem;
   }
 
   a {
 	color: #333;
 	text-decoration: none;
 	font-size: 18px;
+	font-weight: bold;
 	display: block;
-	/* padding: 10px; */
+	margin-bottom: 10px;
+	transition: background-color 0.3s ease;
+  }
+
+  .nav a {
+	color: #b3aea4;
+	text-decoration: none;
+	font-size: 18px;
+	font-weight: lighter;
+	display: block;
+	padding: 10px;
 	margin-bottom: 10px;
 	transition: background-color 0.3s ease;
   }
