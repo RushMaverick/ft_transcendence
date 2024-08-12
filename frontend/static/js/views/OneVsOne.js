@@ -1,8 +1,6 @@
 import AView from "./AView.js";
-import textInputField from "./TextInputView.js";
-import PongGame from "./gameCanvas/pongThree.js";
-import { loadTranslations } from "../index.js";
 
+import { loadTranslations } from "../index.js";
 import { navigateTo } from "../index.js";
 
 export default class extends AView {
@@ -99,20 +97,6 @@ export default class extends AView {
 		invitesButton.addEventListener('click', () => {
 			this.handleInvites();
 		});
-
-		// const findPlayerFrom = this.createForm('tournamentform');
-		// const findPlayerInput = textInputField(
-		// 	'name',
-		// 	'Name',
-		// 	'name',
-		// 	'text'
-		// );
-		// const findButton = this.createButton('find', 'find', this.searchTranslations('findPlayers'));
-		// findPlayerFrom.appendChild(findPlayerInput);
-		// findPlayerFrom.appendChild(findButton);
-		// findPlayerFrom.addEventListener('submit', this.handleFind.bind(this));
-
-		// const gameDiv = this.createGame('pong');
 
 		this.updateView(createGameButton, invitesButton);
 		return ;

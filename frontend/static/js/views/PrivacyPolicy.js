@@ -7,6 +7,8 @@ export default class extends AView {
 	}
 
 	async getHtml(){
+		const container = document.createElement('div');
+		container.classList.add('container');
 		const header = this.createHeader('header', 'Privacy Policy', 'h2');
 		const policy = this.createParagraph('policy');
 		const policy1 = this.createParagraph();
@@ -36,14 +38,15 @@ export default class extends AView {
 		gdprRequests.appendChild(request7);
 
 		const policy5 = this.createParagraph('policy5', 'This is the privacy policy');
+		container.appendChild(header);
+		container.appendChild(policy);
+		container.appendChild(policy1);
+		container.appendChild(gdpr);
+		container.appendChild(gdprRequests);
+		container.appendChild(policy5);
 		
 		window.localStorage.setItem('page', 'PrivacyPolicy');
-		this.updateView(header, 
-			policy,
-			policy1,
-			gdpr,
-			gdprRequests,
-			policy5);
+		this.updateView(container);
 		return ;
 	}
 }

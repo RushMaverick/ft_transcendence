@@ -16,8 +16,10 @@ from tournaments.models import Tournament
 #
 class OnlineStatus(models.Model):
     user = models.OneToOneField(
-    User,
-    on_delete=models.CASCADE,
+        User,
+        on_delete=models.CASCADE,
+        primary_key=True,
+        related_name='online_status'
     )
     is_online = models.BooleanField(default=False)
     last_connection = models.DateTimeField(auto_now_add=True)

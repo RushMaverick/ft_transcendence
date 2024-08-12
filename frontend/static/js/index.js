@@ -14,6 +14,7 @@ import Register from "./views/Register.js";
 import Profile from "./views/Profile.js";
 import Settings from "./views/Settings.js";
 import PrivacyPolicy from "./views/PrivacyPolicy.js";
+import MatchHistory from "./views/MatchHistory.js";
 import CreateGame from "./views/CreateGame.js";
 import GameInvites from "./views/GameInvites.js";
 import Play from "./views/Play.js";
@@ -61,6 +62,7 @@ const router = async () => {
 		{ path: "/privacypolicy", view: PrivacyPolicy},
 		{ path: "/register", view: Register },
 		{ path: "/dashboard", view: Dashboard, authRequired: true },
+		{ path: "/profile/matchhistory", view: MatchHistory, authRequired: true },
 		{ path: "/one-vs-one", view: OneVsOne, authRequired: true},
 		{ path: "/create-game", view: CreateGame, authRequired: true},
 		{ path: "/game-invites", view: GameInvites, authRequired: true},
@@ -96,11 +98,11 @@ const router = async () => {
     }
 
 	//comment out to remove login for testing
-	if (match.route.authRequired && !isLoggedIn) {
-		console.log(`Access to ${match.route.path} is restricted.`);
-		navigateTo('/login');
-		return;
-	}
+	// if (match.route.authRequired && !isLoggedIn) {
+	// 	console.log(`Access to ${match.route.path} is restricted.`);
+	// 	navigateTo('/login');
+	// 	return;
+	// }
 
 	if (match.route.path === "/play" && !sessionStorage.getItem('room_name')) {
 		console.log('No room name found');

@@ -20,10 +20,10 @@ class AvatarSerializer(serializers.ModelSerializer):
 # This serializer is designed to get the Online Status from an user, so for this we use model OnlineStatus
 # and we use as a fields the user id, username, is_online and the last connection of the user
 class OnlineStatusSerializer(serializers.ModelSerializer):
-    username = serializers.CharField(source='user.username', read_only=True)
+    # username = serializers.CharField(source='user.username', read_only=True)
     class Meta:
         model = OnlineStatus
-        fields = ['user','username','is_online', 'last_connection']
+        fields = ['is_online', 'last_connection']
 
 
 class FriendshipSerializer(serializers.ModelSerializer):
@@ -39,10 +39,11 @@ class UserSerializer(serializers.ModelSerializer):
     confirm_password = serializers.CharField(write_only=True, required=True)
 
     avatar = AvatarSerializer(read_only=True)
+    online = OnlineStatusSerializer(source='online_status', read_only=True)
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'avatar', 'password', 'confirm_password']
+        fields = ['id', 'username', 'avatar', 'online', 'password', 'confirm_password']
 
     def validate(self, attrs):
         if attrs['password'] != attrs['confirm_password']:
@@ -56,6 +57,7 @@ class UserSerializer(serializers.ModelSerializer):
         user.set_password(validated_data['password'])
         user.save()
         Avatar.objects.create(user=user)
+        OnlineStatus.objects.create(user=user)
         return user
 
     def update(self, instance: User, validated_data):
