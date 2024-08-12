@@ -1,6 +1,8 @@
 import AView from "./AView.js";
 
 import PongGame from "./gameCanvas/pongThree.js";
+import textInputField from "./TextInputView.js";
+
 export default class extends AView {
 	constructor(params){
 		super(params);//call the constructor of the parent class
