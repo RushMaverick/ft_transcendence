@@ -1,0 +1,9 @@
+{
+	"id": "2",
+	"username": "Logged In User",
+	"profile": {
+		"avatar": "https://picsum.photos/200"
+	},
+	"wins": "10",
+	"loses": "3"
+}

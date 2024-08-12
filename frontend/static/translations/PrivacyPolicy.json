@@ -1,0 +1,53 @@
+{
+	"finnish":
+	{
+		"header": "TIETOSUOJAKÄYTÄNNÖT",
+		"policy": "Olemme sitoutuneet suojelemaan ja kunnioittamaan yksityisyyttäsi. Rekisteröitymällä verkkosivustollemme hyväksyt tietojesi, kuten käyttäjätunnuksen ja pelattujen pelien tietojen keräämisen ja käytön tässä tietosuojakäytännössä kuvatulla tavalla.",
+    	"policy2": "Käytämme käyttäjätunnustasi osallistuaksemme peleihin ja mukauttaaksemme pelikokemustasi.",
+		"policy3": "Käytämme pelattujen pelien tietoja seurataksemme edistymistäsi, luodaksemme tilastoja ja otteluhistoriaasi.",
+		"policy4": "Säilytämme henkilötietojasi vain niin kauan kuin on tarpeen tässä tietosuojakäytännössä kuvattujen tarkoitusten toteuttamiseksi, joita varten ne on kerätty. Kun tietojasi ei enää tarvita, poistamme tai anonymisoimme ne turvallisesti.",
+		"gdpr": "Yleisen tietosuoja-asetuksen (GDPR) mukaisesti sinulla on seuraavat oikeudet tässä tietosuojakäytännössä:",
+    	"request2": "Voit pyytää kopion hallussamme olevista henkilötiedoistasi.",
+        "request3": "Voit pyytää meitä korjaamaan kaikki epätarkat tai puutteelliset tiedot.",
+        "request4": "Voit pyytää meitä poistamaan henkilötietosi.",
+	    "request5": "Voit pyytää meitä rajoittamaan tietojesi käsittelyä tietyin edellytyksin.",
+        "request6": "Voit pyytää meitä siirtämään tietosi toiselle organisaatiolle tai suoraan sinulle tietyin ehdoin.",
+        "request7": "Voit vastustaa henkilötietojesi käsittelyä.",
+        "policy5": "Jos teet pyynnön, meillä on kuukausi aikaa vastata sinulle. Jos haluat käyttää jotakin näistä oikeuksista, ota meihin yhteyttä sähköpostitse: thepongsite@gmail.com."
+	},
+
+	"english":
+	{
+		"header": "PRIVACY POLICY",
+		"policy": "We are committed to protecting and respecting your privacy. By registering our website, you consent to the collection and use of your data such as username and information about the played games ans described in this privacy policy.",
+    	"policy2": "We use your username to participate in games and personalize your gaming experience.",
+		"policy3": "We use the information about played games to track your progress, create statistics and match history.",
+    	"policy4": "We retain your personal data only for as long as necessary to fulfill the purposes for which it was collected, as described in this Privacy Policy. Once your data is no longer needed, we will securely delete or anonymize it.",
+    	"gdpr": "Under the General Data Protection Regulation (GDPR), you have the following rights:",
+    	"request2": "You can request a copy of the personal data we hold about you.",
+        "request3": "You can request that we correct any inaccurate or incomplete data.",
+        "request4": "You can request that we delete your personal data.",
+	    "request5": "You can request that we restrict the processing of your data under certain conditions.",
+        "request6": "You can request that we transfer your data to another organization, or directly to you, under certain conditions.",
+        "request7": "You can object to our processing of your personal data under certain conditions.",
+        "policy5": "If you make a request, we have one month to respond to you. If you would like to exercise any of these rights, please contact us at our email: thepongsite@gmail.com."
+	},
+
+	"swedish":
+	{
+		"header": "PRIVACY POLICY",
+		"policy": "Vi är dedikerade till att skydda och respektera din integritet. Genom att registrera vår webbplats samtycker du till insamlingen och användningen av dina data såsom användarnamn och information om de spelade spelen som beskrivs i denna sekretesspolicy.",
+    	"policy2": "Vi använder ditt användarnamn för att delta i spel och anpassa din spelupplevelse.",
+		"policy3": "Vi använder informationen om spelade spel för att spåra dina framsteg, skapa statistik och matchhistorik.",
+    	"policy4": "Vi behåller dina personuppgifter endast så länge det är nödvändigt för att uppfylla de syften för vilka de samlades in, enligt beskrivningen i denna integritetspolicy. När dina uppgifter inte längre behövs kommer vi att radera eller anonymisera dem på ett säkert sätt.",
+    	"gdpr": "Enligt den allmänna dataskyddsförordningen (GDPR) har du följande rättigheter:",
+    	"request2": "Du kan begära en kopia av de personuppgifter vi har om dig.",
+        "request3": "Du kan begära att vi korrigerar eventuella felaktiga eller ofullständiga uppgifter.",
+        "request4": "Du kan begära att vi raderar dina personuppgifter.",
+	    "request5": "Du kan begära att vi begränsar behandlingen av dina uppgifter under vissa förutsättningar.",
+        "request6": "Du kan begära att vi överför dina uppgifter till en annan organisation, eller direkt till dig, under vissa förutsättningar.",
+        "request7": "Du kan under vissa förutsättningar invända mot vår behandling av dina personuppgifter.",
+        "policy5": "Om du gör en förfrågan har vi en månad på oss att svara dig. Om du vill utöva någon av dessa rättigheter, vänligen kontakta oss på vår e-post: thepongsite@gmail.com."
+
+	}
+}

@@ -1,0 +1,32 @@
+{
+	"finnish":
+	{
+		"language": "Kieli ",
+		"login-nav": "Kirjaudu sisään ",
+		"dashboard-nav": "Etusivu",
+		"profile-nav": "Profiili",
+		"friends-nav": "Kaverit",
+		"settings-nav": "Asetukset"
+
+	},
+
+	"english":
+	{
+		"language": "Language",
+		"login-nav": "Login",
+		"dashboard-nav": "Dashboard",
+		"profile-nav": "Profile",
+		"friends-nav": "Friends",
+		"settings-nav": "Settings"
+	},
+
+	"swedish":
+	{
+		"language": "Språk",
+		"login-nav": "Logga in",
+		"dashboard-nav": "Huvudsida",
+		"profile-nav": "Profil",
+		"friends-nav": "Vänner",
+		"settings-nav": "Inställningar"
+	}
+}

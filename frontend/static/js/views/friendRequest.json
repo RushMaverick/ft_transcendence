@@ -1,0 +1,28 @@
+{
+	"Pending Friend request": [
+		{
+			"id": "2",
+			"from_user": "Chuchi",
+			"to_user": "User",
+			"profile": {
+				"avatar": "https://picsum.photos/200",
+				"online": true
+			},
+			"accepted": false,
+			"wins": "5",
+			"loses": "0"
+		},
+		{
+			"id": "3",
+			"from_user": "Tique",
+			"to_user": "User",
+			"profile": {
+				"avatar": "https://picsum.photos/200",
+				"online": true
+			},
+			"accepted": false,
+			"wins": "5",
+			"loses": "0"
+		}
+	]
+}

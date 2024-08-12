@@ -1,12 +1,13 @@
-from django.shortcuts import render
 from django.contrib.auth.models import  User
-from rest_framework import status, viewsets, permissions
+from rest_framework import status, viewsets
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.decorators import action
 from rest_framework.parsers import MultiPartParser, FormParser
-from .serializers import UserSerializer, PasswordUpdateSerializer, AvatarSerializer, MatchSerializer, OnlineStatusSerializer
+from .serializers import UserSerializer, PasswordUpdateSerializer, AvatarSerializer, OnlineStatusSerializer
 from .permissions import IsAuthenticatedOrCreateOnly, IsUser
-from .models import Avatar, Match, OnlineStatus
+from .models import Avatar, OnlineStatus
+
 
 #OnlineStatusView:
 
@@ -22,35 +23,24 @@ class OnlineStatusView(APIView):
             user_status = OnlineStatus.objects.get(user_id=userID)
         except OnlineStatus.DoesNotExist:
             return Response({"Warning": "User not found."}, status=status.HTTP_404_NOT_FOUND)
-        
+
         serializer = OnlineStatusSerializer(user_status)
         return Response({"User_status": serializer.data}, status=status.HTTP_200_OK)
 
-class MatchList(APIView):
-    permission_classes = [IsAuthenticatedOrCreateOnly]
+class SettingsViewSet(viewsets.ModelViewSet):
+    serializer_class = AvatarSerializer
+    permission_classes = [IsAuthenticatedOrCreateOnly, IsUser]
 
-    def get(self, request, format=None):
-        matches = Match.objects.all()
-        serializer = MatchSerializer(matches, many=True)
-        return Response(serializer.data)
+    """Return the avatar and his url in settings"""
+    @action(detail=False, methods=['get'], permission_classes=[IsAuthenticatedOrCreateOnly, IsUser])
+    def get_avatar(self,request):
+        user = request.user
+        avatar = Avatar.objects.filter(user=user).first()
 
-    def post(self, request, format=None):
-        serializer = MatchSerializer(data=request.data)
-        if(serializer.is_valid()):
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        if not avatar:
+            return Response({"detail": "Avatar not found."}, status=404)
 
-class PlayerMatchesView(APIView):
-    permissions_classes = [IsAuthenticatedOrCreateOnly]
-
-    def get(self, request, user_id, formant=None):
-        try:
-            player = User.objects.get(id=user_id)
-        except User.DoesNotExist:
-            return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
-        matches = Match.objects.filter(player1=player) | Match.objects.filter(player2=player)
-        serializer = MatchSerializer(matches, many=True)
+        serializer = self.serializer_class(instance=avatar)
         return Response(serializer.data)
 
 class AvatarViewSet(APIView):
@@ -115,7 +105,7 @@ class UserViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         user = serializer.instance
-        OnlineStatus.objects.create(user=user, is_online=False)
+        # OnlineStatus.objects.create(user=user, is_online=False)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
@@ -149,3 +139,21 @@ class UserViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_401_UNAUTHORIZED)
         self.perform_destroy(instance)
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    # search_user method:
+    # This method is part of the user management, and this allow us to find an user by the username
+    # so we need to provide the username, if the username exist then we return the user and his information
+    # in other case we just said user not found
+    @action(detail=False, methods=['get'], url_path='search')
+    def search_user(self, request):
+        username = request.query_params.get('username')
+        if not username:
+            return Response({"detail": "Username parameter is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            return Response({"detail": "User not found."}, status=status.HTTP_200_OK)
+
+        serializer = UserSerializer(user)
+        return Response(serializer.data, status=status.HTTP_200_OK)

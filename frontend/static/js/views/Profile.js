@@ -1,54 +1,71 @@
 import AView from "./AView.js";
+import { getTranslation } from "./TranslationUtils.js";
+import { loadTranslations } from "../index.js";
+import MatchHistory from "./MatchHistory.js";
 
 export default class extends AView {
 	constructor(params){
 		super(params);//call the constructor of the parent class
 		this.setTitle("Profile");
-		
-		this.userData = {
-			name: 'Test Name',
-			email: 'testmail@test.com',
-			pictureUrl: 'https://snworksceo.imgix.net/drt/7a10426e-6523-4304-8532-2d230f9bab9b.sized-1000x1000.jpg?w=1000&dpr=2'
-		};
 	}
 
-	fetchName(userData){
-		const base = document.createElement('section');
-		const name = this.userData.name;
-		base.textContent = name;
-		
-		return base;
-	}
-	
-	fetchEmail(userData){
-		const base = document.createElement('section');
-		const email = this.userData.email;
-		base.textContent = email;
-		
-		return base;
-	}
-	
-	fetchPicture(userData){
-		const img = document.createElement('img');
-		img.src = this.userData.pictureUrl;
-		img.width = 300;
-		img.width = 200;
-		return img;
-	}
-
-	async getHtml(userData){
-		const header = this.createHeader('header', 'testheader', 'h2');
-		const userNameBase = this.createParagraph('usernamebase');
-		const userName= this.fetchName(userData);
-		const userEmailBase = this.createParagraph('emailbase');
-		const userEmail = this.fetchEmail(userData);
-		const profilePicutre = this.fetchPicture(userData);
-        const message = this.createParagraph('message');
-        const settings = this.createLink('link2', 'Change settings from here', '/settings');
-        const stats = this.createLink('link1', 'Change settings from here', '/stats');
-
+	async getHtml(){
 		window.localStorage.setItem('page', 'Profile');
-		this.updateView(header, userNameBase, userName, userEmailBase, userEmail, profilePicutre, message, settings, stats);
+		await loadTranslations('Profile');
+
+		const header = this.createHeader('header', 'Profile', 'h1');
+
+		const data = await this.fetchJsonData('static/js/views/profile.json');
+		console.log(data);
+		
+		const createProfile = this.showProfile(data);
+        const settings = this.createLink('link2', 'Change settings from here', '/settings');
+		const matchHistoryLink = this.createLink('link3', 'View Match History', '/profile/matchhistory');
+
+		this.updateView(header, createProfile, matchHistoryLink, settings);
 		return ;
+	}
+
+	showProfile(my) {
+		
+		const profileView = document.createElement('div');
+		profileView.classList.add('profile');
+		
+		const profileTitle = this.createHeader('myProfile',`${my.username}`, 'h3');
+		
+		const profileAvatar = document.createElement('img');
+		profileAvatar.src = my.profile.avatar;
+		profileAvatar.alt = `${my.username}'s avatar`;
+		
+		const wins = my.wins;
+		const loss = my.loses;
+
+		const gameHistoryText = getTranslation('game-history', { wins, loss });
+		const gameHistory = document.createElement('p');
+        gameHistory.textContent = gameHistoryText;
+
+		let msofd;
+		
+		if (wins > loss){
+			const winmsg = "Amazing! You are doing great";
+			msofd = this.createParagraph('winmsg', winmsg);
+		}
+		else if (wins < loss){
+			const lossmsg = "Shall we play more to get some wins?";
+			msofd = this.createParagraph('lossmsg', lossmsg);
+		}
+		else{
+			const tiemsg = "We are even steven. Let's play some more!";
+			msofd = this.createParagraph('tiemsg', tiemsg);
+			msofd.classList.add('msofd');
+		}
+
+		msofd.classList.add('msofd');
+		profileView.appendChild(profileTitle);
+		profileView.appendChild(profileAvatar);
+		profileView.appendChild(gameHistory);
+		profileView.appendChild(msofd);
+		
+		return profileView;
 	}
 }

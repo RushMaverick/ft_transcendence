@@ -33,20 +33,23 @@ ALLOWED_HOSTS = ["*"]
 # Application definition
 
 INSTALLED_APPS = [
-	'rest_framework',
+    'rest_framework',
     'rest_framework_simplejwt',
-	'channels',
+    'channels',
     'corsheaders',  # for cors policies
-	'daphne',
-	'pong',
-	'user',
+    'daphne',
+    'pong',
+    'user',
     'friends',
+    'match',
+	'tournaments',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'drf_spectacular'
 ]
 
 MIDDLEWARE = [
@@ -159,6 +162,7 @@ REST_FRAMEWORK = {
 	'DEFAULT_AUTHENTICATION_CLASSES': [
 		'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
+	'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
 SIMPLE_JWT = {
@@ -166,19 +170,19 @@ SIMPLE_JWT = {
     "SIGNING_KEY": SECRET_KEY,
 }
 
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
-        },
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['console'],
-            'level': os.getenv('DJANGO_LOG_LEVEL', 'DEBUG'),
-        },
-    },
-}
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'handlers': {
+#         'console': {
+#             'level': 'DEBUG',
+#             'class': 'logging.StreamHandler',
+#         },
+#     },
+#     'loggers': {
+#         'django': {
+#             'handlers': ['console'],
+#             'level': os.getenv('DJANGO_LOG_LEVEL', 'DEBUG'),
+#         },
+#     },
+# }

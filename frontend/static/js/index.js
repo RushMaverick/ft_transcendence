@@ -13,6 +13,8 @@ import Login from "./views/Login.js";
 import Register from "./views/Register.js";
 import Profile from "./views/Profile.js";
 import Settings from "./views/Settings.js";
+import PrivacyPolicy from "./views/PrivacyPolicy.js";
+import MatchHistory from "./views/MatchHistory.js";
 
 //match the first character of the string or the start of the string -> "^"
 const pathToRegex = path => new RegExp("^" + path.replace(/\//g, "\\/").replace(/:\w+/g, "(.+)") + "$");
@@ -28,13 +30,24 @@ const getParams = match =>{
 	}))
 }
 
+const getHashParams = () => {
+    const hash = location.hash.slice(1);
+    const parts = hash.split('/');
+    const params = {};
+    if (parts.length > 1) {
+        params.view = parts[0];
+        params.id = parts[1];
+    }
+    return params;
+};
+
 //when trying to navigate to a different page, we don't want to reload the page. We want to use the client-side router to change the view of the page.
 const navigateTo = url => {
 	history.pushState(null, null, url);
 	router();
 };
 
-// const loggedIn = 
+// const loggedIn =
 
 //write client-side router
 const router = async () => {
@@ -42,8 +55,10 @@ const router = async () => {
 	const routes = [
 		{ path: "/", view: Login},
 		{ path: "/login", view: Login },
+		{ path: "/privacypolicy", view: PrivacyPolicy},
 		{ path: "/register", view: Register },
 		{ path: "/dashboard", view: Dashboard, authRequired: true },
+		{ path: "/profile/matchhistory", view: MatchHistory, authRequired: true },
 		{ path: "/one-vs-one", view: OneVsOne, authRequired: true},
 		{ path: "/tournaments", view: Tournaments, authRequired: true},
 		{ path: "/pong", view: Pong, authRequired: true},
@@ -68,49 +83,105 @@ const router = async () => {
 			result: [location.pathname]
 		};
 	}
+	const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
+
+	if (isLoggedIn && (match.route.path === "/login" || match.route.path === "/")) {
+        navigateTo('/dashboard');
+        return;
+    }
 
 	//comment out to remove login for testing
-	// if (match.route.authRequired && !window.isLoggedIn) {
+	// if (match.route.authRequired && !isLoggedIn) {
 	// 	console.log(`Access to ${match.route.path} is restricted.`);
-	// 	navigateTo("/login");
+	// 	navigateTo('/login');
 	// 	return;
 	// }
-	const view = new match.route.view(getParams(match));
 
-	view.getHtml();
+	// Load translations for the current page
+	// const page = localStorage.getItem('page');
+	// await loadTranslations(page);
+
+	const hashParams = getHashParams();
+    if (hashParams.view && match.route.path === "/friends") {
+        match.result.push(hashParams);
+    }
+
+	const view = new match.route.view(getParams(match));
+	await view.getHtml();
+
+	// Update translations after the view is rendered
+	// document.dispatchEvent(new Event("viewUpdated"));
+
+};
+
+export const loadTranslations = async (page) => {
+	const language = window.localStorage.getItem('language') || 'english';
+	try {
+		const response = await fetch(`./static/translations/${page}.json`);
+		console.log(response);
+		const data = await response.json();
+		if (!window.translations) {
+            window.translations = {};
+        }
+		window.translations = data; // Store translations globally
+		console.log('Translations loaded for page:', page, window.translations);
+	} catch (error) {
+		console.error('Error loading translation file:', error);
+	}
+};
+
+
+window.onload = async () => {
+	if (window.localStorage.getItem('language') == null){
+		window.localStorage.setItem('language', 'english');
+	}
 };
 
 window.addEventListener("popstate", router);
-//this will listen for back and forward buttons in the browser
-
+// this will listen for back and forward buttons in the browser
 // Dynamically import the translation file
 document.addEventListener("viewUpdated", () => {
-    let translations;
+	if (localStorage.getItem('language') === 'language'){
+		return;
+	}
 	const page = window.localStorage.getItem('page');
+	updateTranslations('index');
+	updateTranslations(page);
+});
+
+function updateTranslations(page){
+	let translations;
     fetch('./static/translations/' + page + '.json')
    .then(response => response.text())
    .then(data => {
         translations = JSON.parse(data);
 		const language = window.localStorage.getItem('language');
-		const currentTranslations = translations[language]; // Store the imported translations
-        const elementsToTranslate = document.querySelectorAll('[lang-key]');
-		elementsToTranslate.forEach(element => {
-            const key = element.getAttribute('lang-key');
-            if (currentTranslations[key]) {
-				element.textContent = currentTranslations[key];
-            }
-        });
-    })
-   .catch(error => console.error('Error loading translation file:', error));
-});
+		const currentTranslations = translations[language];
+		updateTranslationElements(currentTranslations);
+	})
+}
+
+function updateTranslationElements(currentTranslations){
+		const elementsToTranslate = document.querySelectorAll('[lang-key]');
+			elementsToTranslate.forEach(element => {
+				const key = element.getAttribute('lang-key');
+				if (currentTranslations[key]) {
+					element.textContent = currentTranslations[key];
+				}
+			});
+}
 
 document.addEventListener("DOMContentLoaded", () => {
-	document.body.addEventListener("click", e => {
-		if (e.target.matches("[data-link]")) {
+	document.body.addEventListener("click", async e => {
+		if (e.target.matches("[privacy-link]")) {
+			e.preventDefault();
+			window.open(e.target.href);
+		}
+		else if (e.target.matches("[data-link]")) {
 			e.preventDefault();
 			navigateTo(e.target.href);
 		}
-		if (e.target.matches("[lang-toggle]")) {
+		else if (e.target.matches("[lang-toggle]")) {
 			document.body.addEventListener('change', (event) => {
 				if (event.target.matches("[lang-toggle]")) {
 					const selectedLanguage = event.target.value;
@@ -122,13 +193,22 @@ document.addEventListener("DOMContentLoaded", () => {
 				}
 				})
 		}
+
 	});
 
-document.addEventListener('loginSuccess', (event) => {
-	const { path } = event.detail;
-	navigateTo(path);
-});
+	document.addEventListener('registrationSuccess', () => {
+		navigateTo('/login');
+	});
+
+	document.addEventListener('loginSuccess', (event) => {
+		navigateTo(event.detail.path);
+	});
+// document.addEventListener('loginSuccess', (event) => {
+// 	const { path } = event.detail;
+// 	navigateTo(path);
+// });
 
 
 	router();
 });
+

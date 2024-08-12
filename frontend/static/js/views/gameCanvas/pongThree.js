@@ -1,13 +1,13 @@
 import * as THREE from 'three';
 import WebGL from 'three/addons/capabilities/WebGL.js';
-import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
-import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
+import {Text} from 'troika-three-text'
 
 export default class PongGame {
 	static instance;
     constructor() {
 		if (!PongGame.instance){
 			PongGame.instance = this;
+			PongGame.instance.startAnimate();
 			PongGame.instance.enterView();
 		}
 		else{
@@ -18,7 +18,7 @@ export default class PongGame {
 		if ( WebGL.isWebGL2Available() ) {
 			console.log('WebGL2 is available')
 		} else {
-		
+
 			const warning = WebGL.getWebGL2ErrorMessage();
 			document.getElementById( 'container' ).appendChild( warning );
 		}
@@ -27,20 +27,46 @@ export default class PongGame {
     }
 
 	enterView() {
-		const container = document.querySelector('main');
+		this.container = document.querySelector('pong');
 		this.scene = new THREE.Scene();
+		this.waitingScene = new THREE.Scene();
+		this.waitingForPlayers = true;
+		this.menuSetup();
+		this.setupUI();
         this.createCubes();
 		this.createBorders();
         this.setupLighting();
         this.setupCamera();
         this.setupRenderer();
 		this.setupBall();
-		this.renderer.render(this.scene, this.camera);
+		this.animate();
 	}
 
+	menuSetup() {
+		this.menuCam = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+		this.startButton = new Text();
+		this.startButton.text = 'Awaiting Players...';
+		this.startButton.font = 'static/js/views/gameCanvas/fonts/Tiny5-Regular.ttf';
+		this.startButton.fontSize = 50.0;
+		this.startButton.position.x = -1;
+		this.startButton.position.y = 0;
+		this.startButton.color = 0x000000;
+
+		this.menuCam.position.z = 550;
+		this.menuCam.position.x = 180;
+
+		this.waitingScene.add(this.menuCam, this.startButton);
+	}
+
+
 	joinGame() {
-		let roomname = 'testroom';
-		this.socket = new WebSocket(`ws://localhost:8000/ws/game/${roomname}/`);
+		let match_id = sessionStorage.getItem('match_id');
+		let room_name = sessionStorage.getItem('room_name');
+		console.log('joinGame()');
+		console.log(match_id);
+		console.log(room_name);
+		this.socket = new WebSocket(`ws://localhost:8000/ws/game/${room_name}/?token=${sessionStorage.getItem('access')}&match_id=${match_id}`);
 		this.socket.onerror = function(error) {
 			console.error("WebSocket Error:", error);
 		};
@@ -50,13 +76,43 @@ export default class PongGame {
 		};
 		//This will be used instead of animate() to update the game state.
 		this.socket.onmessage = function(event) {
+			PongGame.instance.waitingForPlayers = false;
 			PongGame.instance.message = JSON.parse(event.data);
 			PongGame.instance.collisionChecking();
+			PongGame.instance.updateUI();
 			PongGame.instance.updatePositions();
-			// console.log(PongGame.instance.message['1'].z);
-			// console.log(PongGame.instance.message['2'].z);
 			PongGame.instance.renderer.render(PongGame.instance.scene, PongGame.instance.camera);
 		};
+		this.socket.onclose = function() {
+			console.log('POng WebSocket connection closed.');
+		};
+	}
+
+	updateUI() {
+		this.p1Score.text = `P1: ${this.message['1'].score}`;
+		this.p2Score.text = `P2: ${this.message['2'].score}`;
+	}
+
+	setupUI() {
+
+		this.p1Score = new Text()
+		this.p2Score = new Text()
+
+		// Set properties to configure:
+		// this.p1Score.text = ''
+		this.p1Score.font = 'static/js/views/gameCanvas/fonts/Tiny5-Regular.ttf'
+		this.p1Score.fontSize = 15.0
+		this.p1Score.position.x = 10
+		this.p1Score.color = 0x000000
+
+		// this.p2Score.text = ''
+		this.p2Score.font = 'static/js/views/gameCanvas/fonts/Tiny5-Regular.ttf'
+		this.p2Score.fontSize = 15.0
+		this.p2Score.position.x = 160
+		this.p2Score.color = 0x000000
+
+		// Update the rendering:
+		this.scene.add(this.p1Score, this.p2Score)
 	}
 
     createCubes() {
@@ -66,18 +122,16 @@ export default class PongGame {
         });
         this.cube = new THREE.Mesh(this.geometry, this.material);
         this.cube.position.x = 10;
-		// this.cube.rotation.y = 300
 		this.cube.castShadow = true;
 		this.cube.receiveShadow = true;
 
 		//Setup cube1 bounding box
 		this.cube1Bounds = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());
 		this.cube1Bounds.setFromObject(this.cube);
-		
+
         this.geometry2 = new THREE.BoxGeometry(5, 15, 2);
 		this.cube2 = new THREE.Mesh(this.geometry2, this.material);
 		this.cube2.position.x = 190;
-		// this.cube2.rotation.y = 300
 		this.cube2.castShadow = true;
 		this.cube2.receiveShadow = true;
 
@@ -90,18 +144,18 @@ export default class PongGame {
 
     createBorders() {
         this.borderGeo = new THREE.BoxGeometry(200, 2, 2);
-        
+
         this.borderMaterial = new THREE.MeshLambertMaterial({
             color: 0xaeaa97
         });
 
         this.border = new THREE.Mesh(this.borderGeo, this.borderMaterial);
         this.border2 = new THREE.Mesh(this.borderGeo, this.borderMaterial);
-        
+
         this.border.position.x = 100;
         this.border.position.y = 0;
         this.border.position.z = 0;
-        
+
         this.border2.position.x = 100;
         this.border2.position.y = 150;
         this.border2.position.z = 0;
@@ -127,7 +181,6 @@ export default class PongGame {
 
 	setupBall() {
 		this.geometry5 = new THREE.SphereGeometry(2, 32, 32);
-		this.debugDot = new THREE.Mesh(new THREE.SphereGeometry(1, 32, 32), new THREE.MeshBasicMaterial({color: 0xff0000}));
 		this.material = new THREE.MeshLambertMaterial({
 			color: 0xaeaa97
 		});
@@ -136,9 +189,6 @@ export default class PongGame {
 		this.ball.position.y = 0;
 		this.ball.position.z = 0;
 
-		this.debugDot.position.x = 0;
-		this.debugDot.position.y = 0;
-		this.debugDot.position.z = 0;
 
 		//setup ball bounding box
 		this.ballBounds = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());;
@@ -146,7 +196,7 @@ export default class PongGame {
 
 		this.ball.castShadow = true;
 		this.ball.receiveShadow = true;
-		this.scene.add(this.ball, this.debugDot);
+		this.scene.add(this.ball);
 	}
 
     setupCamera() {
@@ -177,6 +227,9 @@ export default class PongGame {
     }
 
     handleKeyPresses() {
+		document.addEventListener('click', (e) => {
+			console.log(e.clientX, e.clientY);
+		});
         document.addEventListener('keydown', (e) => {
             switch (e.key) {
                 case 'w':
@@ -217,11 +270,11 @@ export default class PongGame {
 				case 'i':
 					this.camera.position.set(0, 0, 0);
 					this.camera.lookAt(0, 0, 0);
-					break;i
+					break;
             }
         });
     }
-	
+
 	cubeFlash() {
 		this.cube.material.transparent = true;
 		this.cube.material.opacity = 0.5;
@@ -244,7 +297,7 @@ export default class PongGame {
 		if (this.cube1Bounds.intersectsBox(this.borderBounds) || this.cube1Bounds.intersectsBox(this.border2Bounds)
 			|| this.cube2Bounds.intersectsBox(this.borderBounds) || this.cube2Bounds.intersectsBox(this.border2Bounds)
 			|| this.ballBounds.intersectsBox(this.cube1Bounds) || this.ballBounds.intersectsBox(this.cube2Bounds)){
-			
+
 				//Debug feature
 			this.cubeFlash();
 		}
@@ -264,30 +317,30 @@ export default class PongGame {
 	}
 	updatePositions() {
 		//Update cube positions
-		// console.log(this.message['ball'].x)
-		// console.log(this.message);
+
 		this.cube.position.y = this.message['1'].y;
 		this.cube2.position.y = this.message['2'].y;
 		this.ball.position.y = this.message['ball'].y;
 		this.cube.position.x = this.message['1'].x;
 		this.cube2.position.x = this.message['2'].x;
 		this.ball.position.x = this.message['ball'].x;
-		// this.ball.position.y = this.message['ball'].y;
-		// this.ball.position.z = this.message['ball'].z;
+
 	}
 
     animate() {
 		if (!this.isAnimating)
 			return;
 		requestAnimationFrame(() => this.animate());
+		if (this.waitingForPlayers == true)
+			this.renderer.render(this.waitingScene, this.menuCam);
 		window.addEventListener('resize', () => {
-			if (window.innerWidth > window.innerHeight) 
+			if (window.innerWidth > window.innerHeight)
 			{
 				this.camera.aspectRatio = window.innerWidth / window.innerHeight; // static aspect ratio for the canvas?
 				this.camera.updateProjectionMatrix();
 				this.renderer.setSize(window.innerWidth/ 1.3, window.innerHeight / 1.3); // static aspect ratio for the canvas would be implemented here?
 			}
-					
+
 		},false)
     }
 

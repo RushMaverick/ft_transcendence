@@ -1,0 +1,30 @@
+{
+	"finnish":
+	{
+		"log-in": "KIRJAUDU SISÄÄN",
+		"username": "Käyttäjätunnus: ",
+		"password": "Salasana: ",
+		"register": "Etkö ole rekisteröitynyt?",
+		"register-link": "> Rekisteröidy täältä"
+
+	},
+
+	"english":
+	{
+		"log-in": "LOG IN",
+		"username": "Username: ",
+		"password": "Password: ",
+		"register": "Don't have an account?",
+		"register-link": "> Register here"
+	},
+
+	"swedish":
+	{
+		"log-in": "LOGGA IN",
+		"username": "Användarnamn: ",
+		"password": "Lösenord: ",
+		"register": "Har du inget konto?",
+		"register-link": "> Registrera här"
+	}
+
+}

@@ -2,35 +2,8 @@ from django.contrib.auth.models import  User
 from rest_framework import serializers
 from django.contrib.auth.password_validation import validate_password
 from rest_framework.validators import UniqueValidator
-from .models import Avatar, Match, OnlineStatus
+from .models import Avatar, OnlineStatus
 
-class MatchSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Match
-        fields = '__all__'
-
-    def validate(self, data):
-        if 'player1' not in data:
-            raise serializers.ValidationError({
-                'player1': 'This field is required.',
-            })
-        if 'player2' not in data:
-             raise serializers.ValidationError({
-                'player2': 'This field is required.'
-            })
-        if 'winner' not in data:
-            raise serializers.ValidationError({
-                'winner': 'This field is required.'
-            })
-        if data['player1'] == data['player2']:
-            raise serializers.ValidationError({
-                'player1': 'Player 1 and Player 2 cannot be the same.'
-            })
-        if data['winner'] != data['player1'] and data['winner'] != data['player2']:
-            raise serializers.ValidationError({
-                'winner': 'Winner must be either Player 1 or Player 2.'
-            })
-        return data
 
 class AvatarSerializer(serializers.ModelSerializer):
 
@@ -47,24 +20,33 @@ class AvatarSerializer(serializers.ModelSerializer):
 # This serializer is designed to get the Online Status from an user, so for this we use model OnlineStatus
 # and we use as a fields the user id, username, is_online and the last connection of the user
 class OnlineStatusSerializer(serializers.ModelSerializer):
-    username = serializers.CharField(source='user.username', read_only=True)
+    # username = serializers.CharField(source='user.username', read_only=True)
     class Meta:
         model = OnlineStatus
-        fields = ['user','username','is_online', 'last_connection']
+        fields = ['is_online', 'last_connection']
 
-class UserSerializer(serializers.ModelSerializer):
-    username = serializers.CharField(required=True, validators=[UniqueValidator(queryset=User.objects.all())])
-    password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
-    password2 = serializers.CharField(write_only=True, required=True)
 
+class FriendshipSerializer(serializers.ModelSerializer):
     avatar = AvatarSerializer(read_only=True)
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'avatar','password', 'password2']
+        fields = ['username', 'avatar']
+
+class UserSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(required=True, validators=[UniqueValidator(queryset=User.objects.all())])
+    password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
+    confirm_password = serializers.CharField(write_only=True, required=True)
+
+    avatar = AvatarSerializer(read_only=True)
+    online = OnlineStatusSerializer(source='online_status', read_only=True)
+
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'avatar', 'online', 'password', 'confirm_password']
 
     def validate(self, attrs):
-        if attrs['password'] != attrs['password2']:
+        if attrs['password'] != attrs['confirm_password']:
             raise serializers.ValidationError({"password": "Password fields didn't match."})
         return attrs
 
@@ -75,6 +57,7 @@ class UserSerializer(serializers.ModelSerializer):
         user.set_password(validated_data['password'])
         user.save()
         Avatar.objects.create(user=user)
+        OnlineStatus.objects.create(user=user)
         return user
 
     def update(self, instance: User, validated_data):

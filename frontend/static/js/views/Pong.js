@@ -21,11 +21,10 @@ export default class extends AView {
 		tournaButton.setAttribute('id', 'tournaments-button');
 		tournaButton.classList.add('pongpage-reroute-button');
 
-		const gameDiv = this.createGame('pong');
 		const p = this.createParagraph("You are successfully running a Super Pongchamp game.");
 		
 		window.localStorage.setItem('page', 'Pong');
-		this.updateView(header, onevsButton, tournaButton, gameDiv, p);
+		this.updateView(header, onevsButton, tournaButton, p);
 		return ;
 	}
 }

@@ -1,0 +1,45 @@
+{
+	"finnish":
+	{
+		"register": "REKISTERÖIDY",
+		"username": "käyttäjätunnus: ",
+		"password": "salasana: ",
+		"confirm-password": "salasana uudelleen: ",
+		"password-requirements": "",
+		"privacy": "Olen lukenut ja hyväksyn Pong -sivuston ",
+		"privacy-link": "tietosuojakäytännöt",
+		"register-button": "Rekisteröidy",
+		"login": "Oletko jo rekisteröitynyt?",
+		"login-link": "Kirjaudu sisään täältä"
+		
+	},
+	
+	"english":
+	{
+		"register": "REGISTER",
+		"username": "username: ",
+		"password": "password: ",
+		"confirm-password": "confirm password: ",
+		"password-requirements": "Password needs to have at least 8 letters, one character, one number, and one special character.",
+		"privacy": "I have read and agree to The Pong sites ",
+		"privacy-link": "privacy policy",
+		"register-button": "Sign up",
+		"login": "Already have an account?",
+		"login-link": "Log in here"
+	},
+
+	"swedish":
+	{
+		"register": "REGISTRERA",
+		"username": "Användarnamn: ",
+		"password": "Lösenord: ",
+		"confirm-password": "Bekräfta lösenord: ",
+		"password-requirements": "",
+		"privacy": "Jag har läst och håller med Pong-webbsidan ",
+		"privacy-link": "Integritetspolicy",
+		"register-button": "Registrera",
+		"login": "Är du redan registrerad?",
+		"login-link": "Logga in här"
+	}
+
+}

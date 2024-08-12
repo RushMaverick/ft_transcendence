@@ -1,32 +1,38 @@
 {
 	"finnish":
 	{
-		"testheader": "heippuli ja tervetuloa profiiliin",
-		"usernamebase": "käyttäjätunnus: ",
-		"emailbase": "sähköposti: ",
-		"message": "sää voisit: ",
-		"link1": "tilastot ",
-		"link2": "asetukset "
+		"header": "Profiili",
+		"link1": "> Tilastot",
+		"link2": "> Asetukset",
+		"game-history": "Voitot: {wins}🏆\tTappiot: {loss}💀",
+		"winmsg": "Upeaa! Olet menossa hienosti",
+		"lossmsg": "Pelataanko lisää saadaksemme voittoja?",
+		"tiemsg": "Olemme tasoissa. Pelataan lisää!"
 	},
 
 	"english":
 	{
-		"testheader": "helloups and welcome to your profile",
-		"usernamebase": "username: ",
-		"emailbase": "email: ",
-		"message": "here you can: ",
-		"link1": "stats ",
-		"link2": "settings "
+		"header": "Profile",
+		"link1": "> Stats",
+		"link2": "> Settings",
+		"game-history": "Win: {wins}🏆\t Loss: {loss}💀",
+		"winmsg": "Amazing! You are doing great",
+		"lossmsg": "Shall we play more to get some wins?",
+		"tiemsg": "We are even steven. Let's play some more!"
 	},
-
-	"spanish":
+	
+	"swedish":
 	{
-		"testheader": "Hola y bienvenido a tu perfil",
-		"usernamebase": "nombre de usuario: ",
-		"emailbase": "correo electrónico: ",
-		"message": "aquí puedes: ",
-		"link1": "estadísticas ",
-		"link2": "ajustes "
+		"header": "Profil",
+		"usernamebase": "Användarnamn: ",
+		"emailbase": "Strömpost: ",
+		"game-history": "Vinster: {wins}🏆\t Förluster: {loss}💀",
+		"message": "Här kan du: ",
+		"link1": "> Statistik",
+		"link2": "> Inställingar",
+		"winmsg": "Super, de går jättebra!",
+		"lossmsg": "Ska vi spela mera för att få några vinster?",
+		"tiemsg": "Jämnställt! Vi spelar mera!"
 	}
 
 }

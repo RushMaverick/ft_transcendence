@@ -1,25 +1,35 @@
 {
 	"finnish":
 	{
-		"header": "PONGI",
-		"onevs-button": "yksvsyks",
-		"welcome": "täsä on pongi"
+		"header": "Super PongChamp",
+		"onevs-button": "> 1v1",
+		"tournaments-button": "> Turnajaiset",
+		"welcome": "Tässä on Pong",
+		"searchForFriends": "Etsi ystäviä...",
+		"search": "Etsi"
 
 	},
 
 	"english":
 	{
-		"header": "THE PONG",
-		"onevs-button": "onevsone",
-		"welcome": "here you would find the pong "
+		"header": "Super PongChamp",
+		"onevs-button": "> 1v1",
+		"tournaments-button": "> Tournament",
+		"welcome": "here you would find the pong ",
+		"searchForFriends": "Search for friends...",
+		"search": "Search"
 
 	},
 
-	"spanish":
+	"swedish":
 	{
-		"header": "UNO PONG POR FAVOR",
-		"onevs-button": "unocontrauno",
-		"welcome": "Aquí encontrarías los juegos pong "
+		"header": "Super PongChamp",
+		"onevs-button": "> En mot en",
+		"tournaments-button": "> Turnering",
+		"welcome": "Här är Pongen ",
+		"searchForFriends": "Sök vänner...",
+		"search": "Sök"
+
 
 	}
 

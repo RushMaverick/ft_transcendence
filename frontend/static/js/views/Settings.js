@@ -5,18 +5,18 @@ export default class extends AView {
 	constructor(params){
 		super(params);//call the constructor of the parent class
 		this.setTitle('Settings');
+		this.avatarUrl = '';
 	}
 
 	async getHtml(){
 
-		const title = this.createHeader('header', 'tervetuloo', 'h2');
+		const title = this.createHeader('header', 'Update user information', 'h2');
 		title.classList.add('text-center');
 
 		const form = this.createForm('settings');
 		const usernameInput = textInputField('username', 'Username', 'username', 'text');
 		const passwordInput = textInputField('password', 'Password', 'password', 'password');
 		const confirmPasswordInput = textInputField('password-again', 'Confirm password', 'confirm-password', 'password');
-		const paragraph = this.createParagraph('language');
 		const signupButton = this.createButton('savebutton', 'save', 'save');
 		
 		form.appendChild(usernameInput);
@@ -24,18 +24,22 @@ export default class extends AView {
 		form.appendChild(confirmPasswordInput);
 		form.appendChild(signupButton);
 		form.addEventListener('submit', this.handleSettingsFormSubmit.bind(this));
-	
+		
 		const select = document.createElement('select');
 		select.setAttribute('id', 'languageSelect');
 		select.classList.add('translations');
-		['English', 'Finnish', 'Spanish'].forEach((lang) => {
+		const option = document.createElement('option');
+		option.selected = 'Language';
+		option.setAttribute('lang-key', 'language');
+		select.appendChild(option);
+		['English', 'Finnish', 'Swedish'].forEach((lang) => {
 			const option = document.createElement('option');
             option.text = lang;
 			option.setAttribute('lang-key', lang);
             select.appendChild(option);
 		});
 		if(select){
-			  select.addEventListener('change', (event) => {
+			select.addEventListener('change', (event) => {
 				const selectedLanguage = event.target.value;
 				const language = selectedLanguage.toLowerCase();
 				window.localStorage.setItem('language', language);
@@ -55,11 +59,116 @@ export default class extends AView {
 				console.log('deleting account'); //for monitoring
 			}
 		});
+		
+		const avatarContainer = this.fileInputField('update-avatar', 'avatar');
 
 		window.localStorage.setItem('page', 'Settings');
-		this.updateView(title, form, paragraph, select, buttonDel);
+		this.updateView(title, avatarContainer, form, select, buttonDel);
+		await this.fetchAvatar();
 		return ;
 	}
+
+    async fetchAvatar() {
+        // try {
+        //     const response = await fetch(`${import.meta.env.VITE_API_ENDPOINT}/avatar`);
+        //     if (!response.ok) {
+        //         throw new Error('Network response was not ok');
+        //     }
+        //     const data = await response.json();
+        //     this.avatarUrl = data.profile.avatar; // Assuming the response contains the avatar URL
+        //     this.updateAvatarDisplay();
+        // } catch (error) {
+        //     console.error('Error fetching avatar:', error);
+        // }
+		try{
+			const data = await this.fetchJsonData('static/js/views/profile.json');
+			if (data && data.profile && data.profile.avatar) {
+				this.avatarUrl = data.profile.avatar;
+				console.log(this.avatarUrl);
+				this.updateAvatarDisplay();
+			} else {
+				console.error('Profile data or avatar URL is missing');
+			}
+		} catch(error){
+			console.error('Error in fetching avatar');
+		}
+    }
+
+	updateAvatarDisplay() {
+        const avatar = document.querySelector('.avatar');
+		if (avatar) {
+			avatar.style.backgroundImage = `url(${this.avatarUrl})`;
+		} else {
+			console.error('Avatar element not found');
+		}
+    }
+	
+	fileInputField(labelText, name) {
+		const container = document.createElement('div');
+		container.classList.add('avatar-container');
+
+		const avatarDisplay = document.createElement('div');
+		avatarDisplay.classList.add('avatar');
+
+		const label = document.createElement('label');
+		label.classList.add('avatar-label');
+		container.appendChild(label);
+		
+		const input = document.createElement('input');
+		input.setAttribute('type', 'file');
+		input.setAttribute('id', name);
+		input.setAttribute('name', name);
+		input.classList.add('avatar-input');
+		input.style.display = 'none';
+		input.addEventListener('change', this.handleAvatarUpload.bind(this));
+
+		const uploadButton = this.createButton('uploadbutton', 'Upload', 'Upload Avatar');
+		uploadButton.addEventListener('click', () => input.click());
+		// uploadButton.classList.add('upload-button');
+	
+		container.appendChild(avatarDisplay);
+		container.appendChild(uploadButton);
+		container.appendChild(input);
+		
+		return container;
+	}
+
+    async handleAvatarUpload(event) {
+        const file = event.target.files[0];
+        if (!file) {
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('file', file);
+
+        try {
+            const response = await fetch(`${import.meta.env.VITE_API_ENDPOINT}/upload`, {
+                method: 'POST',
+                body: formData
+            });
+
+			if (!response.ok) {
+				let errorMessage = "Unknown error occurred. Please try again.";
+
+				try {
+					const errorData = await response.json();
+					errorMessage = errorData.detail || errorData.message || errorMessage;
+				} catch {
+					errorMessage = "Unable to parse error response.";
+				}
+	
+				alert(`Uploading avatar failed: ${errorMessage}`);
+				return;
+			}
+
+            const responseData = await response.json();
+            this.avatarUrl = responseData.profile.avatar; // Extract the updated avatar URL from the profile object
+            this.updateAvatarDisplay();
+        } catch (error) {
+            console.error('There was a problem with the file upload operation:', error);
+        }
+    }
 
 	async handleSettingsFormSubmit(event) {
         event.preventDefault(); // Prevent the default form submission behavior
