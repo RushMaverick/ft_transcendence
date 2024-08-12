@@ -55,7 +55,6 @@ export default class extends AView {
 
 		const username = event.target.username.value;
 		const password = event.target.password.value;
-		console.log(`Username: ${username}, Password: ${password}`);
 
 		const data = {
 			username: username,

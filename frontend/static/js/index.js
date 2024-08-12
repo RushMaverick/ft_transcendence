@@ -98,11 +98,11 @@ const router = async () => {
     }
 
 	//comment out to remove login for testing
-	// if (match.route.authRequired && !isLoggedIn) {
-	// 	console.log(`Access to ${match.route.path} is restricted.`);
-	// 	navigateTo('/login');
-	// 	return;
-	// }
+	if (match.route.authRequired && !isLoggedIn) {
+		console.log(`Access to ${match.route.path} is restricted.`);
+		navigateTo('/login');
+		return;
+	}
 
 	if (match.route.path === "/play" && !sessionStorage.getItem('room_name')) {
 		console.log('No room name found');
