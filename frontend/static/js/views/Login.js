@@ -74,7 +74,17 @@ export default class extends AView {
 				}
 			);
 			if (!response.ok) {
-				throw new Error("Network response was not ok");
+				let errorMessage = "Unknown error occurred. Please try again.";
+
+				try {
+					const errorData = await response.json();
+					errorMessage = errorData.detail || errorData.message || errorMessage;
+				} catch {
+					errorMessage = "Unable to parse error response.";
+				}
+	
+				alert(`Login failed: ${errorMessage}`);
+				return;
 			}
 			const responseData = await response.json();
 			if (responseData.access) {
@@ -82,12 +92,15 @@ export default class extends AView {
 				sessionStorage.setItem("refresh", responseData.refresh);
 				sessionStorage.setItem('isLoggedIn', 'true');
 				window.isLoggedIn = true;
+
+				alert('Login successful!');
 				document.dispatchEvent(new CustomEvent('loginSuccess', { detail: { path: '/dashboard' } }));
 			} else {
 				console.error("Login failed:", responseData.message);
 			}
 		} catch (error) {
 			console.error("There was a problem with the fetch operation:", error);
+			alert("There was a problem with the login operation. Please try again.");
 		}
 		console.log(import.meta.env.VITE_API_ENDPOINT); // will be deleted later. now currently checkig if .env in frontend works
 	}

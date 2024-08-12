@@ -1,6 +1,7 @@
 import AView from "./AView.js";
 import { getTranslation } from "./TranslationUtils.js";
 import { loadTranslations } from "../index.js";
+import MatchHistory from "./MatchHistory.js";
 
 export default class extends AView {
 	constructor(params){
@@ -15,13 +16,13 @@ export default class extends AView {
 		const header = this.createHeader('header', 'Profile', 'h1');
 
 		const data = await this.fetchJsonData('static/js/views/profile.json');
-		console.log('Fetched Profile Data:', data);
+		console.log(data);
 		
 		const createProfile = this.showProfile(data);
         const settings = this.createLink('link2', 'Change settings from here', '/settings');
-        const stats = this.createLink('link1', 'Change settings from here', '/stats');
+		const matchHistoryLink = this.createLink('link3', 'View Match History', '/profile/matchhistory');
 
-		this.updateView(header, createProfile, settings, stats);
+		this.updateView(header, createProfile, matchHistoryLink, settings);
 		return ;
 	}
 
