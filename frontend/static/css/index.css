@@ -61,18 +61,6 @@ body {
   .actions {
 	margin-bottom: 3rem;
   }
-  
-  .nav {
-	background: #333;;
-	border-right: 2px solid #b3aea4;
-	height: 100vh;
-	width: var(--nav-width);
-	position: fixed;
-	top: 0;
-	left: 0;
-	padding: 20px;
-	box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-  }
 
   .container {
 	font-size: 14px;
@@ -89,6 +77,18 @@ body {
 	transition: background-color 0.3s ease;
   }
 
+  .nav {
+	background: #333;;
+	border-right: 2px solid #b3aea4;
+	height: 100vh;
+	width: var(--nav-width);
+	position: fixed;
+	top: 0;
+	left: 0;
+	padding: 20px;
+	box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  }
+
   .nav a {
 	color: #b3aea4;
 	text-decoration: none;
@@ -100,13 +100,14 @@ body {
 	transition: background-color 0.3s ease;
   }
 
+  .nav a:hover {
+	background: #b3aea4;
+  }
+
   .input-group {
 	margin-bottom: 1rem;
   }
 
-  .nav a:hover {
-	background: #b3aea4;
-  }
   
   select {
 	margin-top: 1rem;
