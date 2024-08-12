@@ -103,8 +103,8 @@ class GameConsumer(AsyncWebsocketConsumer):
                 print(f"pong:connect:User {user} is not part of the room {self.room.id}", flush=True)
                 await self.close()
                 return
-            
-    
+
+
         # Create game if it doesn't exist
         if self.game_room not in Games.games:
             Games.create_game(self.game_room)
@@ -140,6 +140,7 @@ class GameConsumer(AsyncWebsocketConsumer):
             self.pong_game.channel_layer = self.channel_layer
         if not self.pong_game.room_group_name:
             self.pong_game.room_group_name = self.room_group_name
+        self.pong_game.room_id = self.game_room
 
 
         # Start game if both players are in

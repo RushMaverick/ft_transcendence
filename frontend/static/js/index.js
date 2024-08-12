@@ -16,6 +16,7 @@ import Settings from "./views/Settings.js";
 import PrivacyPolicy from "./views/PrivacyPolicy.js";
 import CreateGame from "./views/CreateGame.js";
 import GameInvites from "./views/GameInvites.js";
+import Play from "./views/Play.js";
 
 //match the first character of the string or the start of the string -> "^"
 const pathToRegex = path => new RegExp("^" + path.replace(/\//g, "\\/").replace(/:\w+/g, "(.+)") + "$");
@@ -68,6 +69,7 @@ const router = async () => {
 		{ path: "/friends", view: Friends, authRequired: true },
 		{ path: "/profile", view: Profile, authRequired: true },
 		{ path: "/settings", view: Settings, authRequired: true },
+		{ path: "/play", view: Play, authRequired: true }
 	];
 
 	//Test each route for potential match. go through each route and find matches and return
@@ -97,6 +99,12 @@ const router = async () => {
 	if (match.route.authRequired && !isLoggedIn) {
 		console.log(`Access to ${match.route.path} is restricted.`);
 		navigateTo('/login');
+		return;
+	}
+
+	if (match.route.path === "/play" && !sessionStorage.getItem('room_name')) {
+		console.log('No room name found');
+		navigateTo('/create-game');
 		return;
 	}
 

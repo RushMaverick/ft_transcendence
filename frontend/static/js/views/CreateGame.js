@@ -2,6 +2,7 @@ import AView from "./AView.js";
 import textInputField from "./TextInputView.js";
 import PongGame from "./gameCanvas/pongThree.js";
 import { loadTranslations } from "../index.js";
+import { navigateTo } from "../index.js";
 
 export default class extends AView {
 	constructor(params){
@@ -67,6 +68,10 @@ export default class extends AView {
 		console.log(`Player Name: ${playerName}`);
 		const result = await AView.fetchWithJson(`/user/search/?username=${playerName}`, 'GET')
 		console.log(result);
+		if (result.detail === 'User not found.'){
+			alert('Failed to find player');
+			return;
+		}
 		const playerDiv = this.createPlayerItem(result);
 		this.updateView(playerDiv);
 	}
@@ -74,26 +79,29 @@ export default class extends AView {
 	async createRoom(){
 		const result = await AView.fetchWithJson('/rooms/create_room/', 'POST', {});
 		console.log(result);
-		if (result && result.id){
-			sessionStorage.setItem('room_name', result.id);
+		if (!result){
+			alert('Failed to create room');
 		}
+		sessionStorage.removeItem('match_id');
+		sessionStorage.setItem('room_name', result.id);
 	}
 
 	async handleInvite(username) {
+		await this.createRoom();
 		console.log('Invite player:', username);
 		const result = await AView.fetchWithJson('/rooms/one_vs_one_invitation/', 'POST', { "guest": username});
 		console.log(result);
-		if (result ){
-			let gameDiv = this.createGame('pong');
-			this.updateView(gameDiv);
+		if (!result){
+			alert('Failed to invite player');
 		}
+		navigateTo('/play');
 	}
 
 	async getHtml(){
 		window.localStorage.setItem('page', 'CreateGame');
 		await loadTranslations('CreateGame');
 
-		await this.createRoom();
+		// await this.createRoom();
 
 		const findPlayerFrom = this.createForm('tournamentform');
 		const findPlayerInput = textInputField(

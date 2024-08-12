@@ -31,9 +31,7 @@ export default class extends AView {
 			console.log(data);
 			sessionStorage.removeItem('match_id');
 			sessionStorage.setItem('room_name', data.Room.id);
-			const gameDiv = this.createGame('pong');
-			this.updateView(gameDiv);
-
+			navigateTo('/play');
 		} catch (error) {
 			console.error('Error accepting invite:', error);
 		}
