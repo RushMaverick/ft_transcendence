@@ -62,15 +62,25 @@ export default class extends AView {
 		}
 
 		const buttonDel = this.createButton('deletebutton', 'delete', 'delete account');
-		buttonDel.addEventListener('click', (event) => {
+		buttonDel.addEventListener('click', async (event) => {
 			event.preventDefault();
 			if (window.confirm('Are you sure you want to delete the Pong account?') == true){
-				const data = {
-					delete: true,
-				};
-				// here we would send the delete request to the backend
-				console.log(data);
-				console.log('deleting account'); //for monitoring
+				const response = await fetch(`${import.meta.env.VITE_API_ENDPOINT}/user/${sessionStorage.getItem('userId')}/`, {
+					method: 'DELETE',
+					headers: {
+						'Content-Type': 'application/json',
+						'Authorization': 'Bearer ' + sessionStorage.getItem('access')
+					}
+				});
+				if (response.ok) {
+					sessionStorage.setItem('isLoggedIn', 'false');
+					sessionStorage.removeItem('access');
+					sessionStorage.removeItem('refresh');
+					sessionStorage.removeItem('userId');
+					location.reload();
+				} else {
+					alert('Failed to delete account');
+				}
 			}
 		});
 
@@ -83,17 +93,6 @@ export default class extends AView {
 	}
 
     async fetchAvatar() {
-        // try {
-        //     const response = await fetch(`${import.meta.env.VITE_API_ENDPOINT}/avatar`);
-        //     if (!response.ok) {
-        //         throw new Error('Network response was not ok');
-        //     }
-        //     const data = await response.json();
-        //     this.avatarUrl = data.profile.avatar; // Assuming the response contains the avatar URL
-        //     this.updateAvatarDisplay();
-        // } catch (error) {
-        //     console.error('Error fetching avatar:', error);
-        // }
 		try{
 			const data = await AView.fetchWithJson('/profile/avatar/');
 			if (data && data.image) {
