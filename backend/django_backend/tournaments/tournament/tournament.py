@@ -256,6 +256,6 @@ class Tournament():
         # #Broadcast that tournament is over and winner
         winners = await self.get_winners()
         await self.channel_layer.group_send(
-            self.room_group_name, {"type": "broadcast.message", "msg": f"Tournament over. Winner: {winners[0]}"}
+            self.room_group_name, {"type": "broadcast.message", "msg": {"winner": winners[0]}}
         )
 

@@ -7,6 +7,7 @@
 import Dashboard from "./views/Dashboard.js";
 import OneVsOne from "./views/OneVsOne.js";
 import Tournaments from "./views/Tournaments.js";
+import Tournament from "./views/Tournament.js";
 import Friends from "./views/Friends.js";
 import Pong from "./views/Pong.js";
 import Login from "./views/Login.js";
@@ -66,6 +67,7 @@ const router = async () => {
 		{ path: "/one-vs-one", view: OneVsOne, authRequired: true},
 		{ path: "/create-game", view: CreateGame, authRequired: true},
 		{ path: "/game-invites", view: GameInvites, authRequired: true},
+		{ path: "/tournament", view: Tournament, authRequired: true},
 		{ path: "/tournaments", view: Tournaments, authRequired: true},
 		{ path: "/pong", view: Pong, authRequired: true},
 		{ path: "/friends", view: Friends, authRequired: true },

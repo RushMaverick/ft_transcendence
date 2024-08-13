@@ -1,0 +1,28 @@
+{
+	"finnish":
+	{
+		"header": "TURNAJAISET",
+		"welcome": "täältä löytäisit tournamentsit ",
+
+		"participants": "Osallistujat"
+
+	},
+
+	"english":
+	{
+		"header": "TOURNAMENTS",
+		"welcome": "Here you can find the tournaments ",
+
+		"participants": "Participants"
+	},
+
+	"swedish":
+	{
+		"header": "Turneringar",
+		"welcome": "Här hittar du turneringarna ",
+
+		"participants": "Deltagare"
+
+	}
+
+}
