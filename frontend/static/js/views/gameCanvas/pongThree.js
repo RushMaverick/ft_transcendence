@@ -59,6 +59,24 @@ export default class PongGame {
 		this.waitingScene.add(this.menuCam, this.startButton);
 	}
 
+	displayGameEnd(message) {
+		this.endText = new Text();
+		this.endCam = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+		this.endText.text = message;
+		this.endText.font = 'static/js/views/gameCanvas/fonts/Tiny5-Regular.ttf';
+		this.endText.fontSize = 50.0;
+		this.endText.position.x = -1;
+		this.endText.position.y = 0;
+		this.endText.color = 0x000000;
+
+		this.endCam.position.z = 550;
+		this.endCam.position.x = 180;
+
+		this.waitingScene.add(this.endText, this.endCam);
+		this.renderer.render(this.waitingScene, this.endCam);
+	}
+
 
 	joinGame() {
 		let match_id = sessionStorage.getItem('match_id');
@@ -86,6 +104,7 @@ export default class PongGame {
 				PongGame.instance.stopAnimate();
 				const myId = sessionStorage.getItem('userId');
 				console.log('My ID:', myId, 'Winner ID:', PongGame.instance.message.winner);
+				this.displayGameEnd(myId == PongGame.instance.message.winner ? 'You win!' : 'You lose!');
 				// render winner/loser screen
 				return;
 			}
