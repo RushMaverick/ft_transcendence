@@ -17,7 +17,7 @@ class TournamentListView(APIView):
 
     # Get list of tournaments
     def get(self, request, format=None):
-        tournaments = Tournament.objects.all()
+        tournaments = Tournament.objects.filter(status="open")
         serializer = TournamentSerializer(tournaments, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -112,16 +112,4 @@ class RoundViewSet(viewsets.ModelViewSet):
         except:
             return Response({"message": "Match not found"}, status=status.HTTP_404_NOT_FOUND)
         return Response({"message": "Match added to the round"}, status=status.HTTP_200_OK)
-
-
-# """Return the list of the tournaments the user is registered to"""
-# @api_view(['GET'])
-# @permission_classes([IsAuthenticatedOrCreateOnly, IsUser])
-# def list_registered_tournaments(request):
-# 	user = request.user
-# 	if(user.is_authenticated == False):
-# 		return(Response({"Warning": "Anonimus User"}, status=status.HTTP_401_UNAUTHORIZED))
-# 	tournaments = Participant.objects.filter(player=user)
-# 	serializer = ParticipantSerializer(tournaments, many=True)
-# 	return Response({"tournaments": serializer.data}, status=status.HTTP_200_OK)
 

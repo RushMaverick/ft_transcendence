@@ -1,6 +1,6 @@
 from .TournamentConsumerHelpers import create_match, \
     create_round, \
-    get_tournament, \
+    change_tournament_status, \
     add_participant, \
     get_participants, \
     remove_participant, \
@@ -17,14 +17,13 @@ class Tournament():
     def __init__(self, tournament):
         self.tournament = tournament
         self.participants = {}
-        # self.max_participants = self.tournament["max_participants"]
         self.id = tournament.get("id")
         self.room_group_name = f"tournament_{self.id}"
         self.name = self.tournament.get("name")
         self.channel_layer = get_channel_layer()
         self.round_nbr = 0
         self.round_id = None
-        # self.status = None
+        self.status = "open"
         self.match_completed = {}
         self.connect_match_completed_handler()
         self.all_matches_completed_event = asyncio.Event()
@@ -55,17 +54,6 @@ class Tournament():
         )
 
     async def add_participant(self, player_id, channel_name, channel_layer):
-        #todo: check that tournament is open and check max number of participants
-        # Check max number of participants
-        # if self.tournament.max_participants <= len(self.tournament.participants):
-        #     print(f"Tournament {self.tournament_id} is full", flush=True)
-        #     return await self.close()
-
-        # Check that tournament is open
-        # if self.tournament.status == "closed":
-        #     #print(f"Tournament {self.tournament_id} is not open", flush=True)
-        #     await self.close()
-        #     return
 
         participant = await add_participant(self.id, player_id)
         if not participant:
@@ -208,25 +196,10 @@ class Tournament():
         return winners
 
     async def start(self):
-        # Check that tournament has not started
-        # if self.tournament.status == "open":
-        #     #print("Tournament already started", flush=True)
-        #     return
+        if await change_tournament_status(self.id, "started") == False:
+            return
+        self.status = "started"
 
-        # Check that tournament has enough participants
-        # participants = await get_participants(self.tournament_id)
-        # #print(f"participants: {participants}", flush=True)
-        # if len(participants) != 4:
-        #     #print("Not enough participants", flush=True)
-        #     return
-
-        # Close tournament
-        # TournamentSerializer(tournament, data={"status": "closed"}, partial=True)
-        # if not tournament_serializer.is_valid():
-        #     #print(tournament_serializer.errors, flush=True)
-        #     return
-        # tournament_serializer.save()
-        # #print(tournament_serializer.data, flush=True)
         print("tournament:start:Participants: ", self.participants, flush=True)
         try:
             await self.channel_layer.group_send(
@@ -258,4 +231,4 @@ class Tournament():
         await self.channel_layer.group_send(
             self.room_group_name, {"type": "broadcast.message", "msg": {"winner": winners[0]}}
         )
-
+        await change_tournament_status(self.id, "completed")
