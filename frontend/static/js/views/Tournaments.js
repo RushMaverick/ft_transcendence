@@ -1,6 +1,5 @@
 import AView from "./AView.js";
 
-import PongGame from "./gameCanvas/pongThree.js";
 import textInputField from "./TextInputView.js";
 import { loadTranslations, navigateTo } from "../index.js";
 
@@ -32,7 +31,13 @@ export default class extends AView {
 
 		fetch("http://localhost:8000/api/tournaments/", requestOptions)
 			.then((response) => response.json())
-			.then((result) => console.log(result))
+			.then((result) =>
+				{
+					// console.log(result);
+					sessionStorage.setItem('tournamentId', result.id);
+					navigateTo('/tournament');
+				}
+			)
 			.catch((error) => console.error(error));
 	}
 
