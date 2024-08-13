@@ -15,9 +15,21 @@ export default class extends AView {
 
 		const header = this.createHeader('header', 'Profile', 'h1');
 
-		const data = await this.fetchJsonData('static/js/views/profile.json');
-		console.log(data);
-		
+		const user = await AView.fetchWithJson(`/user/`, 'GET');
+		const avatar = await AView.fetchWithJson(`/profile/avatar/`, 'GET');
+		const stats = await AView.fetchWithJson(`/matches/stats/${sessionStorage.getItem('userId')}`, 'GET');
+
+		if (user == null || avatar == null || stats == null) {
+			alert("An error occurred while fetching user data");
+			return;
+		}
+		let data = {
+			"username": user.username,
+			"avatar": avatar.image,
+			"wins": stats.Stats.wins,
+			"loses": stats.Stats.loses
+		}
+
 		const createProfile = this.showProfile(data);
         const settings = this.createLink('link2', 'Change settings from here', '/settings');
 		const matchHistoryLink = this.createLink('link3', 'View Match History', '/profile/matchhistory');
@@ -27,16 +39,16 @@ export default class extends AView {
 	}
 
 	showProfile(my) {
-		
+
 		const profileView = document.createElement('div');
 		profileView.classList.add('profile');
-		
+
 		const profileTitle = this.createHeader('myProfile',`${my.username}`, 'h3');
-		
+
 		const profileAvatar = document.createElement('img');
-		profileAvatar.src = my.profile.avatar;
+		profileAvatar.src = my.avatar;
 		profileAvatar.alt = `${my.username}'s avatar`;
-		
+
 		const wins = my.wins;
 		const loss = my.loses;
 
@@ -45,7 +57,7 @@ export default class extends AView {
         gameHistory.textContent = gameHistoryText;
 
 		let msofd;
-		
+
 		if (wins > loss){
 			const winmsg = "Amazing! You are doing great";
 			msofd = this.createParagraph('winmsg', winmsg);
@@ -65,7 +77,7 @@ export default class extends AView {
 		profileView.appendChild(profileAvatar);
 		profileView.appendChild(gameHistory);
 		profileView.appendChild(msofd);
-		
+
 		return profileView;
 	}
 }
