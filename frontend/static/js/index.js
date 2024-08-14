@@ -19,6 +19,7 @@ import CreateGame from "./views/CreateGame.js";
 import GameInvites from "./views/GameInvites.js";
 import Play from "./views/Play.js";
 
+
 //match the first character of the string or the start of the string -> "^"
 const pathToRegex = path => new RegExp("^" + path.replace(/\//g, "\\/").replace(/:\w+/g, "(.+)") + "$");
 
@@ -51,7 +52,7 @@ const navigateTo = url => {
 };
 
 // const loggedIn =
-
+let isOnline = false;
 let view = null;
 //write client-side router
 const router = async () => {
@@ -97,12 +98,17 @@ const router = async () => {
         return;
     }
 
+	if (isLoggedIn &&  !isOnline){
+		setOnline();
+	}
+
+
 	//comment out to remove login for testing
-	// if (match.route.authRequired && !isLoggedIn) {
-	// 	console.log(`Access to ${match.route.path} is restricted.`);
-	// 	navigateTo('/login');
-	// 	return;
-	// }
+	if (match.route.authRequired && !isLoggedIn) {
+		console.log(`Access to ${match.route.path} is restricted.`);
+		navigateTo('/login');
+		return;
+	}
 
 	if (match.route.path === "/play" && !sessionStorage.getItem('room_name')) {
 		console.log('No room name found');
@@ -225,8 +231,21 @@ document.addEventListener("DOMContentLoaded", () => {
 // 	navigateTo(path);
 // });
 
-
 	router();
 });
+
+const setOnline = () => {
+	const socket = new WebSocket(`ws://localhost:8000/ws/online_status/?token=${sessionStorage.getItem('access')}`);
+	socket.onerror = function(error) {
+		console.error("Online WebSocket Error:", error);
+	};
+	socket.onopen = function() {
+		console.log('Online WebSocket connection established.');
+	};
+	socket.onclose = function(event) {
+		console.log('Online WebSocket connection closed:', event);
+	}
+	isOnline = true;
+};
 
 export { navigateTo };

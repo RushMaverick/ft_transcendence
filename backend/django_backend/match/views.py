@@ -98,3 +98,25 @@ class PlayerMatchListView(APIView):
         matches = Match.objects.filter(player1=player) | Match.objects.filter(player2=player)
         serializer = MatchSerializer(matches, many=True)
         return Response(serializer.data)
+
+class StatsViewSet(APIView):
+    permission_classes = [IsAuthenticatedOrCreateOnly]
+
+    def get(self, request, user_id):
+        try:
+            player = User.objects.get(id=user_id)
+        except User.DoesNotExist:
+            return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+        
+        n_wins =  Match.objects.filter(winner=player).count()
+        n_matches = Match.objects.filter(player1=player).count() + Match.objects.filter(player2=player).count()
+        n_loses = n_matches - n_wins
+
+        stats = {
+            "wins": n_wins,
+            "loses": n_loses,
+            "matches_played": n_matches
+        }
+        return Response({"Stats": stats}, status=status.HTTP_200_OK)
+
+        
