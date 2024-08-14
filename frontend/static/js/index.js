@@ -63,7 +63,7 @@ const router = async () => {
 		{ path: "/privacypolicy", view: PrivacyPolicy},
 		{ path: "/register", view: Register },
 		{ path: "/dashboard", view: Dashboard, authRequired: true },
-		{ path: "/profile/matchhistory", view: MatchHistory, authRequired: true },
+		{ path: "/matchhistory", view: MatchHistory, authRequired: true },
 		{ path: "/one-vs-one", view: OneVsOne, authRequired: true},
 		{ path: "/create-game", view: CreateGame, authRequired: true},
 		{ path: "/game-invites", view: GameInvites, authRequired: true},

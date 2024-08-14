@@ -1,4 +1,5 @@
 import AView from "./AView.js";
+import { loadTranslations } from "../index.js";
 
 export default class extends AView {
     constructor(params) {
@@ -7,11 +8,13 @@ export default class extends AView {
     }
 
     async getHtml() {
+        window.localStorage.setItem('page', 'MatchHistory');
+		await loadTranslations('MatchHistory');
         const header = this.createHeader('header', 'Match History', 'h1');
 
         let matchHistoryTable;
         try {
-            matchHistoryTable = await this.createMatchHistory('/static/js/views/matches.json');
+            matchHistoryTable = await this.createMatchHistory(`/matches/player/${sessionStorage.getItem('userId')}/`);
         } catch (error) {
             console.error('Failed to create match history table:', error);
             matchHistoryTable = this.createParagraph('error', "Failed to load match history.");
@@ -24,7 +27,7 @@ export default class extends AView {
     async createMatchHistory(url) {
         let matchHistoryData;
         try {
-            matchHistoryData = await this.fetchJsonData(url);
+            matchHistoryData = await AView.fetchWithJson(url, 'GET');
         } catch (error){
             console.error('Error fetching or parsing JSON data:', error);
             return;
@@ -39,7 +42,7 @@ export default class extends AView {
         // Create table header
         const thead = document.createElement('thead');
         const headerRow = document.createElement('tr');
-        
+
         const headers = ['Player 1', 'Player 2', 'Winner', 'Score', 'Date'];
         headers.forEach(headerText => {
             const th = document.createElement('th');
