@@ -2,9 +2,13 @@
 	"finnish":
 	{
 		"header": "Päivitä käyttäjätietoja",
+		"change-user": "Vaihda käyttäjänimi",
 		"username": "käyttäjätunnus: ",
+		"change-pw": "Vaihda salasana",
 		"password": "salasana: ",
 		"password-again": "salasana uudelleen: ",
+		"currentpassword": "nykyinen salasana: ",
+		"newpassword": "uusi salasana: ",
 		"savebutton": "tallenna muutokset",
 		"language": "kieli",
 		"deletebutton": "poista käyttäjä ",
@@ -14,9 +18,13 @@
 	"english":
 	{
 		"header": "Update user information",
+		"change-user": "Change username",
 		"username": "username: ",
+		"change-pw": "Change password",
 		"password": "password: ",
 		"password-again": "password again: ",
+		"currentpassword": "current password: ",
+		"newpassword": "new password: ",
 		"savebutton": "save changes",
 		"language": "language",
 		"deletebutton": "delete account ",
@@ -26,9 +34,13 @@
 	"swedish":
 	{
 		"header": "Uppdatera användarinformation",
+		"change-user": "Ändra användarnamn",
 		"username": "Användarnamn: ",
+		"change-pw": "Ändra lösenord",
 		"password": "Lösenord: ",
 		"password-again": "Bekräfta lösenord: ",
+		"currentpassword": "Nuvarande lösenord: ",
+		"newpassword": "Nytt lösenord: ",
 		"language": "Språk: ",
 		"savebutton": "Spara ändringar",
 		"deletebutton": "Radera användare ",
