@@ -33,7 +33,7 @@ export default class extends AView {
 
 	async dismount(){
 		console.log('Dismounting Play');
-		sessionStorage.removeItem('room_name');
+		// sessionStorage.removeItem('room_name');
 		const canvas = document.querySelector('canvas');
 		if (canvas && PongGame.instance) {
 			console.log('canvas remove');
