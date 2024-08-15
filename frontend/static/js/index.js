@@ -104,6 +104,10 @@ const router = async () => {
 		setOnline();
 	}
 
+	if (sessionStorage.getItem('playing') && match.route.path !== "/play") {
+		navigateTo('/play');
+		return;
+	}
 
 	//comment out to remove login for testing
 	if (match.route.authRequired && !isLoggedIn) {

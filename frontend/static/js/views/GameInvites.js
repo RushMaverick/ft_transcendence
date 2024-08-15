@@ -30,6 +30,7 @@ export default class extends AView {
 			navigateTo('/play');
 		} catch (error) {
 			console.error('Error accepting invite:', error);
+			location.reload();
 		}
 	}
 

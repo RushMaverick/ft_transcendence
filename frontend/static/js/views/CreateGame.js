@@ -93,6 +93,7 @@ export default class extends AView {
 		console.log(result);
 		if (!result){
 			alert('Failed to invite player');
+			return;
 		}
 		navigateTo('/play');
 	}
