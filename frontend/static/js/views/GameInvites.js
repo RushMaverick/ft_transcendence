@@ -53,11 +53,11 @@ export default class extends AView {
 
 		const usernameLink = document.createElement('a');
 		usernameLink.textContent = invite.from_user.username;
-		// usernameLink.href = `#friends/${player.username}`;
-		// usernameLink.addEventListener('click', (event) => {
-		// 	event.preventDefault();
-		// 	this.navigateToFriendsProfile(player.username);
-		// });
+		usernameLink.href = `profile/${invite.from_user.id}`;
+		usernameLink.addEventListener('click', (event) => {
+			event.preventDefault();
+			navigateTo(`/profile/${invite.from_user.id}`);
+		});
 		inviteDiv.appendChild(usernameLink);
 
 		const status = document.createElement('div');
