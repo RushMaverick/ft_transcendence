@@ -5,6 +5,10 @@ export default class extends AView {
     constructor(params) {
         super(params);
         this.setTitle("Match History");
+        this.user_id = null;
+		if (params && params.user_id){
+			this.user_id = params.user_id;
+		}
     }
 
     async getHtml() {
@@ -12,9 +16,13 @@ export default class extends AView {
 		await loadTranslations('MatchHistory');
         const header = this.createHeader('header', 'Match History', 'h1');
 
+        if (!this.user_id){
+            this.user_id = sessionStorage.getItem('userId');
+        }
+
         let matchHistoryTable;
         try {
-            matchHistoryTable = await this.createMatchHistory(`/matches/player/${sessionStorage.getItem('userId')}/`);
+            matchHistoryTable = await this.createMatchHistory(`/matches/player/${this.user_id}/`);
         } catch (error) {
             console.error('Failed to create match history table:', error);
             matchHistoryTable = this.createParagraph('error', "Failed to load match history.");

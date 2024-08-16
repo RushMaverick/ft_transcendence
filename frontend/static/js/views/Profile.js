@@ -1,12 +1,17 @@
 import AView from "./AView.js";
 import { getTranslation } from "./TranslationUtils.js";
 import { loadTranslations } from "../index.js";
-import MatchHistory from "./MatchHistory.js";
+// import MatchHistory from "./MatchHistory.js";
 
 export default class extends AView {
 	constructor(params){
 		super(params);//call the constructor of the parent class
 		this.setTitle("Profile");
+		console.log(params);
+		this.user_id = null;
+		if (params && params.user_id){
+			this.user_id = params.user_id;
+		}
 	}
 
 	async getHtml(){
@@ -15,26 +20,29 @@ export default class extends AView {
 
 		const header = this.createHeader('header', 'Profile', 'h1');
 
-		const user = await AView.fetchWithJson(`/user/`, 'GET');
-		const avatar = await AView.fetchWithJson(`/profile/avatar/`, 'GET');
-		const stats = await AView.fetchWithJson(`/matches/stats/${sessionStorage.getItem('userId')}`, 'GET');
+		if (!this.user_id){
+			this.user_id = sessionStorage.getItem('userId');
+		}
+		const user = await AView.fetchWithJson(`/user/${this.user_id}/`, 'GET');
+		const stats = await AView.fetchWithJson(`/matches/stats/${this.user_id}`, 'GET');
 
-		if (user == null || avatar == null || stats == null) {
+		if (user == null || stats == null) {
 			alert("An error occurred while fetching user data");
 			return;
 		}
 		let data = {
 			"username": user.username,
-			"avatar": avatar.image,
+			"avatar": user.avatar.image,
 			"wins": stats.Stats.wins,
 			"loses": stats.Stats.loses
 		}
 
 		const createProfile = this.showProfile(data);
         const settings = this.createLink('link2', 'Change settings from here', '/settings');
-		const matchHistoryLink = this.createLink('link3', 'View Match History', '/matchhistory');
+		const matchHistoryLink = this.createLink('link3', 'View Match History', `/history/${this.user_id}`);
 
-		this.updateView(header, createProfile, matchHistoryLink, settings);
+		// this.updateView(header, createProfile, matchHistoryLink, settings);
+		this.updateView(header, createProfile, matchHistoryLink);
 		return ;
 	}
 

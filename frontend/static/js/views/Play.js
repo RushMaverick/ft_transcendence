@@ -40,5 +40,19 @@ export default class extends AView {
 			canvas.remove();
 			delete PongGame.instance;
 		}
+		if (!sessionStorage.getItem('playing') && sessionStorage.getItem('room_name')) {
+			const response = await fetch(`${import.meta.env.VITE_API_ENDPOINT}/rooms/${sessionStorage.getItem('room_name')}/delete/`, {
+				method: 'DELETE',
+				headers: {
+					'Content-Type': 'application/json',
+					'Authorization': 'Bearer ' + sessionStorage.getItem('access')
+				}
+			});
+			console.log(response);
+			if (response.status !== 204){
+				alert('Failed to exit room');
+			}
+			sessionStorage.removeItem('room_name');
+		}
 	}
 }

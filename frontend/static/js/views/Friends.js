@@ -1,7 +1,7 @@
 import AView from "./AView.js";
 import FriendRequest from "./FriendRequest.js";
 import { getTranslation } from "./TranslationUtils.js";
-import { loadTranslations } from "../index.js";
+import { loadTranslations, navigateTo } from "../index.js";
 
 export default class Friends extends AView{
 	constructor(params){
@@ -216,10 +216,10 @@ export default class Friends extends AView{
 
 		const usernameLink = document.createElement('a');
 		usernameLink.textContent = friend.username;
-		usernameLink.href = `#friends/${friend.username}`;
+		usernameLink.href = `profile/${friend.id}`;
 		usernameLink.addEventListener('click', (event) => {
 			event.preventDefault();
-			this.navigateToFriendsProfile(friend.username);
+			this.navigateToFriendsProfile(friend.id);
 		});
 		friendDiv.appendChild(usernameLink);
 
@@ -278,10 +278,10 @@ export default class Friends extends AView{
 
 		const usernameLink = document.createElement('a');
 		usernameLink.textContent = request.from_user.username;
-		usernameLink.href = `#friends/${request.from_user.username}`;
+		usernameLink.href = `profile/${request.from_user.id}`;
 		usernameLink.addEventListener('click', (event) => {
 			event.preventDefault();
-			this.navigateToFriendsProfile(request.from_user.username);
+			this.navigateToFriendsProfile(request.from_user.id);
 		});
 		requestDiv.appendChild(usernameLink);
 
@@ -302,12 +302,8 @@ export default class Friends extends AView{
 		return requestDiv;
 	}
 
-	navigateToFriendsProfile(username) {
-		history.pushState({ view: 'profile', friendusername: username }, 'Friend Profile', `#friends/${username}`);
-        const friend = this.getFriendByusername(username);
-        if (friend) {
-            this.showFriendsProfile(friend);
-        }
+	navigateToFriendsProfile(user_id) {
+		navigateTo(`/profile/${user_id}`);
     }
 
     showFriendsProfile(friend) {
