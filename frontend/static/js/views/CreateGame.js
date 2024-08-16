@@ -33,11 +33,11 @@ export default class extends AView {
 
 		const usernameLink = document.createElement('a');
 		usernameLink.textContent = player.username;
-		// usernameLink.href = `#friends/${player.username}`;
-		// usernameLink.addEventListener('click', (event) => {
-		// 	event.preventDefault();
-		// 	this.navigateToFriendsProfile(player.username);
-		// });
+		usernameLink.href = `profile/${player.id}`;
+		usernameLink.addEventListener('click', (event) => {
+			event.preventDefault();
+			navigateTo(`/profile/${player.id}`);
+		});
 		playerDiv.appendChild(usernameLink);
 
 		const status = document.createElement('div');
@@ -93,6 +93,7 @@ export default class extends AView {
 		console.log(result);
 		if (!result){
 			alert('Failed to invite player');
+			return;
 		}
 		navigateTo('/play');
 	}

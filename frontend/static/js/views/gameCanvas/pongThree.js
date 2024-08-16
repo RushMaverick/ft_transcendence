@@ -98,6 +98,10 @@ export default class PongGame {
 		this.socket.onmessage = function(event) {
 			PongGame.instance.waitingForPlayers = false;
 			PongGame.instance.message = JSON.parse(event.data);
+			if (PongGame.instance.message.start) {
+				sessionStorage.setItem('playing', true);
+				return;
+			}
 			if (PongGame.instance.message.winner) {
 				const myId = sessionStorage.getItem('userId');
 				PongGame.instance.displayGameEnd(myId == PongGame.instance.message.winner ? 'You win!' : 'You lose!');
@@ -109,7 +113,10 @@ export default class PongGame {
 			PongGame.instance.renderer.render(PongGame.instance.scene, PongGame.instance.camera);
 		};
 		this.socket.onclose = function() {
-			console.log('Pong WebSocket connection closed.');
+			console.log('POng WebSocket connection closed.');
+			sessionStorage.removeItem('playing');
+			sessionStorage.removeItem('match_id');
+			sessionStorage.removeItem('room_name');
 		};
 	}
 
@@ -362,7 +369,7 @@ export default class PongGame {
 			}
 
 		},false)
-		
+
     }
 
     startAnimate() {
