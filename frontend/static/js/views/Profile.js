@@ -39,7 +39,7 @@ export default class extends AView {
 
 		const createProfile = this.showProfile(data);
         const settings = this.createLink('link2', 'Change settings from here', '/settings');
-		const matchHistoryLink = this.createLink('link3', 'View Match History', '/matchhistory');
+		const matchHistoryLink = this.createLink('link3', 'View Match History', `/history/${this.user_id}`);
 
 		this.updateView(header, createProfile, matchHistoryLink, settings);
 		return ;
