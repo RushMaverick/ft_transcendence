@@ -1,20 +1,12 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 
-
-# from tournaments.serializers import TournamentSerializer, RoundSerializer, ParticipantSerializer
-# from match.serializers import MatchSerializer
-# from asgiref.sync import sync_to_async
-
-# from tournaments.models import Tournament, Round, Participant
-
-from .helpers.TournamentConsumerHelpers import create_match, create_round, get_tournament, add_participant, get_participants, remove_participant
 from .tournament.tournament import Tournament
 from .tournament.tournaments import Tournaments
 
 
 from pong.signals import match_completed
-import asyncio
+
 class TournamentConsumer(AsyncWebsocketConsumer):
     def __init__(self, *args, **kwargs):
         self.room_group_name = None
@@ -48,33 +40,25 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                 return await self.close()
         self.tournament: Tournament = Tournaments.tournaments[self.tournament_id]
         #print(f"tournament {self.tournament}", flush=True)
+        if self.tournament.status != "open":
+            return await self.close()
 
         # Add user to tournament as participant
         self.participant = await self.tournament.add_participant(user.id, self.channel_name, self.channel_layer)
         if not self.participant:
             return await self.close()
         #print(f"{self.participant.id} participant {self.participant}", flush=True)
-
-        # Broadcast participants to all
-        # await self.tournament.broadcast_participants()
-
         # print (f"{user.username} connected to {self.participant.channel_name}", flush=True)
         await self.accept()
-
-        # if len(self.tournament.participants) == 4:
-        #     await Tournaments.start_tournament(tournament_id=self.tournament_id)
 
 
     async def disconnect(self, close_code):
         #print(f"disconnected from room {self.room_group_name}", flush=True)
         # Only remove participants if the tournamnet has not started
-        # if self.tournament.status == "open":
-        #     await remove_participant(self.tournament_id, self.participant.id)
-        if self.tournament:
+        if self.tournament and self.tournament.status == "open":
             await self.tournament.remove_participant(self.participant.id)
         if self.room_group_name:
             await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
-
 
     async def receive(self, text_data):
         try:
@@ -85,17 +69,19 @@ class TournamentConsumer(AsyncWebsocketConsumer):
             #print("Invalid command", flush=True)
             return
         case = {
-            "start": Tournaments.start_tournament,
-            "test": self.testing,
+            "start": self.start
         }
         await case[cmd](tournament_id=self.tournament_id)
+
+    async def start(self, tournament_id):
+        if self.tournament.status != "open":
+            return
+        if len(self.tournament.participants) == 4:
+            print("Coño", flush=True)
+            await Tournaments.start_tournament(tournament_id=tournament_id)
 
 
     async def broadcast_message(self, event):
         # Send message to WebSocket
         await self.send(text_data=json.dumps(event.get("msg")))
 
-
-    async def testing(self, tournament_id):
-        #print("Testing", flush=True)
-        match_completed.send(sender=self.__class__, match_id=1, winner=1)

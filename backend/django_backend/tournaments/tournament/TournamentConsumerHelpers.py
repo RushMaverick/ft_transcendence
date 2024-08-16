@@ -101,3 +101,17 @@ def get_participants(tournament_id: int):
     except Exception as e:
         print(f"Unexpected error fetching participants: {e}", flush=True)
         return None
+
+@sync_to_async
+def change_tournament_status(tournament_id: int, status: str) -> None:
+    print("change_tournament_status", flush=True)
+    try:
+        tournament = Tournament.objects.get(id=tournament_id)
+        tournament.status = status
+        tournament.save()
+    except Tournament.DoesNotExist:
+        print(f"Tournament with id {tournament_id} does not exist", flush=True)
+        return None
+    except Exception as e:
+        print(f"Unexpected error changing tournament status: {e}", flush=True)
+        return None

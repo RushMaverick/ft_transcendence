@@ -61,7 +61,12 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
     def update(self, instance: User, validated_data):
+        current_password = validated_data.pop('password', None)
+        if current_password:
+            if not instance.check_password(current_password):
+                raise serializers.ValidationError("Wrong password")
         instance.username = validated_data.get('username', instance.username)
+
         instance.save()
         return instance
 
@@ -85,3 +90,4 @@ class PasswordUpdateSerializer(serializers.ModelSerializer):
         instance.set_password(validated_data['new_password'])
         instance.save()
         return instance
+

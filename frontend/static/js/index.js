@@ -7,6 +7,7 @@
 import Dashboard from "./views/Dashboard.js";
 import OneVsOne from "./views/OneVsOne.js";
 import Tournaments from "./views/Tournaments.js";
+import Tournament from "./views/Tournament.js";
 import Friends from "./views/Friends.js";
 import Pong from "./views/Pong.js";
 import Login from "./views/Login.js";
@@ -15,6 +16,10 @@ import Profile from "./views/Profile.js";
 import Settings from "./views/Settings.js";
 import PrivacyPolicy from "./views/PrivacyPolicy.js";
 import MatchHistory from "./views/MatchHistory.js";
+import CreateGame from "./views/CreateGame.js";
+import GameInvites from "./views/GameInvites.js";
+import Play from "./views/Play.js";
+
 
 //match the first character of the string or the start of the string -> "^"
 const pathToRegex = path => new RegExp("^" + path.replace(/\//g, "\\/").replace(/:\w+/g, "(.+)") + "$");
@@ -48,7 +53,8 @@ const navigateTo = url => {
 };
 
 // const loggedIn =
-
+let isOnline = false;
+let view = null;
 //write client-side router
 const router = async () => {
 	//inside friends, it will be  /friends/:id
@@ -58,13 +64,19 @@ const router = async () => {
 		{ path: "/privacypolicy", view: PrivacyPolicy},
 		{ path: "/register", view: Register },
 		{ path: "/dashboard", view: Dashboard, authRequired: true },
-		{ path: "/profile/matchhistory", view: MatchHistory, authRequired: true },
+		{ path: "/history", view: MatchHistory, authRequired: true },
+		{ path: "/history/:user_id", view: MatchHistory, authRequired: true },
 		{ path: "/one-vs-one", view: OneVsOne, authRequired: true},
+		{ path: "/create-game", view: CreateGame, authRequired: true},
+		{ path: "/game-invites", view: GameInvites, authRequired: true},
+		{ path: "/tournament", view: Tournament, authRequired: true},
 		{ path: "/tournaments", view: Tournaments, authRequired: true},
 		{ path: "/pong", view: Pong, authRequired: true},
 		{ path: "/friends", view: Friends, authRequired: true },
 		{ path: "/profile", view: Profile, authRequired: true },
+		{ path: "/profile/:user_id", view: Profile, authRequired: true },
 		{ path: "/settings", view: Settings, authRequired: true },
+		{ path: "/play", view: Play, authRequired: true }
 	];
 
 	//Test each route for potential match. go through each route and find matches and return
@@ -90,12 +102,28 @@ const router = async () => {
         return;
     }
 
+	if (isLoggedIn &&  !isOnline){
+		setOnline();
+		document.getElementById('login').style.display = 'none';
+	}
+
+	if (sessionStorage.getItem('playing') && match.route.path !== "/play") {
+		navigateTo('/play');
+		return;
+	}
+
 	//comment out to remove login for testing
-	// if (match.route.authRequired && !isLoggedIn) {
-	// 	console.log(`Access to ${match.route.path} is restricted.`);
-	// 	navigateTo('/login');
-	// 	return;
-	// }
+	if (match.route.authRequired && !isLoggedIn) {
+		console.log(`Access to ${match.route.path} is restricted.`);
+		navigateTo('/login');
+		return;
+	}
+
+	if (match.route.path === "/play" && !sessionStorage.getItem('room_name')) {
+		console.log('No room name found');
+		navigateTo('/create-game');
+		return;
+	}
 
 	// Load translations for the current page
 	// const page = localStorage.getItem('page');
@@ -106,7 +134,12 @@ const router = async () => {
         match.result.push(hashParams);
     }
 
-	const view = new match.route.view(getParams(match));
+	if (view)
+	{
+		//before view change
+		await view.dismount();
+	}
+	view = new match.route.view(getParams(match));
 	await view.getHtml();
 
 	// Update translations after the view is rendered
@@ -115,10 +148,8 @@ const router = async () => {
 };
 
 export const loadTranslations = async (page) => {
-	const language = window.localStorage.getItem('language') || 'english';
 	try {
-		const response = await fetch(`./static/translations/${page}.json`);
-		console.log(response);
+		const response = await fetch(`${import.meta.env.VITE_BASE_URL}/static/translations/${page}.json`);
 		const data = await response.json();
 		if (!window.translations) {
             window.translations = {};
@@ -151,7 +182,7 @@ document.addEventListener("viewUpdated", () => {
 
 function updateTranslations(page){
 	let translations;
-    fetch('./static/translations/' + page + '.json')
+    fetch(`${import.meta.env.VITE_BASE_URL}/static/translations/${page}.json`)
    .then(response => response.text())
    .then(data => {
         translations = JSON.parse(data);
@@ -208,7 +239,21 @@ document.addEventListener("DOMContentLoaded", () => {
 // 	navigateTo(path);
 // });
 
-
 	router();
 });
 
+const setOnline = () => {
+	const socket = new WebSocket(`ws://localhost:8000/ws/online_status/?token=${sessionStorage.getItem('access')}`);
+	socket.onerror = function(error) {
+		console.error("Online WebSocket Error:", error);
+	};
+	socket.onopen = function() {
+		console.log('Online WebSocket connection established.');
+	};
+	socket.onclose = function(event) {
+		console.log('Online WebSocket connection closed:', event);
+	}
+	isOnline = true;
+};
+
+export { navigateTo };

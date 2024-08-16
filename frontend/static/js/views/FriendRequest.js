@@ -14,6 +14,7 @@ export default class FriendRequest extends AView {
         } else {
             alert('Failed to send friend request.');
         }
+        location.reload();
     }
 
     async acceptFriendRequest(friendUsername, request_id) {
@@ -24,6 +25,7 @@ export default class FriendRequest extends AView {
         } else {
             alert('Failed to accept friend request.');
         }
+        location.reload();
     }
 
     async ignoreFriendRequest(friendUsername, request_id) {
@@ -34,5 +36,6 @@ export default class FriendRequest extends AView {
         } else {
             alert('Failed to ignore friend request.');
         }
+        location.reload();
     }
 }

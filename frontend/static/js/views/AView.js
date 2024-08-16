@@ -13,6 +13,10 @@ export default class {
 		return "";
 	}
 
+	async dismount(){
+		return "";
+	}
+
 	clearView() {
 		const container = document.querySelector('main');
 		container.innerHTML = '';
@@ -21,10 +25,10 @@ export default class {
 	updateView( ...elements){
 		const container = document.querySelector('main');
 		const canvas = document.querySelector('canvas');
-		if (canvas && PongGame.instance && !(window.location.pathname === '/one-vs-one' || window.location.pathname === '/tournaments')) {
-			canvas.remove();
-			PongGame.instance.stopAnimate();
-		}
+		// if (canvas && PongGame.instance && !(window.location.pathname === '/one-vs-one' || window.location.pathname === '/tournaments')) {
+		// 	canvas.remove();
+		// 	PongGame.instance.stopAnimate();
+		// }
 
 		container.innerHTML = '';
 		elements.forEach((element) => {
@@ -119,16 +123,14 @@ export default class {
 
 	async fetchJsonData(url) {
         try {
-            // const response = await fetch(`${import.meta.env.VITE_API_ENDPOINT}` + url,
-			// 	{
-			// 		method: 'GET',
-			// 		headers: {
-			// 			'Content-Type': 'application/json',
-			// 			'Authorization': 'Bearer ' + sessionStorage.getItem('access')
-			// 		}
-			// 	}
-			// );
-			const response = await fetch(url);
+            const response = await fetch(`${import.meta.env.VITE_API_ENDPOINT}` + url,
+					{
+						method: 'GET',
+						headers: {
+							'Content-Type': 'application/json',
+							'Authorization': 'Bearer ' + sessionStorage.getItem('access')
+						}
+					});
             if (!response.ok) {
                 throw new Error(`HTTP error status: ${response.status}`);
             }
@@ -141,15 +143,25 @@ export default class {
 
 	static async fetchWithJson(url, method, body) {
 		try {
-			const response = await fetch(`${import.meta.env.VITE_API_ENDPOINT}` + url, {
-				method: method,
-				headers: {
-					'Content-Type': 'application/json',
-					'Authorization': 'Bearer ' + sessionStorage.getItem('access')
-				},
-				body: JSON.stringify(body)
-			});
-
+			let response;
+			if (method === 'GET') {
+				response = await fetch(`${import.meta.env.VITE_API_ENDPOINT}` + url, {
+					method: method,
+					headers: {
+						'Content-Type': 'application/json',
+						'Authorization': 'Bearer ' + sessionStorage.getItem('access')
+					}
+				});
+			} else {
+				response = await fetch(`${import.meta.env.VITE_API_ENDPOINT}` + url, {
+					method: method,
+					headers: {
+						'Content-Type': 'application/json',
+						'Authorization': 'Bearer ' + sessionStorage.getItem('access')
+					},
+					body: JSON.stringify(body)
+				});
+			}
 			if (!response.ok) {
 				throw new Error(`HTTP error status: ${response.status}`);
 			}

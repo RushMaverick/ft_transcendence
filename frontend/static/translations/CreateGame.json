@@ -1,0 +1,25 @@
+{
+	"finnish":
+	{
+		"header": "...",
+		"findPlayers": "Etsi pelaajia",
+		"invite-button": "Kutsu",
+		"exit-room": "Poistu huoneesta"
+	},
+
+	"english":
+	{
+		"header": "...",
+		"findPlayers": "Find players",
+		"invite-button": "Invite",
+		"exit-room": "Exit room"
+	},
+
+	"swedish":
+	{
+		"header": "...",
+		"findPlayers": "Hitta spelare",
+		"invite-button": "Bjud in",
+		"exit-room": "Lämna rummet"
+	}
+}

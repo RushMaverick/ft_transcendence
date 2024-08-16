@@ -1,12 +1,16 @@
 import AView from "./AView.js";
 import { getTranslation } from "./TranslationUtils.js";
 import { loadTranslations } from "../index.js";
-import MatchHistory from "./MatchHistory.js";
 
 export default class extends AView {
 	constructor(params){
 		super(params);//call the constructor of the parent class
 		this.setTitle("Profile");
+		console.log(params);
+		this.user_id = null;
+		if (params && params.user_id){
+			this.user_id = params.user_id;
+		}
 	}
 
 	async getHtml(){
@@ -15,28 +19,41 @@ export default class extends AView {
 
 		const header = this.createHeader('header', 'Profile', 'h1');
 
-		const data = await this.fetchJsonData('static/js/views/profile.json');
-		console.log(data);
-		
-		const createProfile = this.showProfile(data);
-        const settings = this.createLink('link2', 'Change settings from here', '/settings');
-		const matchHistoryLink = this.createLink('link3', 'View Match History', '/profile/matchhistory');
+		if (!this.user_id){
+			this.user_id = sessionStorage.getItem('userId');
+		}
+		const user = await AView.fetchWithJson(`/user/${this.user_id}/`, 'GET');
+		const stats = await AView.fetchWithJson(`/matches/stats/${this.user_id}`, 'GET');
 
-		this.updateView(header, createProfile, matchHistoryLink, settings);
+		if (user == null || stats == null) {
+			alert("An error occurred while fetching user data");
+			return;
+		}
+		let data = {
+			"username": user.username,
+			"avatar": user.avatar.image,
+			"wins": stats.Stats.wins,
+			"loses": stats.Stats.loses
+		}
+
+		const createProfile = this.showProfile(data);
+		const matchHistoryLink = this.createLink('link3', 'View Match History', `/history/${this.user_id}`);
+
+		this.updateView(header, createProfile, matchHistoryLink);
 		return ;
 	}
 
 	showProfile(my) {
-		
+
 		const profileView = document.createElement('div');
 		profileView.classList.add('profile');
-		
+
 		const profileTitle = this.createHeader('myProfile',`${my.username}`, 'h3');
-		
+
 		const profileAvatar = document.createElement('img');
-		profileAvatar.src = my.profile.avatar;
+		profileAvatar.src = my.avatar;
 		profileAvatar.alt = `${my.username}'s avatar`;
-		
+
 		const wins = my.wins;
 		const loss = my.loses;
 
@@ -45,7 +62,7 @@ export default class extends AView {
         gameHistory.textContent = gameHistoryText;
 
 		let msofd;
-		
+
 		if (wins > loss){
 			const winmsg = "Amazing! You are doing great";
 			msofd = this.createParagraph('winmsg', winmsg);
@@ -65,7 +82,7 @@ export default class extends AView {
 		profileView.appendChild(profileAvatar);
 		profileView.appendChild(gameHistory);
 		profileView.appendChild(msofd);
-		
+
 		return profileView;
 	}
 }

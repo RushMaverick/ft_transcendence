@@ -27,22 +27,6 @@ class OnlineStatusView(APIView):
         serializer = OnlineStatusSerializer(user_status)
         return Response({"User_status": serializer.data}, status=status.HTTP_200_OK)
 
-class SettingsViewSet(viewsets.ModelViewSet):
-    serializer_class = AvatarSerializer
-    permission_classes = [IsAuthenticatedOrCreateOnly, IsUser]
-
-    """Return the avatar and his url in settings"""
-    @action(detail=False, methods=['get'], permission_classes=[IsAuthenticatedOrCreateOnly, IsUser])
-    def get_avatar(self,request):
-        user = request.user
-        avatar = Avatar.objects.filter(user=user).first()
-
-        if not avatar:
-            return Response({"detail": "Avatar not found."}, status=404)
-
-        serializer = self.serializer_class(instance=avatar)
-        return Response(serializer.data)
-
 class AvatarViewSet(APIView):
     serializer_class = AvatarSerializer
     parser_classes = [MultiPartParser, FormParser]
@@ -52,7 +36,7 @@ class AvatarViewSet(APIView):
         user = request.user
         avatar = Avatar.objects.filter(user=user).first()
         if(avatar):
-            serializer = self.serializer_class(instance=avatar)
+            serializer = self.serializer_class(instance=avatar, context={'request': request})
             return Response(serializer.data)
         else:
             return Response({"error": "No avatar found."}, status=status.HTTP_404_NOT_FOUND)
@@ -60,13 +44,14 @@ class AvatarViewSet(APIView):
     def post(self, request, format=None):
         "Upload avatar, or update the avatar"
         user = request.user
-        serializer = self.serializer_class(data=request.data)
+        serializer = self.serializer_class(data=request.data, context={'request': request})
         if(serializer.is_valid()):
             old_avatar = Avatar.objects.filter(user=user).first()
             if(old_avatar):
-                old_avatar.image.delete()
+                if old_avatar.image.name != 'default/default.jpg':
+                    old_avatar.image.delete() 
                 old_avatar.delete()
-            serializer.save(user=request.user)
+            serializer.save(user=user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

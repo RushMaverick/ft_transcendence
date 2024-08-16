@@ -2,22 +2,33 @@
 	"finnish":
 	{
 		"header": "TURNAJAISET",
-		"welcome": "täältä löytäisit tournamentsit "
+		"welcome": "täältä löytäisit tournamentsit ",
+		"join-tournament": "Liity turnaukseen",
+		"create-tournament": "Luo uusi turnaus",
+		"name": "Nimi: ",
+		"create": "Luo"
 
 	},
 
 	"english":
 	{
 		"header": "TOURNAMENTS",
-		"welcome": "here you would find the tournaments "
+		"welcome": "here you would find the tournaments ",
+		"join-tournament": "Join a tournament",
+		"create-tournament": "Create a new tournament",
+		"name": "Name: ",
+		"create": "Create"
 
 	},
 
 	"swedish":
 	{
 		"header": "Turneringar",
-		"welcome": "Här hittar du turneringarna "
-
+		"welcome": "Här hittar du turneringarna ",
+		"join-tournament": "Gå med i en turnering",
+		"create-tournament": "Skapa en ny turnering",
+		"name": "Namn: ",
+		"create": "Skapa"
 	}
 
 }

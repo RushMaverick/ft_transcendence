@@ -19,6 +19,7 @@ class Tournament(models.Model):
         User,
         through='Participant'
     )
+    status = models.CharField(max_length=50, default="open")
 
     def __str__(self):
         return "%s" % (self.name)

@@ -1,44 +1,13 @@
 import AView from "./AView.js";
 
-import PongGame from "./gameCanvas/pongThree.js";
+import textInputField from "./TextInputView.js";
+import { loadTranslations, navigateTo } from "../index.js";
+
+
 export default class extends AView {
 	constructor(params){
 		super(params);//call the constructor of the parent class
 		this.setTitle("Tournaments");
-		this.socket = null;
-	}
-
-	async handleStartButton(event){
-		this.socket.send(JSON.stringify({
-			'cmd': 'start',
-		}));
-	}
-
-	socketOnMessageHandler(event){
-		console.log(JSON.parse(event.data));
-		// store the data in local storage
-		let tournament = JSON.parse(event.data);
-
-		if (tournament.match_id == null || tournament.room_name == null){
-			return;
-		}
-		sessionStorage.setItem('match_id', tournament.match_id);
-		sessionStorage.setItem('room_name', tournament.room_name);
-		console.log('getHtml()');
-		console.log(tournament.match_id);
-		console.log(tournament.room_name);
-		// navigateTo('/one-vs-one');
-		const canvas = document.querySelector('canvas');
-		if (canvas && PongGame.instance) {
-			console.log('canvas remove');
-			canvas.remove();
-			delete PongGame.instance;
-			this.updateView();
-		}
-		console.log('createGame');
-		let gameDiv = this.createGame('pong');
-		this.updateView(gameDiv);
-		// this.updateView();
 	}
 
 	async handleCreate(event) {
@@ -62,43 +31,51 @@ export default class extends AView {
 
 		fetch("http://localhost:8000/api/tournaments/", requestOptions)
 			.then((response) => response.json())
-			.then((result) => console.log(result))
+			.then((result) =>
+				{
+					// console.log(result);
+					sessionStorage.setItem('tournamentId', result.id);
+					navigateTo('/tournament');
+				}
+			)
 			.catch((error) => console.error(error));
 	}
 
-	async handleJoin(event) {
-		event.preventDefault();
-		const tournamentId = event.target.id.value;
-		console.log(`Join Tournament Name: ${tournamentId}`);
+	createTournamentItem(tournament) {
+		console.log('tournament:', tournament);
+		const tournamentDiv = document.createElement('div');
+		tournamentDiv.classList.add('list-group-item', 'flex', 'space-between');
 
-		const url = `ws://localhost:8000/ws/tournament/${tournamentId}/?token=${sessionStorage.getItem('access')}`
-		console.log("Tournaments.js: getHtml()");
-		console.log(this.socket);
-		if (this.socket === null){
-			this.socket = new WebSocket(url);
-			this.socket.onerror = function(error) {
-				console.error("WebSocket Error:", error);
-			};
-			this.socket.onopen = function() {
-				console.log('Tournament WebSocket connection established.');
-				//Start screen before players have connected.
-			};
-			//This will be used instead of animate() to update the game state.
-			this.socket.onmessage = this.socketOnMessageHandler.bind(this);
-			this.socket.onclose = function(event) {
-				if (event.wasClean) {
-					console.log(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
-				} else {
-					console.error('[close] Connection died');
-				}
-			};
-		}
+		// tournament name
+		const name = this.createParagraph('_', tournament.name);
+		tournamentDiv.appendChild(name);
+
+		// number of participants
+		const participants = this.createParagraph('participant-num', `${tournament.participants.length}/4`);
+		participants.classList.add('flex');
+		tournamentDiv.appendChild(participants);
+
+		tournamentDiv.addEventListener('click', (event) => {
+			sessionStorage.setItem('tournamentId', tournament.id);
+			navigateTo('/tournament');
+		});
+		return tournamentDiv;
+	}
+
+	createListElement(tournament){
+		const li = document.createElement('li');
+		li.appendChild(this.createTournamentItem(tournament));
+		return li;
 	}
 
 	async getHtml(){
+		window.localStorage.setItem('page', 'Tournaments');
+		await loadTranslations('Tournament');
+
 		const header = this.createHeader('header', 'Tournaments', 'h2');
-		const p = this.createParagraph('welcome', 'You have no tournaments.');
+		// const p = this.createParagraph('welcome', 'You have no tournaments.');
 		const createFrom = this.createForm('tournamentform');
+		const p = this.createParagraph('create-tournament', 'Create a new tournament');
 		const tournamentNameInput = textInputField(
 			'name',
 			'Name',
@@ -106,27 +83,28 @@ export default class extends AView {
 			'text'
 		);
 		const createButton = this.createButton('create', 'create', 'Create');
+		createFrom.appendChild(p);
 		createFrom.appendChild(tournamentNameInput);
 		createFrom.appendChild(createButton);
 		createFrom.addEventListener('submit', this.handleCreate.bind(this));
 
-		const joinForm = this.createForm('joinform');
-		const tournamentIdInput = textInputField(
-			'id',
-			'id',
-			'id',
-			'number'
-		);
-		const joinButton = this.createButton('join', 'join', 'Join');
-		joinForm.appendChild(tournamentIdInput);
-		joinForm.appendChild(joinButton);
-		joinForm.addEventListener('submit', this.handleJoin.bind(this));
+		const data = await AView.fetchWithJson('/tournaments/', 'GET');
+		if (data && data.length > 0){
+			// list of tournaments
+			const tournaments = document.createElement('div');
+			tournaments.classList.add('tournaments');
+			const tournamentsP = this.createParagraph('join-tournament', 'Join a tournament');
+			tournaments.appendChild(tournamentsP);
+			const tournamentsList = document.createElement('ul');
+			tournaments.appendChild(tournamentsList);
+			data.forEach(tournament => {
+				tournamentsList.appendChild(this.createListElement(tournament));
+			});
+			this.updateView(header, createFrom, tournaments);
+			return ;
+		}
 
-		const startButton = this.createButton('start', 'btn', 'Start');
-		startButton.addEventListener('click', this.handleStartButton.bind(this));
-
-		window.localStorage.setItem('page', 'Tournaments');
-		this.updateView(header, p, createFrom, joinForm, startButton);
+		this.updateView(header, createFrom);
 		return ;
 	}
 }
