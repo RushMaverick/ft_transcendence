@@ -164,8 +164,7 @@ export default class Friends extends AView{
 		friendsList.innerHTML = '';
 
 		const result = await response.json();
-		// const result = await this.fetchJsonData('static/js/views/search.json');
-		console.log(result);
+		// console.log(result);
 		// if (result && result.length > 0) {
 		// 	result.forEach(friend => {
 		// 		friendsList.appendChild(this.createFriendItem(friend));
@@ -205,12 +204,11 @@ export default class Friends extends AView{
 	}
 
 	createFriendItem(friend) {
-		console.log('Friend:', friend);
 		const friendDiv = document.createElement('div');
 		friendDiv.classList.add('list-group-item', 'friend');
 
 		const avatar = document.createElement('img');
-		avatar.src = friend.avatar ? `${import.meta.env.VITE_BASE_URL}`+ friend.avatar.image : null; // change url to env variable
+		avatar.src = friend.avatar ? `${import.meta.env.VITE_BASE_URL}`+ friend.avatar.image : null;
 		avatar.alt = `${friend.username}'s avatar`;
 		friendDiv.appendChild(avatar);
 
@@ -272,7 +270,7 @@ export default class Friends extends AView{
 		console.log('Request:', request);
 		console.log(request);
 		const avatar = document.createElement('img');
-		avatar.src = request.from_user.avatar ? `${import.meta.env.VITE_BASE_URL}${request.from_user.avatar.image}` : null; // change url to env variable;
+		avatar.src = request.from_user.avatar ? `${import.meta.env.VITE_BASE_URL}${request.from_user.avatar.image}` : null;
 		avatar.alt = `${request.from_user}'s avatar`;
 		requestDiv.appendChild(avatar);
 

@@ -29,7 +29,7 @@ export default class extends AView {
 			redirect: "follow"
 		};
 
-		fetch("http://localhost:8000/api/tournaments/", requestOptions)
+		fetch(`${import.meta.env.VITE_API_ENDPOINT}` + "/tournaments/", requestOptions)
 			.then((response) => response.json())
 			.then((result) =>
 				{

@@ -75,7 +75,7 @@ export default class extends AView {
 		playerDiv.classList.add('list-group-item', 'flex', 'align-items-end');
 
 		const avatar = document.createElement('img');
-		avatar.src = player.avatar ? 'http://localhost:8000'+ player.avatar.image : null; // change url to env variable
+		avatar.src = player.avatar ? `${import.meta.env.VITE_BASE_URL}` + player.avatar.image : null;
 		avatar.alt = `${player.username}'s avatar`;
 		playerDiv.appendChild(avatar);
 

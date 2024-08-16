@@ -47,7 +47,7 @@ export default class extends AView {
 		inviteDiv.classList.add('list-group-item', 'invite');
 
 		const avatar = document.createElement('img');
-		avatar.src = invite.from_user.avatar ? 'http://localhost:8000'+ invite.from_user.avatar.image : null; // change url to env variable
+		avatar.src = invite.from_user.avatar ? `${import.meta.env.VITE_BASE_URL}`+ invite.from_user.avatar.image : null;
 		avatar.alt = `${invite.from_user.username}'s avatar`;
 		inviteDiv.appendChild(avatar);
 
