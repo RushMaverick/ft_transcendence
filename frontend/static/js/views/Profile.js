@@ -1,7 +1,6 @@
 import AView from "./AView.js";
 import { getTranslation } from "./TranslationUtils.js";
 import { loadTranslations } from "../index.js";
-// import MatchHistory from "./MatchHistory.js";
 
 export default class extends AView {
 	constructor(params){
@@ -38,10 +37,8 @@ export default class extends AView {
 		}
 
 		const createProfile = this.showProfile(data);
-        const settings = this.createLink('link2', 'Change settings from here', '/settings');
 		const matchHistoryLink = this.createLink('link3', 'View Match History', `/history/${this.user_id}`);
 
-		// this.updateView(header, createProfile, matchHistoryLink, settings);
 		this.updateView(header, createProfile, matchHistoryLink);
 		return ;
 	}
