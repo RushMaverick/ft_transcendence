@@ -1,0 +1,20 @@
+{
+	"finnish":
+	{
+        "header": "Otteluhistoria",
+        "no-match": "Ei otteluhistoriaa löytynyt"
+	},
+
+	"english":
+	{
+        "header": "Match History",
+        "no-match": "No match history to be found"
+	},
+
+	"swedish":
+	{
+        "header": "Matchhistorik",
+        "no-match": "Ingen matchhistorik hittades"
+	}
+
+}
