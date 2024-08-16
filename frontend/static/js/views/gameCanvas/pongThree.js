@@ -47,7 +47,7 @@ export default class PongGame {
 
 		this.startButton = new Text();
 		this.startButton.text = 'Awaiting Players...';
-		this.startButton.font = 'static/js/views/gameCanvas/fonts/Tiny5-Regular.ttf';
+		this.startButton.font = 'static/fonts/Tiny5-Regular.ttf';
 		this.startButton.fontSize = 50.0;
 		this.startButton.position.x = -1;
 		this.startButton.position.y = 0;
@@ -67,7 +67,7 @@ export default class PongGame {
 
 		this.endText.text = message;
 		this.endText.sync();
-		this.endText.font = 'static/js/views/gameCanvas/fonts/Tiny5-Regular.ttf';
+		this.endText.font = 'static/fonts/Tiny5-Regular.ttf';
 		this.endText.fontSize = 50.0;
 		this.endText.position.x = -1;
 		this.endText.position.y = 0;
@@ -85,9 +85,9 @@ export default class PongGame {
 		let match_id = sessionStorage.getItem('match_id');
 		let room_name = sessionStorage.getItem('room_name');
 		if (match_id){
-			this.socket = new WebSocket(`ws://localhost:8000/ws/game/${room_name}/?token=${sessionStorage.getItem('access')}&match_id=${match_id}`);
+			this.socket = new WebSocket(`${import.meta.env.VITE_WS_ENDPOINT}/game/${room_name}/?token=${sessionStorage.getItem('access')}&match_id=${match_id}`);
 		} else {
-			this.socket = new WebSocket(`ws://localhost:8000/ws/game/${room_name}/?token=${sessionStorage.getItem('access')}`);
+			this.socket = new WebSocket(`${import.meta.env.VITE_WS_ENDPOINT}/game/${room_name}/?token=${sessionStorage.getItem('access')}`);
 		}
 		this.socket.onerror = function(error) {
 			console.error("WebSocket Error:", error);
@@ -130,12 +130,12 @@ export default class PongGame {
 		this.p1Score = new Text()
 		this.p2Score = new Text()
 
-		this.p1Score.font = 'static/js/views/gameCanvas/fonts/Tiny5-Regular.ttf'
+		this.p1Score.font = 'static/fonts/Tiny5-Regular.ttf'
 		this.p1Score.fontSize = 15.0
 		this.p1Score.position.x = 10
 		this.p1Score.color = 0x000000
 
-		this.p2Score.font = 'static/js/views/gameCanvas/fonts/Tiny5-Regular.ttf'
+		this.p2Score.font = 'static/fonts/Tiny5-Regular.ttf'
 		this.p2Score.fontSize = 15.0
 		this.p2Score.position.x = 160
 		this.p2Score.color = 0x000000

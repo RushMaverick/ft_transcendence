@@ -96,7 +96,7 @@ export default class extends AView {
 				}
 				window.isLoggedIn = true;
 
-				alert('Login successful!');
+				// alert('Login successful!');
 				document.dispatchEvent(new CustomEvent('loginSuccess', { detail: { path: '/dashboard' } }));
 			} else {
 				console.error("Login failed:", responseData.message);
@@ -108,25 +108,3 @@ export default class extends AView {
 		console.log(import.meta.env.VITE_API_ENDPOINT); // will be deleted later. now currently checkig if .env in frontend works
 	}
 }
-// return `
-// 	<div class="container">
-// 		<h2 class="text-center">Login</h2>
-// 		<br>
-// 		<form action="/login.php" class="loginForm">
-// 			<div class="input-group">
-// 				<label for="username" class="label">Username</label>
-// 				<input type="text" id="username" class="input">
-// 				<span class="error-message"></span>
-// 			</div>
-// 			<br>
-// 			<div class="input-group">
-// 				<label for="password" class="label">Password</label>
-// 				<input type="password" id="password" class="input">
-// 				<span class="error-message"></span>
-// 			</div>
-// 			<button class = "login button" data-action="logged-in">
-// 				Login</button>
-// 			<p>Not registered yet? <a href="/register" id ="registerLink" data-link>Register here</a></p>
-// 		</form>
-// 	</div>
-// 	`;

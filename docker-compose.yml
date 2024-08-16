@@ -15,14 +15,12 @@ services:
 
   api:
     build:
-      context: ./backend/django_backend/
+      context: ./backend
       dockerfile: Dockerfile
     image: api:42
     container_name: api
     expose:
       - 8080
-    volumes:
-      - ./backend/django_backend:/app
     command: bash -c "python manage.py makemigrations && python manage.py migrate && gunicorn --bind 0.0.0.0:8080 django_backend.wsgi"
     working_dir: /app
     networks:
@@ -33,14 +31,12 @@ services:
 
   ws:
     build:
-      context: ./backend/django_backend/
+      context: ./backend
       dockerfile: Dockerfile
     image: ws:42
     container_name: ws
     expose:
       - 8000
-    volumes:
-      - ./backend/django_backend:/app
     command: bash -c "daphne -b 0.0.0.0 -p 8000 django_backend.asgi:application"
     working_dir: /app
     networks:

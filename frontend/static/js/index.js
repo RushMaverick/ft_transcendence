@@ -243,7 +243,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 const setOnline = () => {
-	const socket = new WebSocket(`ws://localhost:8000/ws/online_status/?token=${sessionStorage.getItem('access')}`);
+	const socket = new WebSocket(`${import.meta.env.VITE_WS_ENDPOINT}/online_status/?token=${sessionStorage.getItem('access')}`);
 	socket.onerror = function(error) {
 		console.error("Online WebSocket Error:", error);
 	};

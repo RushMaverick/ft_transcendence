@@ -45,7 +45,7 @@ export default class extends AView {
 	async handleJoin(tournamentId) {
 		console.log(`Join Tournament Name: ${tournamentId}`);
 
-		const url = `ws://localhost:8000/ws/tournament/${tournamentId}/?token=${sessionStorage.getItem('access')}`
+		const url = `${import.meta.env.VITE_WS_ENDPOINT}/tournament/${tournamentId}/?token=${sessionStorage.getItem('access')}`
 		console.log("Tournaments.js: getHtml()");
 		console.log(this.socket);
 		if (this.socket === null){

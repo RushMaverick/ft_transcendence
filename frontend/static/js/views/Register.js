@@ -34,26 +34,26 @@ export default class extends AView {
 
 		const passwordRequirements = this.createParagraph('password-requirements', 'Password needs to have at least 8 letters, one character, one number, and one special character.')
 		passwordRequirements.classList.add('password-requirements');
-		
+
 		const checkbox = document.createElement('input');
 		checkbox.setAttribute('type', 'checkbox');
 		checkbox.setAttribute('id', 'checkbox');
 		checkbox.classList.add('inline');
-		
+
 		const privacy = this.createAnchor(
-			'privacy', 
+			'privacy',
 			'I have read and agree to the Pong sites '
 		);
 		privacy.classList.add('inline');
 		const privacyLink = this.createLink(
-			'privacy-link', 
-			'PRIVACY POLICY', 
+			'privacy-link',
+			'PRIVACY POLICY',
 			'/privacypolicy'
 		);
 		privacyLink.classList.add('inline-link');
 		privacyLink.setAttribute('privacy-link', '');
 		privacyLink.setAttribute('id', 'privacy-link');
-		
+
 		const button = this.createParagraph('paragraph');
 		const registerButton = this.createButton("register-button", "Register");
 		button.appendChild(registerButton);
@@ -66,7 +66,7 @@ export default class extends AView {
 		form.appendChild(privacy);
 		form.appendChild(privacyLink);
 		form.appendChild(button);
-		
+
 		const loginSuggestion = this.createParagraph(
 			'login',
 			'Already have an account?'
@@ -161,7 +161,7 @@ export default class extends AView {
 			}
 
 			const responseData = await response.json();
-			alert('Successfully registered!'); 
+			// alert('Successfully registered!');
 			document.dispatchEvent(new CustomEvent('registrationSuccess'));
 		} catch (error) {
 			console.error("There was a problem with the fetch operation:", error);

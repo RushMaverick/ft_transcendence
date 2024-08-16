@@ -210,7 +210,7 @@ export default class Friends extends AView{
 		friendDiv.classList.add('list-group-item', 'friend');
 
 		const avatar = document.createElement('img');
-		avatar.src = friend.avatar ? 'http://localhost:8000'+ friend.avatar.image : null; // change url to env variable
+		avatar.src = friend.avatar ? `${import.meta.env.VITE_BASE_URL}`+ friend.avatar.image : null; // change url to env variable
 		avatar.alt = `${friend.username}'s avatar`;
 		friendDiv.appendChild(avatar);
 
@@ -225,7 +225,7 @@ export default class Friends extends AView{
 
 		const status = document.createElement('div');
 		status.classList.add('status');
-		if (friend.is_online && typeof friend.is_online !== 'undefined') {
+		if (friend.is_online) {
 			status.style.backgroundColor = friend.is_online ? 'green' : 'gray';
 		} else {
 			// Fallback color if online status is unknown
@@ -272,7 +272,7 @@ export default class Friends extends AView{
 		console.log('Request:', request);
 		console.log(request);
 		const avatar = document.createElement('img');
-		avatar.src = request.from_user.avatar ? 'http://localhost:8000'+ request.from_user.avatar.image : null; // change url to env variable;
+		avatar.src = request.from_user.avatar ? `${import.meta.env.VITE_BASE_URL}${request.from_user.avatar.image}` : null; // change url to env variable;
 		avatar.alt = `${request.from_user}'s avatar`;
 		requestDiv.appendChild(avatar);
 

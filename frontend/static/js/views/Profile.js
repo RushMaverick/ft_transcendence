@@ -31,7 +31,7 @@ export default class extends AView {
 		}
 		let data = {
 			"username": user.username,
-			"avatar": user.avatar.image,
+			"avatar": `${import.meta.env.VITE_BASE_URL}` + user.avatar.image,
 			"wins": stats.Stats.wins,
 			"loses": stats.Stats.loses
 		}
