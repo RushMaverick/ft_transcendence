@@ -104,6 +104,7 @@ const router = async () => {
 
 	if (isLoggedIn &&  !isOnline){
 		setOnline();
+		document.getElementById('login').style.display = 'none';
 	}
 
 	if (sessionStorage.getItem('playing') && match.route.path !== "/play") {
