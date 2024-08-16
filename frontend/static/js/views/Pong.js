@@ -1,9 +1,7 @@
-import PongGame from "./gameCanvas/pongThree.js";
 import AView from "./AView.js";
-
 export default class extends AView {
 	constructor(params){
-		super(params);//call the constructor of the parent class
+		super(params);
 		this.setTitle("Pong");
 	}
 
@@ -27,4 +25,6 @@ export default class extends AView {
 		this.updateView(header, onevsButton, tournaButton, p);
 		return ;
 	}
+
+	
 }

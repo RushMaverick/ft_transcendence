@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import WebGL from 'three/addons/capabilities/WebGL.js';
-import {Text} from 'troika-three-text'
+import {Text} from 'troika-three-text';
 
 export default class PongGame {
 	static instance;
@@ -59,13 +59,31 @@ export default class PongGame {
 		this.waitingScene.add(this.menuCam, this.startButton);
 	}
 
+	displayGameEnd(message) {
+		this.endScene = new THREE.Scene();
+
+		this.endText = new Text();
+		this.endCam = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+		this.endText.text = message;
+		this.endText.sync();
+		this.endText.font = 'static/js/views/gameCanvas/fonts/Tiny5-Regular.ttf';
+		this.endText.fontSize = 50.0;
+		this.endText.position.x = -1;
+		this.endText.position.y = 0;
+		this.endText.color = 0x000000;
+
+		this.endCam.position.z = 550;
+		this.endCam.position.x = 180;
+		this.endCam.lookAt(this.endText.position);
+
+		this.endScene.add(this.endText, this.endCam);
+	}
+
 
 	joinGame() {
 		let match_id = sessionStorage.getItem('match_id');
 		let room_name = sessionStorage.getItem('room_name');
-		console.log('joinGame()');
-		console.log(match_id);
-		console.log(room_name);
 		if (match_id){
 			this.socket = new WebSocket(`ws://localhost:8000/ws/game/${room_name}/?token=${sessionStorage.getItem('access')}&match_id=${match_id}`);
 		} else {
@@ -76,17 +94,17 @@ export default class PongGame {
 		};
 		this.socket.onopen = function() {
 			console.log('WebSocket connection established.');
-			//Start screen before players have connected.
 		};
-		//This will be used instead of animate() to update the game state.
 		this.socket.onmessage = function(event) {
 			PongGame.instance.waitingForPlayers = false;
 			PongGame.instance.message = JSON.parse(event.data);
+			if (PongGame.instance.message.start) {
+				sessionStorage.setItem('playing', true);
+				return;
+			}
 			if (PongGame.instance.message.winner) {
-				PongGame.instance.stopAnimate();
 				const myId = sessionStorage.getItem('userId');
-				console.log('My ID:', myId, 'Winner ID:', PongGame.instance.message.winner);
-				// render winner/loser screen
+				PongGame.instance.displayGameEnd(myId == PongGame.instance.message.winner ? 'You win!' : 'You lose!');
 				return;
 			}
 			PongGame.instance.collisionChecking();
@@ -96,6 +114,9 @@ export default class PongGame {
 		};
 		this.socket.onclose = function() {
 			console.log('POng WebSocket connection closed.');
+			sessionStorage.removeItem('playing');
+			sessionStorage.removeItem('match_id');
+			sessionStorage.removeItem('room_name');
 		};
 	}
 
@@ -109,20 +130,16 @@ export default class PongGame {
 		this.p1Score = new Text()
 		this.p2Score = new Text()
 
-		// Set properties to configure:
-		// this.p1Score.text = ''
 		this.p1Score.font = 'static/js/views/gameCanvas/fonts/Tiny5-Regular.ttf'
 		this.p1Score.fontSize = 15.0
 		this.p1Score.position.x = 10
 		this.p1Score.color = 0x000000
 
-		// this.p2Score.text = ''
 		this.p2Score.font = 'static/js/views/gameCanvas/fonts/Tiny5-Regular.ttf'
 		this.p2Score.fontSize = 15.0
 		this.p2Score.position.x = 160
 		this.p2Score.color = 0x000000
 
-		// Update the rendering:
 		this.scene.add(this.p1Score, this.p2Score)
 	}
 
@@ -238,9 +255,6 @@ export default class PongGame {
     }
 
     handleKeyPresses() {
-		document.addEventListener('click', (e) => {
-			console.log(e.clientX, e.clientY);
-		});
         document.addEventListener('keydown', (e) => {
             switch (e.key) {
                 case 'w':
@@ -344,6 +358,8 @@ export default class PongGame {
 		requestAnimationFrame(() => this.animate());
 		if (this.waitingForPlayers == true)
 			this.renderer.render(this.waitingScene, this.menuCam);
+		else if (this.endScene) // Assuming endScene existence indicates game over
+       		this.renderer.render(this.endScene, this.endCam);
 		window.addEventListener('resize', () => {
 			if (window.innerWidth > window.innerHeight)
 			{
@@ -353,6 +369,7 @@ export default class PongGame {
 			}
 
 		},false)
+
     }
 
     startAnimate() {

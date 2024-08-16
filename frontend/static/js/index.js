@@ -64,7 +64,8 @@ const router = async () => {
 		{ path: "/privacypolicy", view: PrivacyPolicy},
 		{ path: "/register", view: Register },
 		{ path: "/dashboard", view: Dashboard, authRequired: true },
-		{ path: "/matchhistory", view: MatchHistory, authRequired: true },
+		{ path: "/history", view: MatchHistory, authRequired: true },
+		{ path: "/history/:user_id", view: MatchHistory, authRequired: true },
 		{ path: "/one-vs-one", view: OneVsOne, authRequired: true},
 		{ path: "/create-game", view: CreateGame, authRequired: true},
 		{ path: "/game-invites", view: GameInvites, authRequired: true},
@@ -73,6 +74,7 @@ const router = async () => {
 		{ path: "/pong", view: Pong, authRequired: true},
 		{ path: "/friends", view: Friends, authRequired: true },
 		{ path: "/profile", view: Profile, authRequired: true },
+		{ path: "/profile/:user_id", view: Profile, authRequired: true },
 		{ path: "/settings", view: Settings, authRequired: true },
 		{ path: "/play", view: Play, authRequired: true }
 	];
@@ -102,8 +104,13 @@ const router = async () => {
 
 	if (isLoggedIn &&  !isOnline){
 		setOnline();
+		document.getElementById('login').style.display = 'none';
 	}
 
+	if (sessionStorage.getItem('playing') && match.route.path !== "/play") {
+		navigateTo('/play');
+		return;
+	}
 
 	//comment out to remove login for testing
 	if (match.route.authRequired && !isLoggedIn) {
@@ -141,9 +148,8 @@ const router = async () => {
 };
 
 export const loadTranslations = async (page) => {
-	const language = window.localStorage.getItem('language') || 'english';
 	try {
-		const response = await fetch(`./static/translations/${page}.json`);
+		const response = await fetch(`${import.meta.env.VITE_BASE_URL}/static/translations/${page}.json`);
 		const data = await response.json();
 		if (!window.translations) {
             window.translations = {};
@@ -176,7 +182,7 @@ document.addEventListener("viewUpdated", () => {
 
 function updateTranslations(page){
 	let translations;
-    fetch('./static/translations/' + page + '.json')
+    fetch(`${import.meta.env.VITE_BASE_URL}/static/translations/${page}.json`)
    .then(response => response.text())
    .then(data => {
         translations = JSON.parse(data);
