@@ -102,6 +102,7 @@ const router = async () => {
 
 	if (isLoggedIn &&  !isOnline){
 		setOnline();
+		document.getElementById('login').style.display = 'none';
 	}
 
 
