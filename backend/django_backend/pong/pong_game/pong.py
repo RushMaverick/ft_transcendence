@@ -118,7 +118,7 @@ class Pong:
 			await self.save_match(winner=self.winner)
 		else:
 			await self.save_match()
-			self.winner = self.player1.id if self.player1.score > self.player2.score else self.player2.id
+			self.winner = self.player1.user.id if self.player1.score > self.player2.score else self.player2.user.id
 		await self.channel_layer.group_send(
 			self.room_group_name, {"type": "game.state", "state": {"winner": self.winner}}
 		)
