@@ -41,4 +41,8 @@ class Avatar(models.Model):
 
     def __str__(self):
         return "%s's profile" % self.user.username
+    
+    @property
+    def relative_image_url(self):
+        return self.image.url
 

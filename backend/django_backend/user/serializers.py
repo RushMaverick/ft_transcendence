@@ -6,7 +6,8 @@ from .models import Avatar, OnlineStatus
 
 
 class AvatarSerializer(serializers.ModelSerializer):
-
+    image = serializers.CharField(source='relative_image_url')
+    
     class Meta:
         model = Avatar
         fields = ['image', 'uploaded_on']
