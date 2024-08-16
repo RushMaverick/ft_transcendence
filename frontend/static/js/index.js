@@ -147,9 +147,8 @@ const router = async () => {
 };
 
 export const loadTranslations = async (page) => {
-	const language = window.localStorage.getItem('language') || 'english';
 	try {
-		const response = await fetch(`./static/translations/${page}.json`);
+		const response = await fetch(`${import.meta.env.VITE_BASE_URL}/static/translations/${page}.json`);
 		const data = await response.json();
 		if (!window.translations) {
             window.translations = {};
@@ -182,7 +181,7 @@ document.addEventListener("viewUpdated", () => {
 
 function updateTranslations(page){
 	let translations;
-    fetch('./static/translations/' + page + '.json')
+    fetch(`${import.meta.env.VITE_BASE_URL}/static/translations/${page}.json`)
    .then(response => response.text())
    .then(data => {
         translations = JSON.parse(data);
