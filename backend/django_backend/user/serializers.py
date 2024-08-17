@@ -6,16 +6,21 @@ from .models import Avatar, OnlineStatus
 
 
 class AvatarSerializer(serializers.ModelSerializer):
-    image = serializers.CharField(source='relative_image_url')
+    image = serializers.ImageField(required=True)
     
     class Meta:
         model = Avatar
         fields = ['image', 'uploaded_on']
 
-        def update(self, instance: User, validated_data):
-            instance.image = validated_data.get('image', instance.image)
-            instance.save()
-            return instance
+    def update(self, instance: User, validated_data):
+        instance.image = validated_data.get('image', instance.image)
+        instance.save()
+        return instance
+        
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['image'] = instance.relative_image_url 
+        return representation
 
 # OnlineStatusSerializer:
 # This serializer is designed to get the Online Status from an user, so for this we use model OnlineStatus
