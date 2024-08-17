@@ -19,6 +19,7 @@ build
 .env.test.local
 .env.production.local
 .vscode
+backend/django_backend/media
 
 npm-debug.log*
 yarn-debug.log*
