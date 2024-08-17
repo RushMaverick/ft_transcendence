@@ -141,4 +141,4 @@ class UserViewSet(viewsets.ModelViewSet):
             return Response({"detail": "User not found."}, status=status.HTTP_404_NOT_FOUND)
 
         serializer = UserSerializer(user)
-        return Response(serializer.data, status=status.HTTP_404_NOT_FOUND)
+        return Response(serializer.data, status=status.HTTP_200_OK)
