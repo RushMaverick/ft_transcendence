@@ -143,6 +143,8 @@ export default class Friends extends AView{
 		friendsList.innerHTML = '';
 
 		const result = await response.json();
+
+		console.log()
 		// console.log(result);
 		// if (result && result.length > 0) {
 		// 	result.forEach(friend => {
