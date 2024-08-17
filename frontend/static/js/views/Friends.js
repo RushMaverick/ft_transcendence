@@ -67,7 +67,6 @@ export default class Friends extends AView{
 			this.updateView(friends, iconContainer, searchBar, searchButton);
 		}
 
-
 		this.checkIfRequests();
 
 		if (this.params.view && this.params.view === 'friends' && this.params.username) {
@@ -218,6 +217,7 @@ export default class Friends extends AView{
         actions.classList.add('actions');
 
 		console.log('createActions:Friend:', friend);
+		const username = sessionStorage.getItem('username');
 
 		if (friend.accepted === false) {
 			let accept = this.searchTranslations('accept-button');
@@ -229,7 +229,7 @@ export default class Friends extends AView{
 			const ignoreButton = this.createButton('ignore-button', 'btn', ignore);
 			ignoreButton.addEventListener('click', () => this.friendRequest.ignoreFriendRequest(friend.username, request_id));
 			actions.appendChild(ignoreButton);
-		} else if (friend.accepted === undefined) {
+		} else if (friend.accepted === undefined && friend.username !== username) {
 			let request = this.searchTranslations('request-button');
 			const requestButton = this.createButton('request-button', 'request-btn', request);
 			requestButton.addEventListener('click', () => this.friendRequest.sendFriendRequest(friend.username));
