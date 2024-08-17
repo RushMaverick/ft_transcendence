@@ -1,21 +1,17 @@
 body {
 	margin: 0;
+	height: 100%;
 	font-family: 'Courier New', Courier, monospace;
 	background-color: #d6d2c4;
 	display: flex;
-	justify-content: center;
-	align-items: center;
-	height: 100vh;
+	align-items: center; 
+	min-height: 100vh;
 	color: #333;
   }
 
   img {
 	width: 100px;
 	height: 100px;
-  }
-
-  .flex {
-	display: flex;
   }
 
   .align-items-end {
@@ -27,7 +23,7 @@ body {
   }
 
   .pong {
-	margin-left: 10rem;
+	margin-left: 3rem;
   }
 
   .searchDiv {
@@ -35,7 +31,7 @@ body {
 	margin-bottom: 2rem;
   }
 
-  .container {
+  /* .container {
 	width: 80%;
 	max-width: 1200px;
 	text-align: center;
@@ -43,7 +39,7 @@ body {
 	border: 2px solid #b3aea4;
 	box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 	padding: 20px;
-  }
+  } */
 
   form {
 	margin-top: 2rem;
@@ -79,21 +75,12 @@ body {
 	margin-bottom: 3rem;
   }
 
-  .nav {
-	background: #333;;
-	border-right: 2px solid #b3aea4;
-	height: 100vh;
-	width: var(--nav-width);
-	position: fixed;
-	top: 0;
-	left: 0;
+  main {
+	flex-grow: 1; 
 	padding: 20px;
-	box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-  }
-
-  .container {
-	font-size: 14px;
-	margin-left: 13rem;
+	min-width: 300px; /* Minimum width to prevent it from collapsing */
+    overflow: hidden; 
+	align-items: center;
   }
 
   a {
@@ -106,6 +93,16 @@ body {
 	transition: background-color 0.3s ease;
   }
 
+.nav {
+	width: 200px;
+	height: 100vh;
+    background-color: #333; /* Adjust to match your design */
+    color: #fff;
+    padding: 20px;
+    box-sizing: border-box;
+    flex-shrink: 0;
+  }
+
   .nav a {
 	color: #b3aea4;
 	text-decoration: none;
@@ -115,6 +112,10 @@ body {
 	padding: 10px;
 	margin-bottom: 10px;
 	transition: background-color 0.3s ease;
+  }
+
+  .nav a:hover {
+	background: #b3aea4;
   }
 
   .input-group {
@@ -135,6 +136,7 @@ body {
 	border: 1px solid #b3aea4;
 	border-radius: 4px;
   }
+
   .select-wrapper {
 	margin-top: 1rem;
 	margin-bottom: 1rem;
@@ -144,12 +146,12 @@ body {
 	outline: none;
 	border-color: #888;
   }
-
+/* 
   .main-content {
 	margin-left: var(--nav-width);
 	padding: 40px;
 	flex-grow: 1;
-  }
+  } */
 
   .buttons {
 	display: flex;
@@ -176,7 +178,7 @@ body {
     height: 200px;
     background-size: cover;
     background-position: center;
-    /* position: relative; */
+    position: relative;
     margin-right: 10px;
   }
 
@@ -221,4 +223,19 @@ th {
 
 tr:hover {
     background-color: #e0e0e0;
+}
+
+
+@media (max-width: 600px) {
+    .container {
+        flex-direction: column; /* Stacks the navbar on top in small screens */
+    }
+
+    .navbar {
+        width: 100%; /* Makes the navbar full width on small screens */
+    }
+
+    .main-content {
+        min-width: unset; /* Allows the content to adjust as needed */
+    }
 }

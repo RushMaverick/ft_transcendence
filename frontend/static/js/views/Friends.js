@@ -206,7 +206,7 @@ export default class Friends extends AView{
 
 	createFriendItem(friend) {
 		console.log('Friend:', friend);
-		const friendDiv = document.createElement('div');
+		const friendDiv = document.createElement('div'); // Change styling of div to smaller size
 		friendDiv.classList.add('list-group-item', 'friend');
 
 		const avatar = document.createElement('img');
@@ -267,7 +267,7 @@ export default class Friends extends AView{
     }
 
 	createRequestItem(request) {
-		const requestDiv = document.createElement('div');
+		const requestDiv = document.createElement('div'); // Change styling of div to smaller size
 		requestDiv.classList.add('list-group-item', 'friend');
 		console.log('Request:', request);
 		console.log(request);
