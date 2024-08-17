@@ -118,27 +118,6 @@ export default class Friends extends AView{
         } else {
             console.log('No pending requests found');
         }
-		//this is for debugging. leaving it for when connected to backend
-
-		// try {
-		// 	const requests = await this.fetchJsonData('static/js/views/friendRequest.json');
-		// 	const inboxIcon = document.querySelector('.inbox-icon');
-
-		// 	if (!inboxIcon) {
-		// 		console.error('inboxIcon element not found in the DOM.');
-		// 		return;
-		// 	}
-
-		// 	console.log('Requests:', requests); // Debugging statement to check the fetched data
-
-		// 	if (requests && requests.length > 0) {
-		// 		const redDot = document.createElement('span');
-		// 		redDot.classList.add('red-dot');
-		// 		inboxIcon.appendChild(redDot);
-		// 	}
-		// } catch (error) {
-		// 	console.error('Error fetching or processing friend requests:', error);
-		// }
     }
 
 	async searchFriend(username) {
