@@ -20,13 +20,13 @@ from user.models import User
 class FriendRequest(models.Model):
     from_user = models.ForeignKey(
     User,
-    on_delete=models.SET_DEFAULT,
+    on_delete=models.CASCADE,
     related_name='sent_request',
     default=None
     )
     to_user = models.ForeignKey(
         User,
-        on_delete=models.SET_DEFAULT,
+        on_delete=models.CASCADE,
         related_name='receive_request',
         default=None
     )

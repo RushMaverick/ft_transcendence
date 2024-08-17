@@ -18,13 +18,13 @@ class Room(models.Model):
 class InvitationRequest(models.Model):
     from_user = models.ForeignKey(
     User,
-    on_delete=models.SET_DEFAULT,
+    on_delete=models.CASCADE,
     related_name='invitation_requests_sent',
     default=None
     )
     to_user = models.ForeignKey(
         User,
-        on_delete=models.SET_DEFAULT,
+        on_delete=models.CASCADE,
         related_name='invitation_requests_received',
         default=None
     )
