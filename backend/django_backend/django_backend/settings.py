@@ -140,6 +140,9 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+# File size
+
+FILE_UPLOAD_MAX_MEMORY_SIZE = 10485760
 
 # This setting defines the directory on the filesystem where uploaded files will be stored.
 #MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -170,20 +173,3 @@ SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=300),
     "SIGNING_KEY": SECRET_KEY,
 }
-
-# LOGGING = {
-#     'version': 1,
-#     'disable_existing_loggers': False,
-#     'handlers': {
-#         'console': {
-#             'level': 'DEBUG',
-#             'class': 'logging.StreamHandler',
-#         },
-#     },
-#     'loggers': {
-#         'django': {
-#             'handlers': ['console'],
-#             'level': os.getenv('DJANGO_LOG_LEVEL', 'DEBUG'),
-#         },
-#     },
-# }
