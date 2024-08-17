@@ -144,12 +144,6 @@ export default class Friends extends AView{
 
 		const result = await response.json();
 
-		console.log('result :', result);
-		// console.log(result);
-		// if (result && result.length > 0) {
-		// 	result.forEach(friend => {
-		// 		friendsList.appendChild(this.createFriendItem(friend));
-		// 	});
 		if (result && result.detail !== 'User not found.') {
 			friendsList.appendChild(this.createFriendItem(result));
 		} else {
