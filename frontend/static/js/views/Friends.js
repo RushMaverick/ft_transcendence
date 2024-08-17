@@ -140,14 +140,16 @@ export default class Friends extends AView{
 			return;
 		}
 		friendsList.innerHTML = '';
-
 		const result = await response.json();
+		console.log('search result: ', result);
 
-		if (result && result.detail !== 'User not found.') {
+		if (result && !result.detail) {
 			friendsList.appendChild(this.createFriendItem(result));
-		} else {
+		} else if (result.detail === 'User not found.'){
 			const noResultsMessage = this.createParagraph('no-user-found', `No Such User Found: ${username}`);
 			friendsList.appendChild(noResultsMessage);
+		} else {
+			alert(result.detail);
 		}
 	}
 
