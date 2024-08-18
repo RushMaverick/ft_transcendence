@@ -12,13 +12,13 @@ class Match(models.Model):
     # round = models.ForeignKey(Round, on_delete=models.CASCADE, related_name='matches')
     player1 = models.ForeignKey(
         User,
-        on_delete=models.SET_DEFAULT,
+        on_delete=models.CASCADE,
         related_name='player1_matches',
         default=None
     )
     player2 = models.ForeignKey(
         User,
-        on_delete=models.SET_DEFAULT,
+        on_delete=models.CASCADE,
         related_name='player2_matches',
         default=None
     )
@@ -26,7 +26,7 @@ class Match(models.Model):
     player2_score = models.IntegerField()
     winner = models.ForeignKey(
         User,
-        on_delete=models.SET_DEFAULT,
+        on_delete=models.CASCADE,
         related_name='winner_matches',
         default=None,
         null=True
