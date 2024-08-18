@@ -43,6 +43,11 @@ class TournamentConsumer(AsyncWebsocketConsumer):
         if self.tournament.status != "open":
             return await self.close()
 
+
+        # If there is less than 4 participants, add user to the tournament
+        if len(self.tournament.participants) >= 4:
+            return await self.close()
+
         # Add user to tournament as participant
         self.participant = await self.tournament.add_participant(user.id, self.channel_name, self.channel_layer)
         if not self.participant:

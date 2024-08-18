@@ -51,7 +51,11 @@ export default class extends AView {
 		if (this.socket === null){
 			this.socket = new WebSocket(url);
 			this.socket.onerror = function(error) {
-				console.error("WebSocket Error:", error);
+				// console.error("WebSocket Error:", error);
+				// go to previous page
+				sessionStorage.removeItem('tournamentId');
+				navigateTo('/tournaments');
+
 			};
 			this.socket.onopen = function() {
 				console.log('Tournament WebSocket connection established.');
