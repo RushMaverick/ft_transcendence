@@ -47,10 +47,15 @@ const getHashParams = () => {
 };
 
 //when trying to navigate to a different page, we don't want to reload the page. We want to use the client-side router to change the view of the page.
-const navigateTo = url => {
-	history.pushState(null, null, url);
-	router();
-};
+// const navigateTo = url => {
+// 	history.pushState(null, null, url);
+// 	router();
+// };
+
+function navigateTo(url, state = {}) {
+    history.pushState(state, '', url);
+    router();
+}
 
 // const loggedIn =
 let isOnline = false;
@@ -168,7 +173,9 @@ window.onload = async () => {
 	}
 };
 
-window.addEventListener("popstate", router);
+window.addEventListener("popstate", (event) => {
+    router(event.state);
+});
 // this will listen for back and forward buttons in the browser
 // Dynamically import the translation file
 document.addEventListener("viewUpdated", () => {

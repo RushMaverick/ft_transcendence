@@ -36,8 +36,9 @@ export default class Friends extends AView{
 		const searchButton = this.createButton('search', 'btn', 'Search');
 		searchButton.classList.add('btn-primary');
         searchButton.addEventListener('click', () => {
-			history.pushState({ view: 'search', query: searchBar.value }, 'Search Friends', '#search');
-            this.searchFriend(searchBar.value);
+			const query = searchBar.value;
+			history.pushState({ view: 'search', query: query}, 'Search Friends', `#search?query=${query}`);
+            this.searchFriend(query);
         });
 
         const inboxIcon = document.createElement('span');
