@@ -142,6 +142,7 @@ export default class {
     }
 
 	static async fetchWithJson(url, method, body) {
+		console.log("url is: ", url);
 		try {
 			let response;
 			if (method === 'GET') {
@@ -169,7 +170,7 @@ export default class {
 			return await response.json();
 		} catch (error) {
 			console.error(`Error during fetch request to ${url}:`, error);
-			alert('An error occurred. Please try again.');
+			// alert('An error occurred. Please try again.');
 			return null;
 		}
 	}

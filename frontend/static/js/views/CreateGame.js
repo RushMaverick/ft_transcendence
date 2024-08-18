@@ -50,15 +50,16 @@ export default class extends AView {
 		}
 		playerDiv.appendChild(status);
 
-		const actions = document.createElement('div');
-		actions.setAttribute('lang-key', '');
-		actions.classList.add('actions');
-		const inviteButton = this.createButton('invite-button', 'btn', this.searchTranslations('invite-button'));
-		inviteButton.addEventListener('click', () => this.handleInvite(player.username));
-		actions.appendChild(inviteButton);
-
-		playerDiv.appendChild(actions);
-
+		const myname = sessionStorage.getItem('username');
+		if (player.username !== myname){
+			const actions = document.createElement('div');
+			actions.setAttribute('lang-key', '');
+			actions.classList.add('actions');
+				const inviteButton = this.createButton('invite-button', 'btn', this.searchTranslations('invite-button'));
+			inviteButton.addEventListener('click', () => this.handleInvite(player.username));
+			actions.appendChild(inviteButton);
+			playerDiv.appendChild(actions);
+		}
 		return playerDiv;
 	}
 
