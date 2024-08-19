@@ -33,7 +33,7 @@ services:
       db:
         condition: service_healthy
     volumes:
-      - media:/media/images
+      - media:/app/media
 
   ws:
     build:
