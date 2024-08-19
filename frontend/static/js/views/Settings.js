@@ -97,7 +97,7 @@ export default class extends AView {
 			const data = await AView.fetchWithJson('/profile/avatar/');
 			if (data && data.image) {
 				this.avatarUrl = data.image;
-				console.log(this.avatarUrl);
+				// console.log(this.avatarUrl);
 				this.updateAvatarDisplay();
 			} else {
 				console.error('Profile data or avatar URL is missing');

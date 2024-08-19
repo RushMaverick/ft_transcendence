@@ -126,7 +126,8 @@ class Pong:
 			self.room_group_name, {"type": "game.state", "state": {"winner": self.winner}}
 		)
 
-		await self.delete_room()
+		if not self.tournament_match:
+			await self.delete_room()
 
 		await self.kill_connections()
 
