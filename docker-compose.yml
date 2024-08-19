@@ -19,6 +19,8 @@ services:
       dockerfile: Dockerfile
     image: api:42
     container_name: api
+    env_file:
+      - .env
     expose:
       - 8080
     command: bash -c "python manage.py makemigrations && python manage.py migrate && gunicorn --bind 0.0.0.0:8080 django_backend.wsgi"
@@ -35,6 +37,8 @@ services:
       dockerfile: Dockerfile
     image: ws:42
     container_name: ws
+    env_file:
+      - .env
     expose:
       - 8000
     command: bash -c "daphne -b 0.0.0.0 -p 8000 django_backend.asgi:application"
