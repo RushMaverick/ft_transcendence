@@ -12,6 +12,8 @@ services:
     restart: on-failure
     depends_on:
       - api
+    volumes:
+      - media:/usr/share/nginx/html/media
 
   api:
     build:
@@ -30,6 +32,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    volumes:
+      - media:/media/images
 
   ws:
     build:
