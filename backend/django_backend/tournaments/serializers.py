@@ -19,7 +19,6 @@ class ParticipantSerializer(serializers.ModelSerializer):
         fields = ['id', 'tournament', 'player', 'position']
 
     def validate(self, data):
-        print("ParticipantSerializer:Data:", data, flush=True)
         try:
             tournament_id = data['tournament'].id
             player_id = data['player'].id
@@ -32,10 +31,7 @@ class ParticipantSerializer(serializers.ModelSerializer):
 
 class TournamentSerializer(serializers.ModelSerializer):
     name = serializers.CharField(required=True, validators=[UniqueValidator(queryset=Tournament.objects.all())])
-    # description = serializers.CharField(required=False)
-    # players = serializers.SerializerMethodField()
     participants = UserSerializer(many=True, read_only=True)
-    # creator = serializers.SerializerMethodField()
     creator = UserSerializer(read_only=True)
     rounds = RoundSerializer(many=True, read_only=True)
     class Meta:
@@ -46,10 +42,3 @@ class TournamentSerializer(serializers.ModelSerializer):
     def save(self, **kwargs):
         # Allow passing additional fields directly
         return super().save(**kwargs)
-
-	# def get_matches(self, obj):
-	# 	"""
-	# 	Return a list of matches associated with the tournament.
-	# 	"""
-	# 	matches = Match.objects.filter(tournament=obj)
-	# 	return [{'match_id': match.id, 'player1': match.player1, 'player2': match.player2, 'winner': match.winner} for match in matches]

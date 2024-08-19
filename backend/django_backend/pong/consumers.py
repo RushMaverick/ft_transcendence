@@ -28,7 +28,6 @@ def get_match_instance(match_id):
 
 @sync_to_async
 def create_match(player1_id: int, player2_id: int):
-    print("create_match", flush=True)
     match_serializer = MatchSerializer(data={
         "player1": player1_id,
         "player2": player2_id,
@@ -36,7 +35,6 @@ def create_match(player1_id: int, player2_id: int):
         "player2_score": 0,
     })
     if not match_serializer.is_valid():
-        print(match_serializer.errors, flush=True)
         return None
     match_serializer.save()
     return match_serializer.data["id"]
@@ -60,9 +58,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 
     async def connect(self):
         user = self.scope['user']
-        print(f"pong:connect:User: {user}", flush=True)
         if not user.is_authenticated:
-            print("pong:connect:User not authenticated", flush=True)
             return await self.close()
 
         self.game_room = self.scope["url_route"]["kwargs"]["room_name"]
@@ -76,14 +72,9 @@ class GameConsumer(AsyncWebsocketConsumer):
             query_params = parse_qs(urlparse(query_string).path)
             self.match_id = query_params.get('match_id', [None])[0]
             if self.match_id != None:
-                print(f"pong:connect:match_id: {self.match_id}", flush=True)
                 self.match = await get_match(self.match_id)
-                print(f"pong:connect:match: {self.match}", flush=True)
-                print(f"pong:connect:player_in_match: {player_in_match(self.match, user.id)}", flush=True)
                 if not self.match or not player_in_match(self.match, user.id):
-                    print("pong:connect:Player not in match", flush=True)
                     return await self.close()
-                print(f"pong:connect:match_id: {self.match_id}", flush=True)
                 self.tournament_match = True
         except Exception as e:
             pass
@@ -94,13 +85,11 @@ class GameConsumer(AsyncWebsocketConsumer):
                 room_id = int(self.game_room.split('_')[-1])
                 self.room = await get_room(room_id)
             except Room.DoesNotExist:
-                print(f"pong:connect:Invalid room ID or room does not exist: {self.game_room}", flush=True)
                 await self.close()
                 return
 
             # Check if the user is part of the room
             if not await is_user_in_room(user, self.room):
-                print(f"pong:connect:User {user} is not part of the room {self.room.id}", flush=True)
                 await self.close()
                 return
 
@@ -112,7 +101,6 @@ class GameConsumer(AsyncWebsocketConsumer):
 
         # check if game is full
         if self.pong_game.player1 and self.pong_game.player2:
-            print("pong:connect:Game is full", flush=True)
             return await self.close()
 
         # Add player to the game
@@ -153,15 +141,11 @@ class GameConsumer(AsyncWebsocketConsumer):
                 self.pong_game.match_instance = await get_match_instance(self.match_id)
                 Games.start_game(self.game_room)
 
-        print (f"pong:connect:Connected to {self.room_group_name}", flush=True)
         await self.accept()
 
 
 
     async def disconnect(self, close_code):
-        print("pong:disconnect:close_code: ", close_code, flush=True)
-        print(f"pong:disconnect:{self.player.id} disconnected from room {self.game_room}", flush=True)
-        # Check if game status is ongoing if it is then save_match(winner_id)
         if self.pong_game.active:
             self.pong_game.surrender(player_id=self.player.id)
 
@@ -176,7 +160,6 @@ class GameConsumer(AsyncWebsocketConsumer):
             cmd = json_data.get("cmd")
             cmd_args = json_data.get("cmd_args")
         except:
-            print("Invalid command", flush=True)
             return
         if (cmd == "move"):
             self.player.move(cmd_args)
