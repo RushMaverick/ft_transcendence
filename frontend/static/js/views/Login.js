@@ -1,5 +1,4 @@
 window.isLoggedIn = false;
-console.log(`Initial state: ${window.isLoggedIn}`);
 
 import AView from "./AView.js";
 import textInputField from "./TextInputView.js";
@@ -107,6 +106,5 @@ export default class extends AView {
 			console.error("There was a problem with the fetch operation:", error);
 			alert("There was a problem with the login operation. Please try again.");
 		}
-		console.log(import.meta.env.VITE_API_ENDPOINT); // will be deleted later. now currently checkig if .env in frontend works
 	}
 }

@@ -92,7 +92,7 @@ class Pong:
 
 	async def game_loop(self) -> None:
 		await self.channel_layer.group_send(
-			self.room_group_name, {"type": "game.state", "state": {"start": True}}
+			self.room_group_name, {"type": "game.state", "state": {"start": True, "player1": self.player1.user.username, "player2": self.player2.user.username}}
 		)
 		await self.set_match_status("in_progress")
 		while self.active:
@@ -102,7 +102,7 @@ class Pong:
 			start_time = time.time()
 			self.update_game()
 			await self.update_state()
-			if self.player1.score >= 1 or self.player2.score >= 1:
+			if self.player1.score >= 3 or self.player2.score >= 3:
 				self.stop()
 			delta_time = time.time() - start_time
 			sleep_time = 1./self.tick - delta_time
@@ -121,7 +121,7 @@ class Pong:
 		if not self.tournament_match:
 			await self.delete_room()
 
-		await self.kill_connections()
+		# await self.kill_connections()
 
 	@sync_to_async
 	def delete_room(self):

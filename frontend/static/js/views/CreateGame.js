@@ -22,7 +22,6 @@ export default class extends AView {
 
 
 	createPlayerItem(player) {
-		console.log('Player:', player);
 		const playerDiv = document.createElement('div');
 		playerDiv.classList.add('list-group-item', 'friend');
 
@@ -66,9 +65,7 @@ export default class extends AView {
 	async handleFind(event) {
 		event.preventDefault();
 		const playerName = event.target.name.value;
-		console.log(`Player Name: ${playerName}`);
 		const result = await AView.fetchWithJson(`/user/search/?username=${playerName}`, 'GET')
-		console.log(result);
 		if (result.detail === 'User not found.'){
 			alert('Failed to find player');
 			return;
@@ -79,7 +76,6 @@ export default class extends AView {
 
 	async createRoom(){
 		const result = await AView.fetchWithJson('/rooms/create_room/', 'POST', {});
-		console.log(result);
 		if (!result){
 			alert('Failed to create room');
 		}
@@ -89,9 +85,7 @@ export default class extends AView {
 
 	async handleInvite(username) {
 		await this.createRoom();
-		console.log('Invite player:', username);
 		const result = await AView.fetchWithJson('/rooms/one_vs_one_invitation/', 'POST', { "guest": username});
-		console.log(result);
 		if (!result){
 			alert('Failed to invite player');
 			return;
@@ -128,7 +122,6 @@ export default class extends AView {
 						'Authorization': 'Bearer ' + sessionStorage.getItem('access')
 					}
 				});
-				console.log(response);
 				if (response.status !== 204){
 					alert('Failed to exit room');
 				}
@@ -143,8 +136,5 @@ export default class extends AView {
 	}
 
 	async dismount(){
-		console.log('Dismounting CreateGame');
-		// const result = await AView.fetchWithJson(`/rooms/delete/`, 'POST', {});
-		// console.log(result);
 	}
 }

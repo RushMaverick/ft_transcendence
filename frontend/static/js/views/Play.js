@@ -23,36 +23,29 @@ export default class extends AView {
 		window.localStorage.setItem('page', 'CreateGame');
 		await loadTranslations('CreateGame');
 
-		if (!sessionStorage.getItem('room_name')) {
-			alert('No room name found');
-		}
 		this.gameDiv = this.createGame('pong');
 		this.updateView(this.gameDiv);
 		return ;
 	}
 
 	async dismount(){
-		console.log('Dismounting Play');
 		// sessionStorage.removeItem('room_name');
 		const canvas = document.querySelector('canvas');
 		if (canvas && PongGame.instance) {
-			console.log('canvas remove');
 			canvas.remove();
 			delete PongGame.instance;
 		}
 		if (!sessionStorage.getItem('playing') && sessionStorage.getItem('room_name')) {
-			const response = await fetch(`${import.meta.env.VITE_API_ENDPOINT}/rooms/${sessionStorage.getItem('room_name')}/delete/`, {
-				method: 'DELETE',
-				headers: {
-					'Content-Type': 'application/json',
-					'Authorization': 'Bearer ' + sessionStorage.getItem('access')
-				}
-			});
-			console.log(response);
-			if (response.status !== 204){
-				alert('Failed to exit room');
-			}
-			sessionStorage.removeItem('room_name');
+			try {
+				const response = await fetch(`${import.meta.env.VITE_API_ENDPOINT}/rooms/${sessionStorage.getItem('room_name')}/delete/`, {
+					method: 'DELETE',
+					headers: {
+						'Content-Type': 'application/json',
+						'Authorization': 'Bearer ' + sessionStorage.getItem('access')
+					}
+				});
+				sessionStorage.removeItem('room_name');
+			} catch (error) {}
 		}
 	}
 }

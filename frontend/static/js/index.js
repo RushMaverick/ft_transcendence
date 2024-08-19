@@ -1,7 +1,6 @@
 //global variable to store the login status(currently without connecting to backend)
 // This will let us the user to be logged in throughout the session
 // window.isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-// console.log(`Initial state: ${window.isLoggedIn}`);
 // but we will not use this for now, we will use temporary checks
 
 import Dashboard from "./views/Dashboard.js";
@@ -112,20 +111,18 @@ const router = async () => {
 		document.getElementById('login').style.display = 'none';
 	}
 
-	if (sessionStorage.getItem('playing') && match.route.path !== "/play") {
-		navigateTo('/play');
-		return;
-	}
+	// if (sessionStorage.getItem('playing') && match.route.path !== "/play") {
+	// 	navigateTo('/play');
+	// 	return;
+	// }
 
 	//comment out to remove login for testing
 	if (match.route.authRequired && !isLoggedIn) {
-		console.log(`Access to ${match.route.path} is restricted.`);
 		navigateTo('/login');
 		return;
 	}
 
 	if (match.route.path === "/play" && !sessionStorage.getItem('room_name')) {
-		console.log('No room name found');
 		navigateTo('/create-game');
 		return;
 	}
@@ -160,7 +157,6 @@ export const loadTranslations = async (page) => {
             window.translations = {};
         }
 		window.translations = data; // Store translations globally
-		console.log('Translations loaded for page:', page, window.translations);
 	} catch (error) {
 		console.error('Error loading translation file:', error);
 	}
@@ -255,10 +251,8 @@ const setOnline = () => {
 		console.error("Online WebSocket Error:", error);
 	};
 	socket.onopen = function() {
-		console.log('Online WebSocket connection established.');
 	};
 	socket.onclose = function(event) {
-		console.log('Online WebSocket connection closed:', event);
 	}
 	isOnline = true;
 };

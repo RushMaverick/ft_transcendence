@@ -58,7 +58,6 @@ export default class Friends extends AView{
 		data.friends.forEach(friend => {
 			friend.accepted = true;
 		});
-		// console.log(data);
 		this.friends = data;
 		if (data){
 			this.createFriendsList(data, friendsList);
@@ -85,8 +84,6 @@ export default class Friends extends AView{
 	}
 
 	createFriendsList(data, friendsList) {
-		console.log('data:', data);
-		console.log(data.friends);
         if (data && data.friends && data.friends.length > 0) {
             data.friends.forEach(friend => {
                 friendsList.appendChild(this.createFriendItem(friend));
@@ -116,7 +113,6 @@ export default class Friends extends AView{
             redDot.classList.add('red-dot');
             inboxIcon.appendChild(redDot);
         } else {
-            console.log('No pending requests found');
         }
     }
 
@@ -142,7 +138,6 @@ export default class Friends extends AView{
 		}
 		friendsList.innerHTML = '';
 		const result = await response.json();
-		console.log('search result: ', result);
 
 		if (result && !result.detail) {
 			friendsList.appendChild(this.createFriendItem(result));
@@ -219,7 +214,6 @@ export default class Friends extends AView{
 		actions.setAttribute('lang-key', '');
         actions.classList.add('actions');
 
-		console.log('createActions:Friend:', friend);
 		const username = sessionStorage.getItem('username');
 
 		if (friend.accepted === false) {
@@ -245,8 +239,6 @@ export default class Friends extends AView{
 	createRequestItem(request) {
 		const requestDiv = document.createElement('div'); // Change styling of div to smaller size
 		requestDiv.classList.add('list-group-item', 'friend');
-		console.log('Request:', request);
-		console.log(request);
 		const avatar = document.createElement('img');
 		avatar.src = request.from_user.avatar ? `${import.meta.env.VITE_BASE_URL}${request.from_user.avatar.image}` : null;
 		avatar.alt = `${request.from_user}'s avatar`;

@@ -21,10 +21,8 @@ export default class extends AView {
 	}
 
 	async handleAccept(roomId, fromUser) {
-		console.log('Accept player:', fromUser);
 		try {
 			const data = await AView.fetchWithJson(`/rooms/${roomId}/accept_request/`, 'POST', {"from_user": fromUser});
-			console.log(data);
 			sessionStorage.removeItem('match_id');
 			sessionStorage.setItem('room_name', data.Room.id);
 			navigateTo('/play');
@@ -35,14 +33,11 @@ export default class extends AView {
 	}
 
 	async handleDecline(roomId, fromUser) {
-		console.log('Decline player:', fromUser);
 		const data = await AView.fetchWithJson(`/rooms/${roomId}/reject_request/`, 'POST', {"from_user": fromUser});
-		console.log(data);
 		location.reload();
 	}
 
 	createInviteItem(invite) {
-		console.log('Invite:', invite);
 		const inviteDiv = document.createElement('div');
 		inviteDiv.classList.add('list-group-item', 'invite');
 
@@ -98,7 +93,6 @@ export default class extends AView {
 		await loadTranslations('GameInvites');
 
 		const data = await AView.fetchWithJson('/rooms/list_request/', 'GET');
-		console.log(data);
 		const invitesList =  document.createElement('div');
 		invitesList.className = 'list-group';
 		this.createInviteList(data, invitesList);

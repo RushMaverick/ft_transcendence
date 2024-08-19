@@ -13,7 +13,6 @@ export default class extends AView {
 	async handleCreate(event) {
 		event.preventDefault();
 		const tournamentName = event.target.name.value;
-		console.log(`Tournament Name: ${tournamentName}`);
 		const myHeaders = new Headers();
 		myHeaders.append("Authorization", "Bearer " + sessionStorage.getItem('access'));
 		myHeaders.append("Content-Type", "application/json");
@@ -33,7 +32,6 @@ export default class extends AView {
 			.then((response) => response.json())
 			.then((result) =>
 				{
-					// console.log(result);
 					sessionStorage.setItem('tournamentId', result.id);
 					navigateTo('/tournament');
 				}
@@ -42,7 +40,6 @@ export default class extends AView {
 	}
 
 	createTournamentItem(tournament) {
-		console.log('tournament:', tournament);
 		const tournamentDiv = document.createElement('div');
 		tournamentDiv.classList.add('list-group-item', 'flex', 'space-between');
 

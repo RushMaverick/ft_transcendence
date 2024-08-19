@@ -7,7 +7,6 @@ export default class FriendRequest extends AView {
 
     async sendFriendRequest(friendUsername) {
         const result = await AView.fetchWithJson('/friends/send_request/', 'POST', { 'friend': friendUsername });
-        console.log(result);
 
         if (result) {
             alert('Friend request sent!');
@@ -19,7 +18,6 @@ export default class FriendRequest extends AView {
 
     async acceptFriendRequest(friendUsername, request_id) {
         const result = await AView.fetchWithJson(`/friends/${request_id}/accept_request/`, 'POST', { 'from_user': friendUsername });
-        console.log(result);
         if (result) {
             alert('Friend request accepted!');
         } else {
@@ -30,7 +28,6 @@ export default class FriendRequest extends AView {
 
     async ignoreFriendRequest(friendUsername, request_id) {
         const result = await AView.fetchWithJson(`/friends/${request_id}/reject_request/`, 'POST', { 'from_user': friendUsername });
-        console.log(result);
         if (result) {
             alert('Friend request ignored.');
         } else {

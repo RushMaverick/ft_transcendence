@@ -16,7 +16,6 @@ export default class PongGame {
 		}
 		//Check if WebGL2 is available, error means WebGL2 is not available on the browser
 		if ( WebGL.isWebGL2Available() ) {
-			console.log('WebGL2 is available')
 		} else {
 
 			const warning = WebGL.getWebGL2ErrorMessage();
@@ -93,18 +92,21 @@ export default class PongGame {
 			console.error("WebSocket Error:", error);
 		};
 		this.socket.onopen = function() {
-			console.log('WebSocket connection established.');
 		};
 		this.socket.onmessage = function(event) {
 			PongGame.instance.waitingForPlayers = false;
 			PongGame.instance.message = JSON.parse(event.data);
 			if (PongGame.instance.message.start) {
+				console.log(PongGame.instance.message)
+				PongGame.instance.P1 = PongGame.instance.message.player1;
+				PongGame.instance.P2 = PongGame.instance.message.player2;
 				sessionStorage.setItem('playing', true);
 				return;
 			}
 			if (PongGame.instance.message.winner) {
 				const myId = sessionStorage.getItem('userId');
 				PongGame.instance.displayGameEnd(myId == PongGame.instance.message.winner ? 'You win!' : 'You lose!');
+				this.socket.close();
 				return;
 			}
 			PongGame.instance.collisionChecking();
@@ -113,7 +115,6 @@ export default class PongGame {
 			PongGame.instance.renderer.render(PongGame.instance.scene, PongGame.instance.camera);
 		};
 		this.socket.onclose = function() {
-			console.log('POng WebSocket connection closed.');
 			sessionStorage.removeItem('playing');
 			sessionStorage.removeItem('match_id');
 			sessionStorage.removeItem('room_name');
@@ -121,8 +122,8 @@ export default class PongGame {
 	}
 
 	updateUI() {
-		this.p1Score.text = `P1: ${this.message['1'].score}`;
-		this.p2Score.text = `P2: ${this.message['2'].score}`;
+		this.p1Score.text = `${this.P1}: ${this.message['1'].score}`;
+		this.p2Score.text = `${this.P2}: ${this.message['2'].score}`;
 	}
 
 	setupUI() {

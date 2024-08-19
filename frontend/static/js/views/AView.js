@@ -61,27 +61,6 @@ export default class {
         return p;
     }
 
-	// //lets try to figure out if we can make this work somehow? right now, is not used
-	// createParagraphWithLink(langkey, additionalText, href) {
-    //     const p = document.createElement('p');
-	// 	p.textContent = "temp";
-	// 	p.setAttribute('lang-key', langkey);
-    //     const link = document.createElement('a');
-	// 	console.log("WE ADD A LINK NOWWW");
-	// 	console.log(href);
-	// 	console.log(additionalText);
-    //     link.href = href;
-    //     link.textContent = "umm hello";
-    //     link.dataset.link = true;
-    //     p.appendChild(link);
-    //     // if (additionalText) {
-    //     //     const span = document.createElement('span');
-    //     //     span.textContent = additionalText;
-    //     //     p.appendChild(span);
-    //     // }
-    //     return p;
-    // }
-
 	createLink(langkey, text, href){
 		const link = document.createElement('a');
 		link.textContent = text;
@@ -142,7 +121,6 @@ export default class {
     }
 
 	static async fetchWithJson(url, method, body) {
-		console.log("url is: ", url);
 		try {
 			let response;
 			if (method === 'GET') {

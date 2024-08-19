@@ -6,7 +6,6 @@ export default class extends AView {
 	constructor(params){
 		super(params);//call the constructor of the parent class
 		this.setTitle("Profile");
-		console.log(params);
 		this.user_id = null;
 		if (params && params.user_id){
 			this.user_id = params.user_id;
