@@ -29,11 +29,9 @@ class Pong:
 
 
 	def start(self) -> None:
-		print("start", flush=True)
 		self.active = True
 
 	def stop(self) -> None:
-		print("stop", flush=True)
 		self.active = False
 
 	def remove_player(self, player: Player) -> None:
@@ -72,7 +70,6 @@ class Pong:
 		self.player2.update_position()
 
 		if self.ball.is_colliding(self.player1) or self.ball.is_colliding(self.player2):
-			print ('Collision with player', flush=True)
 			self.ball.dx *= -1
 
 		if self.ball.x < 0:
@@ -94,28 +91,23 @@ class Pong:
 
 
 	async def game_loop(self) -> None:
-		print("Game loop", flush=True)
-		print(f"Tournament match: {self.tournament_match}", flush=True)
 		await self.channel_layer.group_send(
-			self.room_group_name, {"type": "game.state", "state": {"start": True}}
+			self.room_group_name, {"type": "game.state", "state": {"start": True, "player1": self.player1.user.username, "player2": self.player2.user.username}}
 		)
 		await self.set_match_status("in_progress")
 		while self.active:
 			if not self.player1 or not self.player2:
-				print("Players not connected", flush=True)
 				await asyncio.sleep(1)
 				continue
 			start_time = time.time()
 			self.update_game()
 			await self.update_state()
-			if self.player1.score >= 1 or self.player2.score >= 1:
+			if self.player1.score >= 3 or self.player2.score >= 3:
 				self.stop()
-				print("Game Over", flush=True)
 			delta_time = time.time() - start_time
 			sleep_time = 1./self.tick - delta_time
 			if (sleep_time > 0):
 				await asyncio.sleep(sleep_time)
-		print("Game loop ended", flush=True)
 
 		if self.winner:
 			await self.save_match(winner=self.winner)
@@ -126,9 +118,10 @@ class Pong:
 			self.room_group_name, {"type": "game.state", "state": {"winner": self.winner}}
 		)
 
-		await self.delete_room()
+		if not self.tournament_match:
+			await self.delete_room()
 
-		await self.kill_connections()
+		# await self.kill_connections()
 
 	@sync_to_async
 	def delete_room(self):
@@ -142,7 +135,6 @@ class Pong:
 		p2 = self.player2.user.id
 		if not winner:
 			winner = p1 if self.player1.score > self.player2.score else p2
-		# print(f"Saving match with winner: {winner}", flush=True)
 		serializer = MatchSerializer(data={
 			"player1": p1,
 			"player2": p2,
@@ -156,8 +148,6 @@ class Pong:
 
 		if self.match_instance:
 			serializer.update(self.match_instance, serializer.validated_data)
-			print("Match saved", flush=True)
-		print(f"Tournament match: {self.tournament_match}", flush=True)
 		if self.tournament_match:
 			match_completed.send(sender=self.__class__, match_id=self.match_id, winner=winner)
 
@@ -175,4 +165,3 @@ class Pong:
 		if not serializer.is_valid():
 			raise ValueError("Match data could not be serialized")
 		serializer.update(self.match_instance, serializer.validated_data)
-		print("Match status updated", flush=True)

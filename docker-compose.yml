@@ -1,0 +1,85 @@
+services:
+  frontend:
+    build:
+      context: ./frontend/
+      dockerfile: Dockerfile
+    image: frontend:42
+    container_name: frontend
+    ports:
+      - 8443:443
+    networks:
+      - django_db_network
+    restart: on-failure
+    depends_on:
+      - api
+    volumes:
+      - media:/usr/share/nginx/html/media
+
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: api:42
+    container_name: api
+    env_file:
+      - .env
+    expose:
+      - 8080
+    command: bash -c "python manage.py makemigrations && python manage.py migrate && gunicorn --bind 0.0.0.0:8080 django_backend.wsgi"
+    working_dir: /app
+    networks:
+      - django_db_network
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - media:/app/media
+
+  ws:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: ws:42
+    container_name: ws
+    env_file:
+      - .env
+    expose:
+      - 8000
+    command: bash -c "daphne -b 0.0.0.0 -p 8000 django_backend.asgi:application"
+    working_dir: /app
+    networks:
+      - django_db_network
+    depends_on:
+      - api
+
+#  #To persist the data beyond the life of the container we configured a volume.
+#  #This config will bind postgres_data to the "/var/lib/postgresql/data/" directory in the container.
+  db:
+    build:
+      context: ./backend/database/
+      dockerfile: Dockerfile
+    container_name: postgres_db
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    networks:
+      - django_db_network
+    env_file:
+      - .env
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres-data:
+  media:
+
+#custom networks to facilitate communication between the containers
+networks:
+  django_db_network:
+    name: django_db_network

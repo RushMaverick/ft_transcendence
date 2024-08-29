@@ -1,5 +1,4 @@
 window.isLoggedIn = false;
-console.log(`Initial state: ${window.isLoggedIn}`);
 
 import AView from "./AView.js";
 import textInputField from "./TextInputView.js";
@@ -55,12 +54,13 @@ export default class extends AView {
 
 		const username = event.target.username.value;
 		const password = event.target.password.value;
-
+		
 		const data = {
 			username: username,
 			password: password,
 		};
-
+		
+		
 		try {
 			const response = await fetch(
 				`${import.meta.env.VITE_API_ENDPOINT}/token/`,
@@ -71,32 +71,33 @@ export default class extends AView {
 					},
 					body: JSON.stringify(data),
 				}
-			);
-			if (!response.ok) {
-				let errorMessage = "Unknown error occurred. Please try again.";
-
-				try {
-					const errorData = await response.json();
-					errorMessage = errorData.detail || errorData.message || errorMessage;
-				} catch {
-					errorMessage = "Unable to parse error response.";
+				);
+				if (!response.ok) {
+					let errorMessage = "Unknown error occurred. Please try again.";
+					
+					try {
+						const errorData = await response.json();
+						errorMessage = errorData.detail || errorData.message || errorMessage;
+					} catch {
+						errorMessage = "Unable to parse error response.";
+					}
+					
+					alert(`Login failed: ${errorMessage}`);
+					return;
 				}
-
-				alert(`Login failed: ${errorMessage}`);
-				return;
-			}
-			const responseData = await response.json();
-			if (responseData.access) {
-				sessionStorage.setItem("access", responseData.access);
-				sessionStorage.setItem("refresh", responseData.refresh);
-				sessionStorage.setItem('isLoggedIn', 'true');
-				const user = await AView.fetchWithJson('/user/', 'GET', null);
-				if (user && user.id) {
-					sessionStorage.setItem('userId', user.id);
-				}
-				window.isLoggedIn = true;
-
-				alert('Login successful!');
+				const responseData = await response.json();
+				if (responseData.access) {
+					sessionStorage.setItem("access", responseData.access);
+					sessionStorage.setItem("refresh", responseData.refresh);
+					sessionStorage.setItem('isLoggedIn', 'true');
+					const user = await AView.fetchWithJson('/user/', 'GET', null);
+					if (user && user.id) {
+						sessionStorage.setItem('userId', user.id);
+					}
+					sessionStorage.setItem('username', username);
+					window.isLoggedIn = true;
+					
+					// alert('Login successful!');
 				document.dispatchEvent(new CustomEvent('loginSuccess', { detail: { path: '/dashboard' } }));
 			} else {
 				console.error("Login failed:", responseData.message);
@@ -105,28 +106,5 @@ export default class extends AView {
 			console.error("There was a problem with the fetch operation:", error);
 			alert("There was a problem with the login operation. Please try again.");
 		}
-		console.log(import.meta.env.VITE_API_ENDPOINT); // will be deleted later. now currently checkig if .env in frontend works
 	}
 }
-// return `
-// 	<div class="container">
-// 		<h2 class="text-center">Login</h2>
-// 		<br>
-// 		<form action="/login.php" class="loginForm">
-// 			<div class="input-group">
-// 				<label for="username" class="label">Username</label>
-// 				<input type="text" id="username" class="input">
-// 				<span class="error-message"></span>
-// 			</div>
-// 			<br>
-// 			<div class="input-group">
-// 				<label for="password" class="label">Password</label>
-// 				<input type="password" id="password" class="input">
-// 				<span class="error-message"></span>
-// 			</div>
-// 			<button class = "login button" data-action="logged-in">
-// 				Login</button>
-// 			<p>Not registered yet? <a href="/register" id ="registerLink" data-link>Register here</a></p>
-// 		</form>
-// 	</div>
-// 	`;

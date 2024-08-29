@@ -1,7 +1,6 @@
 //global variable to store the login status(currently without connecting to backend)
 // This will let us the user to be logged in throughout the session
 // window.isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-// console.log(`Initial state: ${window.isLoggedIn}`);
 // but we will not use this for now, we will use temporary checks
 
 import Dashboard from "./views/Dashboard.js";
@@ -47,10 +46,15 @@ const getHashParams = () => {
 };
 
 //when trying to navigate to a different page, we don't want to reload the page. We want to use the client-side router to change the view of the page.
-const navigateTo = url => {
-	history.pushState(null, null, url);
-	router();
-};
+// const navigateTo = url => {
+// 	history.pushState(null, null, url);
+// 	router();
+// };
+
+function navigateTo(url, state = {}) {
+    history.pushState(state, '', url);
+    router();
+}
 
 // const loggedIn =
 let isOnline = false;
@@ -107,20 +111,18 @@ const router = async () => {
 		document.getElementById('login').style.display = 'none';
 	}
 
-	if (sessionStorage.getItem('playing') && match.route.path !== "/play") {
-		navigateTo('/play');
-		return;
-	}
+	// if (sessionStorage.getItem('playing') && match.route.path !== "/play") {
+	// 	navigateTo('/play');
+	// 	return;
+	// }
 
 	//comment out to remove login for testing
 	if (match.route.authRequired && !isLoggedIn) {
-		console.log(`Access to ${match.route.path} is restricted.`);
 		navigateTo('/login');
 		return;
 	}
 
 	if (match.route.path === "/play" && !sessionStorage.getItem('room_name')) {
-		console.log('No room name found');
 		navigateTo('/create-game');
 		return;
 	}
@@ -155,7 +157,6 @@ export const loadTranslations = async (page) => {
             window.translations = {};
         }
 		window.translations = data; // Store translations globally
-		console.log('Translations loaded for page:', page, window.translations);
 	} catch (error) {
 		console.error('Error loading translation file:', error);
 	}
@@ -168,7 +169,9 @@ window.onload = async () => {
 	}
 };
 
-window.addEventListener("popstate", router);
+window.addEventListener("popstate", (event) => {
+    router(event.state);
+});
 // this will listen for back and forward buttons in the browser
 // Dynamically import the translation file
 document.addEventListener("viewUpdated", () => {
@@ -243,15 +246,13 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 const setOnline = () => {
-	const socket = new WebSocket(`ws://localhost:8000/ws/online_status/?token=${sessionStorage.getItem('access')}`);
+	const socket = new WebSocket(`${import.meta.env.VITE_WS_ENDPOINT}/online_status/?token=${sessionStorage.getItem('access')}`);
 	socket.onerror = function(error) {
 		console.error("Online WebSocket Error:", error);
 	};
 	socket.onopen = function() {
-		console.log('Online WebSocket connection established.');
 	};
 	socket.onclose = function(event) {
-		console.log('Online WebSocket connection closed:', event);
 	}
 	isOnline = true;
 };

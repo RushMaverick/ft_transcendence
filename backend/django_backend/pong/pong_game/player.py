@@ -19,7 +19,6 @@ class Player(Collider):
 		self.move_down: bool = False
 
 	def move(self, direction: str) -> None:
-		print(f"Player {self.id} moving {direction}", flush=True)
 		if direction == "up":
 			self.move_up = True
 		elif direction == "down":

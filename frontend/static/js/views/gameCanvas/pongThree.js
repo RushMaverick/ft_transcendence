@@ -16,7 +16,6 @@ export default class PongGame {
 		}
 		//Check if WebGL2 is available, error means WebGL2 is not available on the browser
 		if ( WebGL.isWebGL2Available() ) {
-			console.log('WebGL2 is available')
 		} else {
 
 			const warning = WebGL.getWebGL2ErrorMessage();
@@ -47,7 +46,7 @@ export default class PongGame {
 
 		this.startButton = new Text();
 		this.startButton.text = 'Awaiting Players...';
-		this.startButton.font = 'static/js/views/gameCanvas/fonts/Tiny5-Regular.ttf';
+		this.startButton.font = 'static/fonts/Tiny5-Regular.ttf';
 		this.startButton.fontSize = 50.0;
 		this.startButton.position.x = -1;
 		this.startButton.position.y = 0;
@@ -67,7 +66,7 @@ export default class PongGame {
 
 		this.endText.text = message;
 		this.endText.sync();
-		this.endText.font = 'static/js/views/gameCanvas/fonts/Tiny5-Regular.ttf';
+		this.endText.font = 'static/fonts/Tiny5-Regular.ttf';
 		this.endText.fontSize = 50.0;
 		this.endText.position.x = -1;
 		this.endText.position.y = 0;
@@ -85,26 +84,29 @@ export default class PongGame {
 		let match_id = sessionStorage.getItem('match_id');
 		let room_name = sessionStorage.getItem('room_name');
 		if (match_id){
-			this.socket = new WebSocket(`ws://localhost:8000/ws/game/${room_name}/?token=${sessionStorage.getItem('access')}&match_id=${match_id}`);
+			this.socket = new WebSocket(`${import.meta.env.VITE_WS_ENDPOINT}/game/${room_name}/?token=${sessionStorage.getItem('access')}&match_id=${match_id}`);
 		} else {
-			this.socket = new WebSocket(`ws://localhost:8000/ws/game/${room_name}/?token=${sessionStorage.getItem('access')}`);
+			this.socket = new WebSocket(`${import.meta.env.VITE_WS_ENDPOINT}/game/${room_name}/?token=${sessionStorage.getItem('access')}`);
 		}
 		this.socket.onerror = function(error) {
 			console.error("WebSocket Error:", error);
 		};
 		this.socket.onopen = function() {
-			console.log('WebSocket connection established.');
 		};
 		this.socket.onmessage = function(event) {
 			PongGame.instance.waitingForPlayers = false;
 			PongGame.instance.message = JSON.parse(event.data);
 			if (PongGame.instance.message.start) {
+				console.log(PongGame.instance.message)
+				PongGame.instance.P1 = PongGame.instance.message.player1;
+				PongGame.instance.P2 = PongGame.instance.message.player2;
 				sessionStorage.setItem('playing', true);
 				return;
 			}
 			if (PongGame.instance.message.winner) {
 				const myId = sessionStorage.getItem('userId');
 				PongGame.instance.displayGameEnd(myId == PongGame.instance.message.winner ? 'You win!' : 'You lose!');
+				this.socket.close();
 				return;
 			}
 			PongGame.instance.collisionChecking();
@@ -113,7 +115,6 @@ export default class PongGame {
 			PongGame.instance.renderer.render(PongGame.instance.scene, PongGame.instance.camera);
 		};
 		this.socket.onclose = function() {
-			console.log('POng WebSocket connection closed.');
 			sessionStorage.removeItem('playing');
 			sessionStorage.removeItem('match_id');
 			sessionStorage.removeItem('room_name');
@@ -121,8 +122,8 @@ export default class PongGame {
 	}
 
 	updateUI() {
-		this.p1Score.text = `P1: ${this.message['1'].score}`;
-		this.p2Score.text = `P2: ${this.message['2'].score}`;
+		this.p1Score.text = `${this.P1}: ${this.message['1'].score}`;
+		this.p2Score.text = `${this.P2}: ${this.message['2'].score}`;
 	}
 
 	setupUI() {
@@ -130,12 +131,12 @@ export default class PongGame {
 		this.p1Score = new Text()
 		this.p2Score = new Text()
 
-		this.p1Score.font = 'static/js/views/gameCanvas/fonts/Tiny5-Regular.ttf'
+		this.p1Score.font = 'static/fonts/Tiny5-Regular.ttf'
 		this.p1Score.fontSize = 15.0
 		this.p1Score.position.x = 10
 		this.p1Score.color = 0x000000
 
-		this.p2Score.font = 'static/js/views/gameCanvas/fonts/Tiny5-Regular.ttf'
+		this.p2Score.font = 'static/fonts/Tiny5-Regular.ttf'
 		this.p2Score.fontSize = 15.0
 		this.p2Score.position.x = 160
 		this.p2Score.color = 0x000000

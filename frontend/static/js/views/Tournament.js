@@ -16,13 +16,10 @@ export default class extends AView {
 	}
 
 	socketOnMessageHandler(event){
-		// console.log('socketOnMessageHandler');
-		// console.log(JSON.parse(event.data));
 		let tournament = JSON.parse(event.data);
 
 		if (tournament.winner){
-			console.log('winner');
-			console.log(tournament.winner);
+
 			alert(`Winner: ${tournament.winner.username}`);
 			sessionStorage.removeItem('tournamentId');
 			this.socket.close();
@@ -43,25 +40,24 @@ export default class extends AView {
 	}
 
 	async handleJoin(tournamentId) {
-		console.log(`Join Tournament Name: ${tournamentId}`);
 
-		const url = `ws://localhost:8000/ws/tournament/${tournamentId}/?token=${sessionStorage.getItem('access')}`
-		console.log("Tournaments.js: getHtml()");
-		console.log(this.socket);
+		const url = `${import.meta.env.VITE_WS_ENDPOINT}/tournament/${tournamentId}/?token=${sessionStorage.getItem('access')}`
 		if (this.socket === null){
 			this.socket = new WebSocket(url);
 			this.socket.onerror = function(error) {
-				console.error("WebSocket Error:", error);
+				// console.error("WebSocket Error:", error);
+				// go to previous page
+				sessionStorage.removeItem('tournamentId');
+				navigateTo('/tournaments');
+
 			};
 			this.socket.onopen = function() {
-				console.log('Tournament WebSocket connection established.');
 				//Start screen before players have connected.
 			};
 			//This will be used instead of animate() to update the game state.
 			this.socket.onmessage = this.socketOnMessageHandler.bind(this);
 			this.socket.onclose = function(event) {
 				if (event.wasClean) {
-					console.log(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
 				} else {
 					console.error('[close] Connection died');
 				}
@@ -70,12 +66,11 @@ export default class extends AView {
 	}
 
 	createPlayerItem(player) {
-		console.log('player:', player);
 		const playerDiv = document.createElement('div');
 		playerDiv.classList.add('list-group-item', 'flex', 'align-items-end');
 
 		const avatar = document.createElement('img');
-		avatar.src = player.avatar ? 'http://localhost:8000'+ player.avatar.image : null; // change url to env variable
+		avatar.src = player.avatar ? `${import.meta.env.VITE_BASE_URL}` + player.avatar.image : null;
 		avatar.alt = `${player.username}'s avatar`;
 		playerDiv.appendChild(avatar);
 
@@ -109,7 +104,6 @@ export default class extends AView {
 
 	async updateParticipantsList(){
 		const data = await AView.fetchWithJson(`/tournaments/${sessionStorage.getItem('tournamentId')}/`, 'GET');
-		console.log(data);
 		if (data.participants){
 			this.participantsList.innerHTML = '';
 			data.participants.forEach(participant => {
@@ -158,10 +152,5 @@ export default class extends AView {
 	}
 
 	async dismount(){
-		console.log('Tournament dismount');
-		// if (this.socket){
-		// 	this.socket.close();
-		// }
-		// sessionStorage.removeItem('tournamentId');
 	}
 }

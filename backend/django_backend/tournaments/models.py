@@ -10,7 +10,7 @@ class Tournament(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     creator = models.ForeignKey(
         User,
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
         related_name='tournament_creator',
         default=None,
         null=True
@@ -33,7 +33,7 @@ class Participant(models.Model):
     )
     player = models.ForeignKey(
         User,
-        on_delete=models.SET_DEFAULT,
+        on_delete=models.CASCADE,
         related_name='tournament_participation',
         default=None
     )

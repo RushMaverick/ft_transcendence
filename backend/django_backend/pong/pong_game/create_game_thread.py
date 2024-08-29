@@ -49,14 +49,6 @@ class CreateGameThread:
 	def stop_game(cls, game_name):
 		if game_name in cls.threads:
 			cls.threads[game_name]["active"] = False
-			# pong_instance = cls.games[game_name]
-			# pong_instance.stop_game()
-			print("#1", flush=True)
-			print("is alive: ", cls.threads[game_name]["thread"].is_alive(), flush=True)
-			# while (cls.threads[game_name]["thread"]["active"]):
-			# 	pass
 			cls.threads[game_name]["thread"].join()
-			print("#2", flush=True)
 			del cls.threads[game_name]  # Remove the thread entry
 			del cls.games[game_name]  # Optionally remove the game instance as well
-			print("Game stopped successfully", flush=True)

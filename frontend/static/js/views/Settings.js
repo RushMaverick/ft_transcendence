@@ -97,7 +97,6 @@ export default class extends AView {
 			const data = await AView.fetchWithJson('/profile/avatar/');
 			if (data && data.image) {
 				this.avatarUrl = data.image;
-				console.log(this.avatarUrl);
 				this.updateAvatarDisplay();
 			} else {
 				console.error('Profile data or avatar URL is missing');
@@ -177,7 +176,6 @@ export default class extends AView {
 			}
 
             const responseData = await response.json();
-			console.log(responseData);
             this.avatarUrl = responseData.image; // Extract the updated avatar URL from the profile object
             this.updateAvatarDisplay();
         } catch (error) {
@@ -199,7 +197,6 @@ export default class extends AView {
         };
 
 		const result = await AView.fetchWithJson(`/user/${sessionStorage.getItem('userId')}/`, 'PUT', data);
-		console.log(result);
 		if (result && result.id) {
 			sessionStorage.setItem('isLoggedIn', 'false');
 			sessionStorage.removeItem('access');
@@ -229,7 +226,6 @@ export default class extends AView {
 		};
 
 		const result = await AView.fetchWithJson(`/user/${sessionStorage.getItem('userId')}/`, 'PATCH', data);
-		console.log(result);
 		if (result && result.success) {
 			sessionStorage.setItem('isLoggedIn', 'false');
 			sessionStorage.removeItem('access');

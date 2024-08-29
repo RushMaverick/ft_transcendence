@@ -36,8 +36,9 @@ export default class Friends extends AView{
 		const searchButton = this.createButton('search', 'btn', 'Search');
 		searchButton.classList.add('btn-primary');
         searchButton.addEventListener('click', () => {
-			history.pushState({ view: 'search', query: searchBar.value }, 'Search Friends', '#search');
-            this.searchFriend(searchBar.value);
+			const query = searchBar.value;
+			history.pushState({ view: 'search', query: query}, 'Search Friends', `#search?query=${query}`);
+            this.searchFriend(query);
         });
 
         const inboxIcon = document.createElement('span');
@@ -57,7 +58,6 @@ export default class Friends extends AView{
 		data.friends.forEach(friend => {
 			friend.accepted = true;
 		});
-		// console.log(data);
 		this.friends = data;
 		if (data){
 			this.createFriendsList(data, friendsList);
@@ -66,7 +66,6 @@ export default class Friends extends AView{
 		else{
 			this.updateView(friends, iconContainer, searchBar, searchButton);
 		}
-
 
 		this.checkIfRequests();
 
@@ -85,8 +84,6 @@ export default class Friends extends AView{
 	}
 
 	createFriendsList(data, friendsList) {
-		console.log('data:', data);
-		console.log(data.friends);
         if (data && data.friends && data.friends.length > 0) {
             data.friends.forEach(friend => {
                 friendsList.appendChild(this.createFriendItem(friend));
@@ -116,29 +113,7 @@ export default class Friends extends AView{
             redDot.classList.add('red-dot');
             inboxIcon.appendChild(redDot);
         } else {
-            console.log('No pending requests found');
         }
-		//this is for debugging. leaving it for when connected to backend
-
-		// try {
-		// 	const requests = await this.fetchJsonData('static/js/views/friendRequest.json');
-		// 	const inboxIcon = document.querySelector('.inbox-icon');
-
-		// 	if (!inboxIcon) {
-		// 		console.error('inboxIcon element not found in the DOM.');
-		// 		return;
-		// 	}
-
-		// 	console.log('Requests:', requests); // Debugging statement to check the fetched data
-
-		// 	if (requests && requests.length > 0) {
-		// 		const redDot = document.createElement('span');
-		// 		redDot.classList.add('red-dot');
-		// 		inboxIcon.appendChild(redDot);
-		// 	}
-		// } catch (error) {
-		// 	console.error('Error fetching or processing friend requests:', error);
-		// }
     }
 
 	async searchFriend(username) {
@@ -162,19 +137,15 @@ export default class Friends extends AView{
 			return;
 		}
 		friendsList.innerHTML = '';
-
 		const result = await response.json();
-		// const result = await this.fetchJsonData('static/js/views/search.json');
-		console.log(result);
-		// if (result && result.length > 0) {
-		// 	result.forEach(friend => {
-		// 		friendsList.appendChild(this.createFriendItem(friend));
-		// 	});
-		if (result) {
+
+		if (result && !result.detail) {
 			friendsList.appendChild(this.createFriendItem(result));
-		} else {
+		} else if (result.detail === 'User not found.'){
 			const noResultsMessage = this.createParagraph('no-user-found', `No Such User Found: ${username}`);
 			friendsList.appendChild(noResultsMessage);
+		} else {
+			alert(result.detail);
 		}
 	}
 
@@ -205,12 +176,11 @@ export default class Friends extends AView{
 	}
 
 	createFriendItem(friend) {
-		console.log('Friend:', friend);
-		const friendDiv = document.createElement('div'); // Change styling of div to smaller size
+		const friendDiv = document.createElement('div');
 		friendDiv.classList.add('list-group-item', 'friend');
 
 		const avatar = document.createElement('img');
-		avatar.src = friend.avatar ? 'http://localhost:8000'+ friend.avatar.image : null; // change url to env variable
+		avatar.src = friend.avatar ? `${import.meta.env.VITE_BASE_URL}`+ friend.avatar.image : null;
 		avatar.alt = `${friend.username}'s avatar`;
 		friendDiv.appendChild(avatar);
 
@@ -225,7 +195,7 @@ export default class Friends extends AView{
 
 		const status = document.createElement('div');
 		status.classList.add('status');
-		if (friend.is_online && typeof friend.is_online !== 'undefined') {
+		if (friend.is_online) {
 			status.style.backgroundColor = friend.is_online ? 'green' : 'gray';
 		} else {
 			// Fallback color if online status is unknown
@@ -244,7 +214,7 @@ export default class Friends extends AView{
 		actions.setAttribute('lang-key', '');
         actions.classList.add('actions');
 
-		console.log('createActions:Friend:', friend);
+		const username = sessionStorage.getItem('username');
 
 		if (friend.accepted === false) {
 			let accept = this.searchTranslations('accept-button');
@@ -256,7 +226,7 @@ export default class Friends extends AView{
 			const ignoreButton = this.createButton('ignore-button', 'btn', ignore);
 			ignoreButton.addEventListener('click', () => this.friendRequest.ignoreFriendRequest(friend.username, request_id));
 			actions.appendChild(ignoreButton);
-		} else if (friend.accepted === undefined) {
+		} else if (friend.accepted === undefined && friend.username !== username) {
 			let request = this.searchTranslations('request-button');
 			const requestButton = this.createButton('request-button', 'request-btn', request);
 			requestButton.addEventListener('click', () => this.friendRequest.sendFriendRequest(friend.username));
@@ -269,10 +239,8 @@ export default class Friends extends AView{
 	createRequestItem(request) {
 		const requestDiv = document.createElement('div'); // Change styling of div to smaller size
 		requestDiv.classList.add('list-group-item', 'friend');
-		console.log('Request:', request);
-		console.log(request);
 		const avatar = document.createElement('img');
-		avatar.src = request.from_user.avatar ? 'http://localhost:8000'+ request.from_user.avatar.image : null; // change url to env variable;
+		avatar.src = request.from_user.avatar ? `${import.meta.env.VITE_BASE_URL}${request.from_user.avatar.image}` : null;
 		avatar.alt = `${request.from_user}'s avatar`;
 		requestDiv.appendChild(avatar);
 
