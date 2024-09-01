@@ -1,56 +1,95 @@
-- django
-  - django channels
-    - Websockets for realtime gaming
-      - [Doc - Tutorial Part1: Basic Setup](https://channels.readthedocs.io/en/latest/tutorial/part_1.html)
-    - Authenticatates user with auth-token
-      - [Doc - Custom Authentication](https://channels.readthedocs.io/en/stable/topics/authentication.html#custom-authentication)
-      - [Stackoverflow - TokenAuthMiddleware](https://stackoverflow.com/a/65437244)
-  - django rest_framework
-    - REST API
-      - [Doc - Quickstart](https://www.django-rest-framework.org/tutorial/quickstart/)
-    - Creating user authentication token
-      - [Doc - TokenAuthentication](https://www.django-rest-framework.org/api-guide/authentication/#tokenauthentication)
-      - [Medium - Token-Based Authentication](https://medium.com/django-unleashed/token-based-authentication-and-authorization-in-django-rest-framework-user-and-permissions-347c7cc472e9)
-  - [Stackoverflow - Generate new secret key](https://stackoverflow.com/a/67423892)
+
+# Transcendence: Ping Pong contest Website
+
+Transcendence is an innovative and engaging online Pong game platform designed to connect players from around the world. Built with real-time multiplayer functionality, the platform offers a modern twist to the classic Pong game, featuring advanced player matching, friend systems, and competitive ranking. The project is designed to be scalable, secure, and user-friendly, catering to both casual players and competitive gamers.
 
 
-#### 1\. Setup virtual environment
-Python should be upgrade to Python 3.12 or upper before running the following command-- the app expects Python3
+
+## Table of Contents
+
+1. [Collaborators](#collaborators)
+2. [Key Features](#key-features)
+3. [Technology Stack](#technology-stack)
+4. [Installation](#installation)
+5. [Usage](#usage)
+6. [Screenshots](#screenshots)
+7. [API Documentation](#api-documentation)
+8. [License](#license)
+9. [Contact](#contact)
+
+
+
+
+## Collaborators
+
+- [Rasmus Rask](https://github.com/RushMaverick) - *Project Manager & Frontend Developer*
+- [Rosa Mäkinen](https://github.com/rosamakinen) - *Frontend Developer*
+- [Teemu Spoof](https://github.com/Stte) - *Full Stack Developer*
+- [Yoonseon Lee](https://github.com/ynslee) - *Frontend Developer*
+- [Juan Esteban Pelaez](https://github.com/jestebanpelaez18) - *Backend Developer*
+
+
+## Features
+
+- **User Management**: Secure user registration, authentication, and profile management, including avatar uploads and friend interactions. Utilizes JWT for token-based authentication.
+- **Friends Functionality**: Comprehensive friend management with the ability to send, receive, and manage friend requests.
+- **Multiplayer Gameplay**: Real-time multiplayer support with WebSocket integration for seamless online play.
+- **Remote Players**: Seamless gameplay experience for users located on separate computers.
+- **Tournaments**: Organize and participate in tournaments.
+- **Multi-language Support**: User interface available in multiple languages to accommodate a diverse audience.
+- **Advanced 3D Graphics**: Enhanced visual experience for the Pong game using advanced 3D techniques with ThreeJS.
+- **API Development**: Robust APIs developed with Django REST framework.
+- **Server-Side Pong**: Replaced the basic Pong game with a server-side implementation that handles gameplay, ball movement, scoring, and player interactions. API supports both web interface and Command-Line Interface (CLI) interaction.
+- **Database Integration**: PostgreSQL used for reliable data management and consistency.
+- **GDPR Compliance**: Features for user anonymization and local data management to meet GDPR requirements.
+- **API Testing**: Tested using Postman to ensure reliability.
+- **Browser Compatibility**: Improved support for various web browsers to ensure broad accessibility.
+- **Scalable Architecture**: Built using Django Channels and Docker for efficient scaling and deployment.
+## Technology Stack
+
+- **Frontend:** HTML, CSS, JavaScript
+- **Backend:** Django, Django REST Framework
+- **Database:** PostgreSQL
+- **WebSocket**: Django Channels
+- **API Testing:** Postman
+- **Deployment:**: Nginx, Docker
+
+## Installation
+
+Follow these steps to set up and run the project using Docker and Docker Compose. The `Makefile` is provided to streamline the process.
+
+### Prerequisites
+
+Make sure you have the following installed:
+- [Docker](https://docs.docker.com/get-docker/)
+- [Docker Compose](https://docs.docker.com/compose/install/)
+- [Make](https://www.gnu.org/software/make/)
+
+### Clone the Repository
+
+First, clone the repository to your local machine:
+
+```bash
+git clone https://github.com/RushMaverick/ft_transcendence.git
+cd ft_transcendence
 ```
-$ python -m venv myvenv
+
+### Build and Start the Project
+
+Use the Makefile to handle the setup, build, and start processes. Run:
+
+```bash
+make
 ```
-#### 2\. Activite virtual environment 
-‼️ Be aware : The path might slightly vary depending on your operating system
-```
-$ source myvenv/bin/activate
-```
-#### 3\. Install required packages
-For the assignment requirements
-```
-$ pip install -r requirements.txt
-```
+This command will:
 
-### Run Flask to see working API <a name = "run_flask"></a>
+- Install frontend dependencies using npm.
+- Build the frontend assets.
+- Create necessary directories and copy static files.
+- Build and start the Docker containers defined in docker-compose.yml
 
-Run the following command in the same directory where all the files are
-```
-$ python manage.py runserver
+## Usage
+
+
 ```
 
-**Remember to put semantic messages when you are pushing to master
-
-See how a minor change to your commit message style can make you a better programmer.
-
-Format: `<type>(<scope>): <subject>`
-
-`<scope>` is optional
-
-Examples:
-
-- `feat`: (new feature for the user, not a new feature for build script)
-- `fix`: (bug fix for the user, not a fix to a build script)
-- `docs`: (changes to the documentation)
-- `style`: (formatting, missing semi colons, etc; no production code change)
-- `refactor`: (refactoring production code, eg. renaming a variable)
-- `test`: (adding missing tests, refactoring tests; no production code change)
-- `chore`: (updating grunt tasks etc; no production code change)
