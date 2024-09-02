@@ -87,9 +87,77 @@ This command will:
 - Build the frontend assets.
 - Create necessary directories and copy static files.
 - Build and start the Docker containers defined in docker-compose.yml
-
 ## Usage
 
+1. **Access the Web Application**: Open your web browser and navigate to [https://localhost:8443](https://localhost:8443). This is where you can interact with the user interface of the Pong game and manage your account.
 
-```
+2. **User Authentication**:
+   - **Sign Up**: Register a new account by filling out the sign-up form on the main page.
+   - **Log In**: Access your account by logging in with your credentials.
+   - **Profile Management**: Once logged in, navigate to the
+   - **Profile** page from the sidebar. You can update your profile information, upload an avatar, and manage your settings. The profile page will display your username, avatar, and game statistics such as wins and losses.
+     
+     - **Win/Loss Stats**: Track your performance with win and loss counts displayed alongside fun emojis.
+     - **Match History**: Click on "View Match History" to see detailed statistics about your previous games.
 
+3. **Playing the Game**:
+   - **Multiplayer**: Join or create multiplayer matches and play against others. Players can compete in real-time matches directly from the web interface.
+   - **Tournaments**: Participate in or organize tournaments through the application interface.
+
+4. **Friends and Social Features**:
+   - **Add Friends**: Use the **Friends** section in the sidebar to send and receive friend requests. View your friends' online status and invite them to play.
+   - **Profile Viewing**: Click on friends' profiles to view their statistics and match history.
+
+5. **Settings**:
+   - Adjust application settings, including changing the language for multi-language support and updating account details.
+
+6. **Languages**: Use the language selector in the settings menu to switch between supported languages, accommodating different user preferences.
+
+
+
+## Screenshots
+
+### Log In
+
+[![Log In](https://i.postimg.cc/gcxKZxVt/temp-Imagey-REs-RI.avif)](https://postimg.cc/grPR9kB3)
+
+- The log-in screen provides a secure and user-friendly interface for users to access their accounts. It features input fields for email and password, along with options to register a new account or recover forgotten passwords. This streamlined design ensures a smooth authentication process for users.
+
+### Dashboard
+
+[![Dashboard](https://i.postimg.cc/jjh7pbz7/temp-Imagel3-UM0n.avif)](https://postimg.cc/p9prj3cW)
+
+- The dashboard acts as the central hub of the application, offering quick access to key features such as user profiles, friends, ongoing games, and settings. It displays essential information and notifications, allowing users to easily navigate and manage their activities within the application.
+
+### Profile
+
+[![Profile](https://i.postimg.cc/ZRTrnRTH/temp-Image-EW4-Ua9.avif)](https://postimg.cc/yJbJr733)
+
+- The profile page showcases detailed user information, including username, avatar, and game statistics such as wins and losses. Users can view their match history and update personal information. The design is clean and intuitive, making it easy to manage and personalize user profiles.
+
+### Friend Request
+
+[![Friend Request](https://i.postimg.cc/4xQvgVGy/temp-Image-Bqj-Hc3.avif)](https://postimg.cc/v4Dx71cw)
+
+- The friend request screen allows users to manage their social interactions by sending, accepting, or declining friend requests. This feature enhances the social connectivity of the application, encouraging users to engage with others and form connections within the gaming community.
+
+### Game
+
+[![Game](https://i.postimg.cc/GmwT92KD/temp-Image-KUGXep.avif)](https://postimg.cc/KRf8Hmdc)
+
+- The game screen provides a dynamic and immersive experience where users can participate in real-time multiplayer Pong games. The interface is designed to be responsive and interactive, ensuring a seamless gaming experience. Players can enjoy head-to-head matches, complete with score tracking and responsive controls.
+
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](https://choosealicense.com/licenses/mit/) file for more details. 
+
+
+
+
+## Contact
+
+Contact us via linkedin.
+
+- [Rasmus Rask](https://www.linkedin.com/in/rasmus-rask/)
+- [Juan Esteban Pelaez](https://www.linkedin.com/in/jestebanpelaez18/)
