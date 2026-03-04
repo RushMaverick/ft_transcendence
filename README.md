@@ -157,7 +157,7 @@ This project is licensed under the MIT License. See the [LICENSE](https://choose
 
 ## Contact
 
-Contact us via linkedin.
+Contact us via LinkedIn.
 
 - [Rasmus Rask](https://www.linkedin.com/in/rasmus-rask/)
 - [Juan Esteban Pelaez](https://www.linkedin.com/in/jestebanpelaez18/)
